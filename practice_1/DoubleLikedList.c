@@ -2,174 +2,169 @@
 #include <stdlib.h>
 #pragma warning(disable:4996)
 
-// 노드 및 리스트 정의
+// 노드, 리스트 정의
 
-typedef struct DoubleLinkedListNode {
-	
-	int r;			// 순서
-	char elem;			// 원소
-	struct DoubleLinkedListNode* prev;	// 이전 노드
-	struct DoubleLinkedListNode* next;	// 다음 노드
+typedef struct _node {
 
-} node; // 이중연결리스트 노드 
+	char e;
+	struct _node* prev;
+	struct _node* next;
 
+} Node;
 
-typedef struct DoubleLinkedList{
+typedef struct _DoubleLinkedList {
 
-	int size;	// 리스트 크기
-	node* H;	// 헤더
-	node* T;	// 트레일러
+	Node* H, * T;
+	int size;
 
-} list; // 이중연결리스트(헤더, 트레일러 보유)
+} DoubleLinkedList;
 
 // 메소드 정의
 
-void init(list* list);
-node* newNode(int r, char elem);
-void ADD(list* list, int r, char e);
-void DELETE(list* list, int r);
-void GET(list* list, int r);
-void print(list* list);
+void initList(DoubleLinkedList* list);
+Node* newNode(char e);
+void add(DoubleLinkedList* list, int r, char e);
+void delete(DoubleLinkedList* list, int r);
+void get(DoubleLinkedList* list, int r);
+void print(DoubleLinkedList* list);
 
 int main() {
 
-	list list; init(&list);
-	int opernum, r;
-	char oper, elem;
+	DoubleLinkedList* list = (DoubleLinkedList*)malloc(sizeof(DoubleLinkedList));
+	int num, r;
+	char oper, e;
 
-	scanf("%d", &opernum);
-	getchar();
+	initList(list);
 
-	for (int i = 0; i < opernum; i++) {
-		scanf("%c", &oper);
-		getchar();
+	scanf("%d", &num); getchar();
+	for (int i = 0; i < num; i++) {
+
+		scanf("%c", &oper); getchar();
 
 		switch (oper) {
-		case 'A' :
-			scanf("%d %c", &r, &elem);
-			getchar();
-			ADD(&list, r, elem);
+
+		case 'A':
+			scanf("%d %c", &r, &e); getchar();
+			add(list, r, e);
 			break;
+
 		case 'D':
-			scanf("%d", &r);
-			getchar();
-			DELETE(&list, r);
+			scanf("%d", &r); getchar();
+			delete(list, r);
 			break;
 		case 'G':
-			scanf("%d", &r);
-			getchar();
-			GET(&list, r);
+			scanf("%d", &r); getchar();
+			get(list, r);
 			break;
 		case 'P':
-			print(&list);
+			print(list);
 			break;
-		default:
-			break;
+
 		}
 	}
 
-	return;
+	return 0;
+
 }
 
+void initList(DoubleLinkedList* list) {
 
-// 메소드 구현
+	Node* H, * T;
 
-void init(list* list) {
+	H = (Node*)malloc(sizeof(Node));
+	T = (Node*)malloc(sizeof(Node));
 
-	node* header = (node *)malloc(sizeof(node));
-	node* trailer = (node*)malloc(sizeof(node));
+	list->H = H; H->next = T; H->prev = NULL;
+	list->T = T; T->prev = H; T->next = NULL;
 
-	list->H = header; header->next = trailer; header->prev = NULL;
-	list->T = trailer; trailer->prev = header; trailer->next = NULL;
 	list->size = 0;
 
-} // DoublelinkedList 생성
+}
 
-node* newNode(int r, char elem) {
+Node* newNode(char e) {
 
-	node* newnode = (node*)malloc(sizeof(node));
+	Node* new = (Node*)malloc(sizeof(Node));
 
-	newnode->next = NULL; newnode->prev = NULL;
-	
-	newnode->r = r;
-	newnode->elem = elem;
+	new->prev = new->next = NULL;
+	new->e = e;
 
-	return newnode;
+	return new;
 
-} // Node 생성
+}
 
-void ADD(list* list, int r, char e) {
+void add(DoubleLinkedList* list, int r, char e) {
 
-	node* newnode = newNode(r, e);
-	node* node = list->H;
+	Node* new;
+	Node* pos = list->H;
 
-	// 노드 위치 이동 후 노드 추가
-	for (int i = 0; i < r; i++) {
-		node = node->next;
-	} 
-	
-	// node.prev <- new -> node 
-	newnode->next = node;
-	newnode->prev = node->prev;
+	// 순위 정보 유지
+	// 4순위 입력 후 6순위 입력 불가. 반드시 1, 2, 3, 4, 5 , ... 순서 유지.
+	if (list->size + 1 < r) {
+		printf("invalid position\n");
+		return;
+	}
 
-	// node -> new
-	node->prev = newnode;
+	new = newNode(e);
 
-	// newnode <- node
-	node = newnode->prev;
-	node->next = newnode;
+	// 노드 이동
+	for (int i = 0; i < r; i++) pos = pos->next;
 
+	// 노드 연결
+	pos->prev->next = new;
+	new->prev = pos->prev;
+
+	pos->prev = new;
+	new->next = pos;
+
+	pos = new;
 	list->size++;
 
 }
 
-void DELETE(list* list, int r) {
+void delete(DoubleLinkedList* list, int r) {
 
-	node* node, *p, *q;
-	node = list->H;
+	Node* pos = list->H;
 
-	if (r > list->size) {
+	if (list->size < r) {
 		printf("invalid position\n");
 		return;
 	}
 
 	// 노드 이동
-	for (int i = 0; i < r; i++) node = node->next;
-	
-	// node.prev -> node.next, node.prev <- node.next
-	p = node->prev;
-	q = node->next;
-	p->next = q;
-	q->prev = p;
+	for (int i = 0; i < r; i++) pos = pos->next;
 
-	free(node);
+	// 현재 노드의 전, 후 노드 연결
+	pos->prev->next = pos->next;
+	pos->next->prev = pos->prev;
+
+	// 노드 삭제
+	free(pos);
 	list->size--;
-
 }
-void GET(list* list, int r) {
 
-	node* node = list->H;
+void get(DoubleLinkedList* list, int r) {
 
-	if (r > list->size) {
+	Node* pos = list->H;
+
+	if (list->size < r) {
 		printf("invalid position\n");
 		return;
 	}
 
-	for (int i = 0; i < r; i++) {
-		node = node->next;
-	}
-
-	printf("%c\n", node->elem);
+	// 노드 이동
+	for (int i = 0; i < r; i++) pos = pos->next;
+	printf("%c\n", pos->e);
 
 }
 
-void print(list* list) {
+void print(DoubleLinkedList* list) {
 
-	node* node = list->H;
+	Node* node = list->H;
+	int size = list->size;
 
-	for (int i = 0; i < list->size; i++) {
+	for (int i = 0; i < size; i++) {
 		node = node->next;
-		printf("%c", node->elem);
+		printf("%c", node->e);
 	} printf("\n");
 
 }
