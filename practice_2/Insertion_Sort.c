@@ -2,7 +2,7 @@
 	#include <stdlib.h>
 	#pragma warning(disable:4996)
 
-	// 메소드 정의
+	// Define Method
 	int* InitArray(int n);
 	void InsertionSort(int n, int* arr);
 
@@ -14,10 +14,10 @@
 
 		arr = InitArray(n);
 
-		// Insertion Sort
+		// Run Insertion Sort
 		InsertionSort(n, arr);
 
-		// Print Array
+		// Run Print Array
 		for (int i = 0; i < n; i++) {
 			printf(" %d", arr[i]);
 		}
@@ -28,7 +28,7 @@
 
 	int* InitArray(int n) {
 
-		int* arr = (int*)malloc(sizeof(int));
+		int* arr = (int*)malloc(sizeof(int) * n);
 
 		if (arr == NULL) {
 			printf("Error");
@@ -43,20 +43,23 @@
 
 	void InsertionSort(int n, int* arr) {
 
-		int tmp, i, j;
+		int i, j, save;
 
 		for (i = 1; i < n; i++) {
 
-			tmp = arr[i];
-		
-			for (j =  i - 1; j >= 0 && arr[j] > tmp; j--) {
+			save = arr[i];
+			
+			j = i - 1;
+			while (j >= 0 && arr[j] > save) {
+				
 				arr[j + 1] = arr[j];
+				j -= 1; // For Exit first loop
+			
 			}
 
-			arr[j + 1] = tmp;
+			arr[j + 1] = save;
 
 		}
 
-		return;
 
 	}

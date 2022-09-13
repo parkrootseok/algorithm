@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #pragma warning(disable:4996)
 
-// 메소드 정의
+// Define Method
 int* InitArray(int n);
 void SelectionSort(int n, int* arr);
 
@@ -14,10 +14,10 @@ int main() {
 
 	arr = InitArray(n);
 
-	// Selection-Sort
+	// Run Selection Sort
 	SelectionSort(n, arr);
 
-	// Print Array
+	// Run Print Array
 	for (int i = 0; i < n; i++) {
 		printf(" %d", arr[i]);
 	}
@@ -28,7 +28,7 @@ int main() {
 
 int* InitArray(int n) {
 
-	int* arr = (int*)malloc(sizeof(int));
+	int* arr = (int*)malloc(sizeof(int) * n);
 
 	if (arr == NULL) {
 		printf("Error");
@@ -36,35 +36,33 @@ int* InitArray(int n) {
 	}
 
 	for (int i = 0; i < n; i++) scanf("%d", &arr[i]);
-		
+
 	return arr;
 }
 
 void SelectionSort(int n, int* arr) {
 
-	int idx, num, tmp;
-
-	for (int i = n - 1;0 <= i; i--) {
+	int i, j, idx, tmp;
+	for (i = n - 1; i >= 0 ; i--) {
 
 		idx = i;
 
-		// 최댓값 탐색
-		for (int j = 0; j < i; j++) {
+		for (j = 0; j < i; j++) {
 
+			// Find Max
 			if (arr[idx] < arr[j]) {
 				idx = j;
 			}
-			
+
 		}
 
-		//교환
+		// Swap
 		if (idx != i) {
 			tmp = arr[i];
 			arr[i] = arr[idx];
 			arr[idx] = tmp;
 		}
 	}
-
-	return;
+	
 
 }

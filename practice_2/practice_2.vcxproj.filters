@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Insertion_Sort.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Selection_Sort.c">
+    <ClCompile Include="CompareRunTime.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
