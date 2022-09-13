@@ -5,6 +5,7 @@
 #pragma warning(disable:4996)
 
 int * InitArray(int n);
+void reverseSort(int n, int arr);
 void SelectionSort(int n, int* arr);
 void InsertionSort(int n, int* arr);
 void show(int n, int* arr);
@@ -18,30 +19,85 @@ int main() {
 
 	int* Selection_arr, * Insertion_arr;
 
-	Selection_arr = InitArray(n);
-	Insertion_arr = InitArray(n);
+	for (int i = 0; i < 10; i++) {
 
-	// Run Selection Sort and Check Time
-	QueryPerformanceFrequency(&ticksPerSec);
-	QueryPerformanceCounter(&start);
-	SelectionSort(n, Selection_arr);
-	QueryPerformanceCounter(&end);
+		Selection_arr = InitArray(n);
+		Insertion_arr = InitArray(n);
 
-	diff.QuadPart = end.QuadPart - start.QuadPart;
-	printf("%.12f ms\n", ((double)diff.QuadPart / (double)ticksPerSec.QuadPart) * 1000);
+		printf("%d번 째 반복\n", i + 1);
 
-	// Run Insertion Sort and Check Time
-	QueryPerformanceFrequency(&ticksPerSec);
-	QueryPerformanceCounter(&start);
-	InsertionSort(n, Insertion_arr);
-	QueryPerformanceCounter(&end);
+		// A. 정렬이 안 된 데이터 배열
+		printf("A. 정렬이 안 된 데이터\n");
 
-	diff.QuadPart = end.QuadPart - start.QuadPart;
-	printf("%.12f ms\n", ((double)diff.QuadPart / (double)ticksPerSec.QuadPart) * 1000);
+		// Run Selection Sort and Check Time
+		QueryPerformanceFrequency(&ticksPerSec);
+		QueryPerformanceCounter(&start);
+		SelectionSort(n, Selection_arr);
+		QueryPerformanceCounter(&end);
+
+		diff.QuadPart = end.QuadPart - start.QuadPart;
+		printf("Selection Sort : %.12f ms\n", ((double)diff.QuadPart / (double)ticksPerSec.QuadPart) * 1000);
+
+		// Run Insertion Sort and Check Time
+		QueryPerformanceFrequency(&ticksPerSec);
+		QueryPerformanceCounter(&start);
+		InsertionSort(n, Insertion_arr);
+		QueryPerformanceCounter(&end);
+
+		diff.QuadPart = end.QuadPart - start.QuadPart;
+		printf("Insertion Sort : %.12f ms\n", ((double)diff.QuadPart / (double)ticksPerSec.QuadPart) * 1000);
+
+
+
+		// B. 정렬된 데이터 배열
+		printf("B. 정렬된 데이터\n");
+
+		// Run Selection Sort and Check Time
+		QueryPerformanceFrequency(&ticksPerSec);
+		QueryPerformanceCounter(&start);
+		SelectionSort(n, Selection_arr);
+		QueryPerformanceCounter(&end);
+
+		diff.QuadPart = end.QuadPart - start.QuadPart;
+		printf("Selection Sort : %.12f ms\n", ((double)diff.QuadPart / (double)ticksPerSec.QuadPart) * 1000);
+
+		// Run Insertion Sort and Check Time
+		QueryPerformanceFrequency(&ticksPerSec);
+		QueryPerformanceCounter(&start);
+		InsertionSort(n, Insertion_arr);
+		QueryPerformanceCounter(&end);
+
+		diff.QuadPart = end.QuadPart - start.QuadPart;
+		printf("Insertion Sort : %.12f ms\n", ((double)diff.QuadPart / (double)ticksPerSec.QuadPart) * 1000);
+
+
+		// C. 역순으로 정렬된 데이터 배열
+		printf("C. 역순으로 정렬된 데이터\n");
+		reverseSort(n, Selection_arr);
+		reverseSort(n, Insertion_arr);
+
+		// Run Selection Sort and Check Time
+		QueryPerformanceFrequency(&ticksPerSec);
+		QueryPerformanceCounter(&start);
+		SelectionSort(n, Selection_arr);
+		QueryPerformanceCounter(&end);as
+
+		diff.QuadPart = end.QuadPart - start.QuadPart;
+		printf("Selection Sort : %.12f ms\n", ((double)diff.QuadPart / (double)ticksPerSec.QuadPart) * 1000);
+
+		// Run Insertion Sort and Check Time
+		QueryPerformanceFrequency(&ticksPerSec);
+		QueryPerformanceCounter(&start);
+		InsertionSort(n, Insertion_arr);
+		QueryPerformanceCounter(&end);
+
+		diff.QuadPart = end.QuadPart - start.QuadPart;
+		printf("Insertion Sort : %.12f ms\n", ((double)diff.QuadPart / (double)ticksPerSec.QuadPart) * 1000);
+
+	}
 	
-	// Print Array
-	//show(n, Selection_arr);
-	//show(n, Insertion_arr);
+
+	return;
 
 }
 
@@ -60,6 +116,25 @@ int* InitArray(int n) {
 	}
 
 	return arr;
+}
+
+void reverseSort(int n, int * arr) {
+
+	int tmp;
+	for (int i = 0; i < n; i++) {
+
+		for (int j = i; j < n; j++) {
+
+			if (arr[j] < arr[j + 1]) {
+				tmp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = tmp;
+			}
+
+		}
+	}
+
+
 }
 
 void SelectionSort(int n, int* arr) {
