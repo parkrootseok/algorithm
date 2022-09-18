@@ -18,5 +18,8 @@
     <ClCompile Include="Heap_Insertion.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Heap_Bottomup.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
