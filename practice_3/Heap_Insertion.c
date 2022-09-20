@@ -72,46 +72,44 @@ void upHeap(int i) {
 
 	int tmp;
 
+	// 최상위 노드일 경우 종료
 	if (i == 1) return;
-	if (H[i] <= H[i / 2]) return;
 
-	// 스왑
-	tmp = H[i];
-	H[i] = H[i / 2];
-	H[i / 2] = tmp;
+	// 부모 노드가 더 클 경우 종료
+	if (H[i / 2] >= H[i]) return;
+
+	// 위 모든 경우가 아닌 경우 스왑
+	tmp = H[i / 2];
+	H[i / 2] = H[i];
+	H[i] = tmp;
 
 	upHeap(i / 2);
-
 }
 
 void downHeap(int i) {
 
 	int tmp, bigger;
 
-	// 내부 노드 존재 확인
-	if (n < (i * 2) && n < (i * 2 + 1)) return;
+	// 자식 노드 존재 확인
+	if ((n < i * 2) & (n < i * 2 + 1)) return;
 
-	// 존재 시 내부 노드 중 가장 큰 노드 찾기
 	bigger = i * 2;
 
-	if (n >= i * 2 + 1) {
-
+	// 내부 노드 중 제일 큰 값 찾기
+	// 최대힙이므로 큰 값을 찾는다. 만약 최소힙이라면 작은 값을 찾아 조정. 
+	if ((n >= i * 2 + 1)) {
 		if (H[i * 2 + 1] > H[bigger]) {
-
 			bigger = i * 2 + 1;
-
 		}
-
 	}
 
-	// 상위 노드가 내부 노드와 크거나 작으면 교환 필요 X
+	// 부모 노드보다 작거나 같을 경우 조정 필요 X
 	if (H[i] >= H[bigger]) return;
 
-	// 스왑
 	tmp = H[i];
 	H[i] = H[bigger];
-	H[bigger] = tmp;
-
+	H[bigger] =tmp;
+	
 	downHeap(bigger);
 }
 

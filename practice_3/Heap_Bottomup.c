@@ -42,22 +42,28 @@ int main() {
 
 void rBuildHeap(int i) { // 재귀적 방식
 
+	// 인덱스가 트리 크기보다 클 경우 종료
 	if (i > n) return;
-
+	
+	// 자식 노드 조정
 	rBuildHeap(i * 2);
 	rBuildHeap(i * 2 + 1);
-	downHeap(i);
 	
+	// 부모 노드 순서 조정
+	downHeap(i);
+
 	return;
+
 }
 
 void BuildHeap() { // 비재귀적 방식
 	
-	for (int i = n / 2; i > 0; i--) {
+	// 가장 깊은 내부 노드 중 오른쪽 노드에서 시작
+	// 리프 노드는 조사할 필요 X
+	for (int i = n / 2; i > 0 ; i--) {
 		downHeap(i);
 	}
-
-	return;
+	
 }
 
 void downHeap(int i) {
