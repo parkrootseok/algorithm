@@ -36,7 +36,7 @@
 
 		printHeap();
 
-		return 0;
+		return;
 	}
 
 	void inPlaceHeapSort() {
