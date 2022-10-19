@@ -5,6 +5,7 @@
 // Define Method
 int* InitArray(int n);
 void SelectionSort(int n, int* arr);
+void swap(int* a, int* b);
 
 int main() {
 
@@ -40,29 +41,36 @@ int* InitArray(int n) {
 	return arr;
 }
 
-void SelectionSort(int n, int* arr) {
+// 시간 복잡도 : O(n^2)
+// Data가 정
+void SelectionSort(int n, int* arr) { 
 
-	int i, j, idx, tmp;
-	for (i = n - 1; i >= 0 ; i--) {
+	int pass, minLoc;
 
-		idx = i;
+	for(pass = 0;pass < n - 2;pass++) { 
+		
+		minLoc = pass;
 
-		for (j = 0; j < i; j++) {
+		for (int j = pass + 1; j < n - 1; j++) { 
 
-			// Find Max
-			if (arr[idx] < arr[j]) {
-				idx = j;
+			// 리스트에서 가장 작은 Data 검색
+			if (arr[j] < arr[minLoc]) {
+				minLoc = j;
 			}
-
 		}
 
-		// Swap
-		if (idx != i) {
-			tmp = arr[i];
-			arr[i] = arr[idx];
-			arr[idx] = tmp;
-		}
+		// 가장 작은 Data를 앞으로 이동
+		swap(arr[pass], arr[minLoc]);
 	}
-	
+
+}
+
+void swap(int* a, int* b) {
+
+	int tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
 
 }
