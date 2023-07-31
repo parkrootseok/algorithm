@@ -1,8 +1,0 @@
-﻿  QuickSort.c
-C:\Users\g_e_u\git\Algorithm\project_2\project_2\QuickSort.c(57,22): warning C4142: 'createArray': 형식이 재정의되었지만 심각하지는 않습니다.
-C:\Users\g_e_u\git\Algorithm\project_2\project_2\QuickSort.c(13): message : 'createArray' 선언을 참조하십시오.
-C:\Users\g_e_u\git\Algorithm\project_2\project_2\QuickSort.c(64,8): warning C4244: '함수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\g_e_u\git\Algorithm\project_2\project_2\QuickSort.c(73,17): warning C4028: 정식 매개 변수 1이(가) 선언과 다릅니다.
-C:\Users\g_e_u\git\Algorithm\project_2\project_2\QuickSort.c(73,26): warning C4028: 정식 매개 변수 2이(가) 선언과 다릅니다.
-C:\Users\g_e_u\git\Algorithm\project_2\project_2\QuickSort.c(103,8): warning C4244: '함수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  project_2.vcxproj -> C:\Users\g_e_u\git\Algorithm\project_2\x64\Debug\project_2.exe

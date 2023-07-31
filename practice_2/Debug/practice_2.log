@@ -1,8 +1,0 @@
-﻿  CompareRunTime.c
-C:\Users\g_e_u\git\Algorithm\practice_2\CompareRunTime.c(76,31): warning C4047: '함수': 'int'의 간접 참조 수준이 'int *'과(와) 다릅니다.
-C:\Users\g_e_u\git\Algorithm\practice_2\CompareRunTime.c(76,18): warning C4024: 'reverseSort': 형식 및 실제 매개 변수 2의 형식이 서로 다릅니다.
-C:\Users\g_e_u\git\Algorithm\practice_2\CompareRunTime.c(77,31): warning C4047: '함수': 'int'의 간접 참조 수준이 'int *'과(와) 다릅니다.
-C:\Users\g_e_u\git\Algorithm\practice_2\CompareRunTime.c(77,18): warning C4024: 'reverseSort': 형식 및 실제 매개 변수 2의 형식이 서로 다릅니다.
-C:\Users\g_e_u\git\Algorithm\practice_2\CompareRunTime.c(110,18): warning C4244: '함수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\g_e_u\git\Algorithm\practice_2\CompareRunTime.c(121,31): warning C4028: 정식 매개 변수 2이(가) 선언과 다릅니다.
-  practice_2.vcxproj -> C:\Users\g_e_u\git\Algorithm\practice_2\Debug\practice_2.exe
