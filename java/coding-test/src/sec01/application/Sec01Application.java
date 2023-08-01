@@ -56,7 +56,45 @@ public class Sec01Application {
 
     }
 
+    public void ex07() {
+        String str = sc.next();
+        System.out.println(solution.IsPalindrome(str));
+    }
 
+    public void ex08() {
+        String str = sc.nextLine();
+        System.out.println(solution.IsValidPalindrome(str));
+    }
+
+    public void ex09() {
+        String str = sc.next();
+        System.out.println(solution.extractDigit(str));
+    }
+
+    public void ex10() {
+
+        String str = sc.next();
+        char target = sc.next().charAt(0);
+
+        for(int x : solution.findMinimumSDistance(str, target)) {
+            System.out.print(x + " ");
+        }
+
+    }
+    public void ex11() {
+
+        String str = sc.next();
+        System.out.println(solution.compressString(str));
+
+    }
+
+    public void ex12() {
+
+        int number = sc.nextInt();
+        String str = sc.next();
+        System.out.println(solution.encrypt(number, str));
+
+    }
 
 }
 

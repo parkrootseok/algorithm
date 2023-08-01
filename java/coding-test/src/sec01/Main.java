@@ -13,8 +13,13 @@ public class Main {
 //        application.ex03();
 //        application.ex04();
 //        application.ex05();
-        application.ex06();
-
+//        application.ex06();
+//        application.ex07();
+//        application.ex08();
+//        application.ex09();
+//        application.ex10();
+//        application.ex11();
+        application.ex12();
     }
 
 }

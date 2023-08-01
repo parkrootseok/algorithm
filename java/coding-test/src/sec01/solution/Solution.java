@@ -1,5 +1,7 @@
 package sec01.solution;
 
+import java.util.ArrayList;
+
 public class Solution {
 
     public Solution() {}
@@ -175,6 +177,185 @@ public class Solution {
         }
 
         return answer;
+
+    }
+
+    /**
+     * section 1 - 7 : 회문 문자열
+     */
+    public String IsPalindrome(String str) {
+
+        /* 대소문자를 구별하지 않을 때 */
+        String reverseStr = new StringBuilder(str).reverse().toString();
+
+        if (!reverseStr.equals(str)) {
+            return "NO";
+        }
+
+//        /* 대소문자 구별할 때 */
+//        int left = 0, right = str.length() - 1;
+//        while (left < right) {
+//
+//            if(str.charAt(left) != str.charAt(right)) {
+//                return "NO";
+//            }
+//
+//            left++;
+//            right--;
+//        }
+
+//        int len = str.length();
+//        for (int i = 0;i < len / 2; i++) {
+//
+//            if(str.charAt(i) != str.charAt(len - i - 1)) {
+//                return "NO";
+//            }
+//
+//        }
+
+        return "YES";
+
+    }
+
+    /**
+     * section 1 - 8 : 유효한 회문
+     * 알파벳만 비교하여 회문인지 판단
+     * 대소문자도 구분 X
+     */
+    public String IsValidPalindrome(String str) {
+
+        str = str.toUpperCase().replaceAll("[^A-Z]", "");
+        String convertStr = new StringBuilder(str).reverse().toString();
+
+        if (!str.equals(convertStr)) {
+            return "NO";
+        }
+
+
+//        int left = 0, right = str.length() - 1;
+//        while (left < right) {
+//
+//            while (!Character.isAlphabetic(str.charAt(left))) {
+//                left++;
+//            }
+//
+//            while (!Character.isAlphabetic(str.charAt(right))) {
+//                right--;
+//            }
+//
+//            if(str.charAt(left) != str.charAt(right)) {
+//                return "NO";
+//            }
+//
+//            left++;
+//            right--;
+//
+//        }
+
+        return "YES";
+    }
+
+    /**
+     * section 1 - 9 : 숫자만 추출
+     */
+    public Integer extractDigit(String str) {
+
+        String ans = "";
+        for (char x:str.toCharArray()) {
+
+            if(Character.isDigit(x)) {
+                ans += x;
+            }
+
+        }
+
+        // parseInt : 원시 타입, valueOf :객체 타입
+        return Integer.valueOf(ans);
+
+    }
+
+    /**
+     * section 1 - 10 : 가장 짧은 문자거리
+     */
+    public int[] findMinimumSDistance(String str, char t) {
+
+        int pos = 101, len = str.length();
+        int[] ans = new int[str.length()];
+
+        for (int i = 0; i < len; i++) {
+
+            if (str.charAt(i) == t) {
+                pos = 0;
+                ans[i] = pos;
+            } else {
+                pos++;
+                ans[i] = pos;
+            }
+
+        }
+
+        for (int i = len - 1; 0 <= i; i--) {
+
+            if (str.charAt(i) == t) {
+                pos = 0;
+            } else {
+                pos++;
+                ans[i] = Math.min(pos, ans[i]) ;
+            }
+
+        }
+
+        return ans;
+
+    }
+
+    /**
+     * section 1 - 11 : 문자열 압축
+     */
+    public String compressString(String str) {
+
+        int i, cnt;
+        str = str + " ";
+        String ans = "";
+
+        cnt = 1;
+        for (i = 0;i < str.length() - 1;i++) {
+
+            if (str.charAt(i) == str.charAt(i + 1)) {
+               cnt++;
+            } else {
+                ans += str.charAt(i);
+                if (cnt > 1) {
+                    ans += cnt;
+                    cnt = 1;
+                }
+            }
+        }
+
+        return ans;
+
+    }
+
+    /**
+     * section 1 - 12 : 암호
+     */
+    public String encrypt(int number, String str) {
+
+        String ans = "";
+        int dis = str.length() / number;
+
+        for (int i = 0; i < str.length(); i += dis) {
+
+            String binaryNumber = str
+                    .substring(i, i + dis)
+                    .replace("#", "1")
+                    .replace("*", "0");
+
+            ans += (char)(Integer.parseInt(binaryNumber, 2));
+
+        }
+
+        return ans;
 
     }
 
