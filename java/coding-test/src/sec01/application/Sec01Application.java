@@ -1,34 +1,34 @@
 package sec01.application;
 
 import java.util.Scanner;
-import sec01.solution.Solution;
+import sec01.solution.Sec01Solution;
 
 public class Sec01Application {
 
     public Sec01Application() {
     }
 
-    private final Solution solution = new Solution();
+    private final Sec01Solution sec01Solution = new Sec01Solution();
     private final Scanner sc = new Scanner(System.in);
 
     public void ex01() {
 
         String str = sc.next();
         char target = sc.next().charAt(0);
-        System.out.println(solution.findCharacterInString(str, target));
+        System.out.println(sec01Solution.findCharacterInString(str, target));
 
     }
 
     public void ex02() {
 
         String str = sc.next();
-        System.out.println(solution.changeCase(str));
+        System.out.println(sec01Solution.changeCase(str));
 
     }
 
     public void ex03() {
         String str = sc.nextLine();
-        System.out.println(solution.findLongWord(str));
+        System.out.println(sec01Solution.findLongWord(str));
     }
 
     public void ex04() {
@@ -37,7 +37,7 @@ public class Sec01Application {
 
         for (int i = 0; i < num ; i++) {
             String str = sc.next();
-            System.out.println(solution.reverseWord(str));
+            System.out.println(sec01Solution.reverseWord(str));
         }
 
     }
@@ -45,30 +45,30 @@ public class Sec01Application {
     public void ex05() {
 
          String str = sc.next();
-         System.out.println(solution.reverseSpecificWord(str));
+         System.out.println(sec01Solution.reverseSpecificWord(str));
 
     }
 
     public void ex06() {
 
         String str = sc.next();
-        System.out.println(solution.removeDuplicationChar(str));
+        System.out.println(sec01Solution.removeDuplicationChar(str));
 
     }
 
     public void ex07() {
         String str = sc.next();
-        System.out.println(solution.IsPalindrome(str));
+        System.out.println(sec01Solution.IsPalindrome(str));
     }
 
     public void ex08() {
         String str = sc.nextLine();
-        System.out.println(solution.IsValidPalindrome(str));
+        System.out.println(sec01Solution.IsValidPalindrome(str));
     }
 
     public void ex09() {
         String str = sc.next();
-        System.out.println(solution.extractDigit(str));
+        System.out.println(sec01Solution.extractDigit(str));
     }
 
     public void ex10() {
@@ -76,7 +76,7 @@ public class Sec01Application {
         String str = sc.next();
         char target = sc.next().charAt(0);
 
-        for(int x : solution.findMinimumSDistance(str, target)) {
+        for(int x : sec01Solution.findMinimumSDistance(str, target)) {
             System.out.print(x + " ");
         }
 
@@ -84,7 +84,7 @@ public class Sec01Application {
     public void ex11() {
 
         String str = sc.next();
-        System.out.println(solution.compressString(str));
+        System.out.println(sec01Solution.compressString(str));
 
     }
 
@@ -92,7 +92,7 @@ public class Sec01Application {
 
         int number = sc.nextInt();
         String str = sc.next();
-        System.out.println(solution.encrypt(number, str));
+        System.out.println(sec01Solution.encrypt(number, str));
 
     }
 
