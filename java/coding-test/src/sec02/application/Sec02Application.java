@@ -97,23 +97,87 @@ public class Sec02Application {
 
     public void ex07() {
 
+        int rep = sc.nextInt();
+        int[] numbers = new int[rep];
+
+        for (int i = 0; i < rep;i++) {
+            numbers[i] = sc.nextInt();
+        }
+
+        System.out.println(solution.score(rep, numbers));
+
     }
 
     public void ex08() {
+
+        int rep = sc.nextInt();
+        int[] numbers = new int[rep];
+
+        for (int i = 0; i < rep;i++) {
+            numbers[i] = sc.nextInt();
+        }
+        for (int x: solution.ranking(rep, numbers)) {
+            System.out.print(x + " ");
+        }
     }
 
     public void ex09() {
+
+        int rep = sc.nextInt();
+        int[][] numbers = new int[rep][rep];
+
+        for (int i = 0; i < rep;i++) {
+            for (int j = 0; j < rep;j++) {
+                numbers[i][j] = sc.nextInt();
+            }
+        }
+
+        System.out.println(solution.findMatrixMaxSum(rep, numbers));
+
     }
 
     public void ex10() {
 
+        int rep = sc.nextInt();
+        int[][] numbers = new int[rep][rep];
+
+        for (int i = 0; i < rep;i++) {
+            for (int j = 0; j < rep;j++) {
+                numbers[i][j] = sc.nextInt();
+            }
+        }
+
+        System.out.println(solution.findTop(rep, numbers));
+
     }
 
     public void ex11() {
+        int rep = sc.nextInt();
+        int[][] numbers = new int[rep][rep];
 
+        for (int i = 0; i < rep;i++) {
+            for (int j = 0; j < rep;j++) {
+                numbers[i][j] = sc.nextInt();
+            }
+        }
+
+        System.out.println(solution.selectClassPresident(rep, numbers));
     }
 
     public void ex12() {
+
+        int N = sc.nextInt();   // 학생 수
+        int M = sc.nextInt();   // 시험 횟수
+
+        int[][] numbers = new int[M][N];
+
+        for (int i = 0; i < M;i++) {
+            for (int j = 0; j < N;j++) {
+                numbers[i][j] = sc.nextInt();
+            }
+        }
+
+        System.out.println(solution.mentor(M, N, numbers));
 
     }
 

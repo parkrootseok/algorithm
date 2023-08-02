@@ -8,7 +8,7 @@ public class Main {
         Sec02Application sec02 = new Sec02Application();
 
         // sec01.ex12();
-        sec02.ex06  ();
+        sec02.ex12  ();
 
     }
 }

@@ -169,55 +169,202 @@ public class Sec02Solution {
     /**
      * section 2 - 7 : 점수 계산
      */
-    public void IsPalindrome(String str) {
+    public int score(int rep, int[] arr) {
+
+        final int CORRECT = 1, WRONG = 0, POINT = 1;
+        int score = 0;
+
+        int mul = 1;
+        for (int i = 0;i < rep;i++) {
+
+            if (arr[i] == CORRECT) {
+                score +=  POINT * (mul++);
+            } else {
+                mul = 1;
+            }
+
+        }
+
+        return score;
 
     }
 
     /**
-     * section 1 - 8 : 유효한 회문
+     * section 2 - 8 : 등수 구하기
      * 알파벳만 비교하여 회문인지 판단
      * 대소문자도 구분 X
      */
-    public String IsValidPalindrome(String str) {
+    public int[] ranking(int rep, int[] arr) {
 
-        return "YES";
+        int[] rank = new int[rep];
+
+        for (int i = 0;i < rep;i++) {
+
+            int cnt = 1;
+
+            for(int j = 0;j < rep;j++) {
+                if (arr[j] > arr[i]) {
+                    cnt++;
+                }
+            }
+
+            rank[i] = cnt;
+
+        }
+
+        return rank;
     }
 
     /**
-     * section 1 - 9 : 숫자만 추출
+     * section 2 - 9 : 격자판 최대합
+     *
      */
-    public Integer extractDigit(String str) {
+    public int findMatrixMaxSum(int rep, int[][] arr) {
 
-        return 0;
+        int max = 0, colSum, rowSum, downLeftSum, upRightSum;
+
+        downLeftSum = upRightSum = 0;
+        for (int i = 0; i < rep;i++) {
+
+            rowSum = colSum = 0;
+
+            for (int j = 0; j < rep;j++) {
+
+                rowSum += arr[i][j];
+                colSum += arr[j][i];
+
+                if (i == j) {
+                    downLeftSum += arr[i][j];
+                }
+
+                if (i + j == (rep - 1)) {
+                    upRightSum += arr[i][j];
+                }
+
+            }
+
+            max = Math.max(max, rowSum);
+            max = Math.max(max, colSum);
+
+        }
+
+        max = Math.max(max, downLeftSum);
+        max = Math.max(max, upRightSum);
+
+        return max;
 
     }
 
     /**
-     * section 1 - 10 : 가장 짧은 문자거리
+     * section 2 - 10 : 봉우리
      */
-    public int[] findMinimumSDistance(String str, char t) {
+    public int findTop(int rep, int[][] arr) {
 
-        return null;
+        int ans = 0;
+        int[] dx = {-1, 0, 1, 0};
+        int[] dy = {0, 1, 0, -1};
 
-    }
+        for (int i = 0; i < rep;i++) {
 
-    /**
-     * section 1 - 11 : 문자열 압축
-     */
-    public String compressString(String str) {
+            for (int j = 0; j < rep;j++) {
 
-        String ans = "";
+                boolean flag = true;
+
+                for (int k = 0; k < 4; k++) {
+
+                    int x = i + dx[k];
+                    int y = j + dy[k];
+
+                    if ( x >= 0 && x < rep &&  y >= 0 && y < rep && arr[x][y] >= arr[i][j]) {
+                        flag = false;
+                        break;
+                    }
+                }
+
+               if (flag) ans++;
+
+            }
+
+        }
+
         return ans;
 
     }
 
     /**
-     * section 1 - 12 : 암호
+     * section 2 - 11 : 임시 반장 정하기
      */
-    public String encrypt(int number, String str) {
+    public int selectClassPresident(int rep, int[][] arr) {
 
-        String ans = "";
+        int max = Integer.MIN_VALUE, ans = 0, cnt;
+
+        for (int i = 0; i < rep;i++) {
+
+            cnt = 0;
+
+            for (int j = 0; j < rep;j++) {
+
+                for (int k = 0; k < rep; k++) {
+
+                    if (arr[i][k] == arr[j][k]) {
+                        cnt++;
+                        break;
+                    }
+                }
+            }
+
+            if (max < cnt) {
+                max = cnt;
+                ans = i + 1;
+            }
+
+        }
+
         return ans;
+
+    }
+
+    /**
+     * section 2 - 12 : 멘토링
+     */
+    public int mentor(int M, int N, int[][] arr) {
+
+        int ans = 0;
+
+        int cnt, ipos, jpos;
+        for (int i = 1; i <= N; i++) {
+            for (int j = 1; j <= N; j++) {
+                cnt = 0;
+                for (int k = 0; k < M; k++) {
+                    ipos = jpos = 0;
+                    for (int s = 0; s < N; s++) {
+
+                        if (arr[k][s] == i) {   // i학생 등수
+                            ipos = s;
+                        }
+
+                        if (arr[k][s] == j) {   // j학생 등수
+                            jpos = s;
+                        }
+
+                    }
+
+                    if (ipos < jpos) { // i 학생이 j 학생 등수보다 앞서면
+                        cnt++;
+                    }
+
+                }
+
+                if (cnt == M) { // i 학생이 j 학생보다 모든 회차에서 우수하면
+                    ans++;
+                }
+
+            }
+
+        }
+
+        return ans;
+
 
     }
 
