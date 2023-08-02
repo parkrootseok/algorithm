@@ -1,10 +1,8 @@
 package sec01.solution;
 
-import java.util.ArrayList;
+public class Sec01Solution {
 
-public class Solution {
-
-    public Solution() {}
+    public Sec01Solution() {}
 
     /**
      * section 1 - 1 : 문자 찾기
