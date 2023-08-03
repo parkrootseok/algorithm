@@ -51,7 +51,6 @@ public class Sec02Solution {
 
     /**
      * section 2 - 3 : 가위바위보
-     *
      */
     public char[] whoIsWinner(int rep, int[] A, int []B) {
 
@@ -191,8 +190,6 @@ public class Sec02Solution {
 
     /**
      * section 2 - 8 : 등수 구하기
-     * 알파벳만 비교하여 회문인지 판단
-     * 대소문자도 구분 X
      */
     public int[] ranking(int rep, int[] arr) {
 
@@ -217,7 +214,6 @@ public class Sec02Solution {
 
     /**
      * section 2 - 9 : 격자판 최대합
-     *
      */
     public int findMatrixMaxSum(int rep, int[][] arr) {
 
