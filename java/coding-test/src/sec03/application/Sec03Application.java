@@ -77,119 +77,40 @@ public class Sec03Application {
 
     public void ex04() {
 
-        int n = sc.nextInt();
-        solution.fibonacciSequence(n);
+        int size = sc.nextInt();
+        int target = sc.nextInt();
+        int[] arr = new int[size];
+        for (int i = 0 ; i < size ; i++) {
+
+            arr[i] = sc.nextInt();
+
+        }
+
+        System.out.println(solution.continuousSubsequence(size, target, arr));
 
     }
 
     public void ex05() {
 
-        int n = sc.nextInt();
-        solution.countDecimalNumber(n);
+        int target = sc.nextInt();
+
+        System.out.println(solution.sumContinuousNumber(target));
 
     }
 
     public void ex06() {
 
+        int size = sc.nextInt();
         int rep = sc.nextInt();
+        int[] arr = new int[size];
+        for (int i = 0 ; i < size ; i++) {
 
-        int[] numbers = new int[rep];
+            arr[i] = sc.nextInt();
 
-        for (int i = 0; i < rep;i++) {
-            numbers[i] = sc.nextInt();
         }
 
-        for (int x : solution.reverseNumberIsDecimal(rep, numbers)) {
-            System.out.print(x + " ");
-        }
+        System.out.println(solution.maximumLengthContinuousSubsequence(size, rep, arr));
 
     }
-
-    public void ex07() {
-
-        int rep = sc.nextInt();
-        int[] numbers = new int[rep];
-
-        for (int i = 0; i < rep;i++) {
-            numbers[i] = sc.nextInt();
-        }
-
-        System.out.println(solution.score(rep, numbers));
-
-    }
-
-    public void ex08() {
-
-        int rep = sc.nextInt();
-        int[] numbers = new int[rep];
-
-        for (int i = 0; i < rep;i++) {
-            numbers[i] = sc.nextInt();
-        }
-        for (int x: solution.ranking(rep, numbers)) {
-            System.out.print(x + " ");
-        }
-    }
-
-    public void ex09() {
-
-        int rep = sc.nextInt();
-        int[][] numbers = new int[rep][rep];
-
-        for (int i = 0; i < rep;i++) {
-            for (int j = 0; j < rep;j++) {
-                numbers[i][j] = sc.nextInt();
-            }
-        }
-
-        System.out.println(solution.findMatrixMaxSum(rep, numbers));
-
-    }
-
-    public void ex10() {
-
-        int rep = sc.nextInt();
-        int[][] numbers = new int[rep][rep];
-
-        for (int i = 0; i < rep;i++) {
-            for (int j = 0; j < rep;j++) {
-                numbers[i][j] = sc.nextInt();
-            }
-        }
-
-        System.out.println(solution.findTop(rep, numbers));
-
-    }
-
-    public void ex11() {
-        int rep = sc.nextInt();
-        int[][] numbers = new int[rep][rep];
-
-        for (int i = 0; i < rep;i++) {
-            for (int j = 0; j < rep;j++) {
-                numbers[i][j] = sc.nextInt();
-            }
-        }
-
-        System.out.println(solution.selectClassPresident(rep, numbers));
-    }
-
-    public void ex12() {
-
-        int N = sc.nextInt();   // 학생 수
-        int M = sc.nextInt();   // 시험 횟수
-
-        int[][] numbers = new int[M][N];
-
-        for (int i = 0; i < M;i++) {
-            for (int j = 0; j < N;j++) {
-                numbers[i][j] = sc.nextInt();
-            }
-        }
-
-        System.out.println(solution.mentor(M, N, numbers));
-
-    }
-
 }
 
