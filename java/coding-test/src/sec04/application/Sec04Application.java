@@ -48,24 +48,24 @@ public class Sec04Application {
 
     public void ex04() {
 
-        int size = sc.nextInt();
-        int target = sc.nextInt();
-        int[] arr = new int[size];
-        for (int i = 0 ; i < size ; i++) {
+        String s = sc.next();
+        String t = sc.next();
 
-            arr[i] = sc.nextInt();
-
-        }
-
-        System.out.println(solution.continuousSubsequence(size, target, arr));
+        System.out.println(solution.findAnagram(s, t));
 
     }
 
     public void ex05() {
 
-        int target = sc.nextInt();
+        int a = sc.nextInt();
+        int k = sc.nextInt();
+        int[] A = new int[a];
+        for (int i = 0 ; i < a ; i++) {
 
-        System.out.println(solution.sumContinuousNumber(target));
+            A[i] = sc.nextInt();
+
+        }
+        System.out.println(solution.maxNumber(A, k));
 
     }
 
