@@ -1,9 +1,9 @@
 package sec04.solution;
 
-import java.time.temporal.ValueRange;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 public class Sec04Solution {
 
@@ -86,9 +86,9 @@ public class Sec04Solution {
 
             map.put(A[left], map.get(A[left]) - 1);
 
-            if (map.get(A[left++]) == 0) {
+            if (map.get(A[left]) == 0) {
                 map.remove(A[left]);
-            }
+            } left++;
 
             result.add(map.size());
 
@@ -99,67 +99,64 @@ public class Sec04Solution {
     }
 
     /**
-     * section 3 - 4 : 연속 부분수열
+     * section 4 - 4 : 모든 아나그램 찾기
      */
-    public int continuousSubsequence(int size, int target, int[] arr) {
+    public int findAnagram(String s, String t) {
 
-        int left = 0, sum = 0, ans = 0;
-        for (int right = 0;right < size;right++) {
+        HashMap<Character, Integer> bMap = new HashMap<>();
+        HashMap<Character, Integer> aMap = new HashMap<>();
+        int ans = 0, length = t.length();
 
-            sum += arr[right];
+        for (char c : t.toCharArray()) {
+            bMap.put(c, bMap.getOrDefault(c, 0) + 1);
+        }
 
-            if (sum == target) {
+        for (int i = 0 ; i < length - 1 ; i++) {
+            aMap.put(s.charAt(i), aMap.getOrDefault(s.charAt(i), 0) + 1);
+        }
+
+        int lt = 0, rt;
+        for (rt = length - 1; rt < s.length() ; rt++) {
+
+            aMap.put(s.charAt(rt), aMap.getOrDefault(s.charAt(rt), 0) + 1);
+
+            if (aMap.equals(bMap)) {
                 ans++;
             }
 
-            while (sum >= target) {
+            aMap.put(s.charAt(lt), aMap.get(s.charAt(lt)) - 1);
+            if (aMap.get(s.charAt(lt)) == 0) {
+                aMap.remove(s.charAt(lt));
+            } lt++;
 
-                sum -= arr[left++];
-                if (sum == target) {
-                    ans++;
-                }
-            }
 
         }
 
         return ans;
+
     }
 
     /**
-     * section 3 - 5 : 연속된 자연수의 합
+     * section 4 - 5 : K번째 큰 수
      */
-    public int sumContinuousNumber(int target) {
+    public int maxNumber(int[] A, int k) {
 
-        int sum, ans, left = 1;
-        sum = ans = 0;
+        int ans = 0;
+        TreeSet<Integer> treeSet = new TreeSet<>(Collections.reverseOrder());
 
-
-//        /* 수학적 접근 */
-//        int t = --target, cnt = 1;
-//        while (t > 0) {
-//            cnt++;
-//            t -= cnt;
-//            if (t % cnt == 0) {
-//                ans++;
-//            }
-//        }
-
-        for (int right = 1 ; right < (target / 2) + 1 ; right++) {
-
-            sum += right;
-
-            if (sum == target) {
-                ans ++;
-            }
-
-            while (sum >= target) {
-
-                sum -= left++;
-                if (sum == target) {
-                    ans++;
+        for (int i = 0 ; i < A.length ; i++) {
+            for (int j = i + 1 ; j < A.length ; j++) {
+                for (int l = j + 1 ; l < A.length ; l++) {
+                    treeSet.add(A[i] + A[j] + A[l]);
                 }
             }
+        }
 
+        int cnt = 0;
+        for (int x : treeSet) {
+           if (++cnt == k) {
+               ans = x;
+           }
         }
 
         return ans;

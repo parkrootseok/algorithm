@@ -14,7 +14,7 @@ public class Main {
         // sec01.ex12();
         // sec02.ex12();
         // sec03.ex06();
-        sec04.ex03();
+        sec04.ex05();
 
     }
 }
