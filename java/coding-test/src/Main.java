@@ -3,6 +3,7 @@ import sec02.application.Sec02Application;
 import sec03.application.Sec03Application;
 import sec04.application.Sec04Application;
 import sec05.application.Sec05Application;
+import sec06.application.Sec06Application;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,13 +13,14 @@ public class Main {
         Sec03Application sec03 = new Sec03Application();
         Sec04Application sec04 = new Sec04Application();
         Sec05Application sec05 = new Sec05Application();
+        Sec06Application sec06 = new Sec06Application();
 
         // sec01.ex12();
         // sec02.ex12();
         // sec03.ex06();
         // sec04.ex05();
-        sec05.ex08();
-
+        // sec05.ex08();
+        sec06.ex10();
 
     }
 }
