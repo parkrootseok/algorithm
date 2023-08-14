@@ -2,11 +2,7 @@ package sec06.solution;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
-import sec05.solution.Person;
+import java.util.Collections;
 
 public class Sec06Solution {
 
@@ -146,5 +142,154 @@ public class Sec06Solution {
 
     }
 
+    /**
+     * section 6 - 6 : 장난꾸러기
+     */
+    public ArrayList<Integer> mischief(int[] arr) {
+
+        ArrayList<Integer> ans  = new ArrayList<>();
+        int[] tmp = arr.clone();
+        Arrays.sort(tmp);
+
+        for (int i = 0 ; i < arr.length ; i++) {
+
+            if (tmp[i] != arr[i]) {
+                ans.add(i + 1);
+            }
+        }
+
+        return ans;
+
+    }
+
+    /**
+     * section 6 - 7 : 좌표 정렬
+     */
+    public ArrayList<Coordinate> sortCoordinate(ArrayList<Coordinate> coordinates) {
+
+        // Collections 클래스의 sort 메소드는 Comparable 클래스의 compareTo 메소드를 사용하여 정렬
+        Collections.sort(coordinates);
+        return coordinates;
+
+    }
+
+    /**
+     * section 6 - 8 : 이분검색
+     */
+    public int binarySearch(int[] arr, int M) {
+
+        int ans = 0;
+        Arrays.sort(arr);
+
+        int lt = 0, rt = arr.length - 1;
+
+        while (lt <= rt) {
+
+            int mid = (lt + rt) / 2;
+
+            if (arr[mid] == M) {
+                ans = mid + 1;
+                break;
+            } else if (arr[mid] < M) {
+                lt = mid + 1;
+            } else {
+                rt =  mid - 1;
+            }
+
+        }
+
+
+        return ans;
+    }
+
+    /**
+     * section 6 - 9 : 뮤직비디오
+     */
+    public int musicVideo(int[] arr, int M) {
+
+        int ans = 0;
+
+        int lt = Arrays.stream(arr).max().getAsInt();
+        int rt = Arrays.stream(arr).sum();
+
+        while (lt <= rt) {
+
+            int mid = (lt + rt) / 2;
+
+            if (count(arr, mid) <= M) {
+                ans = mid;
+                rt = mid - 1;
+            } else {
+                lt = mid + 1;
+            }
+
+        }
+
+        return ans;
+
+    }
+
+    private int count(int[] arr, int mid) {
+
+        int cnt = 1, sum = 0;
+        for (int x : arr) {
+
+            if (sum + x > mid) {
+                cnt++;
+                sum = x;
+            } else {
+                sum += x;
+            }
+
+        }
+
+        return cnt;
+
+    }
+
+    /**
+     * section 6 - 10 : 마구간 정하기
+     */
+    public int selectStall(int[] arr, int M) {
+
+        int ans = 0;
+
+        Arrays.sort(arr);
+        int lt = 1;
+        int rt = arr[arr.length - 1];
+
+        while (lt <= rt) {
+
+            int mid = (lt + rt) / 2;
+
+            if (minDistinctCount(arr, mid) >= M) {  // M개 보다 많으면 간격이 더 넓어야 하고
+                ans = mid;
+                lt = mid + 1;
+            } else {    // M개 보다 작으면 너무 긴격을 줄여야 함
+                rt = mid - 1;
+            }
+
+        }
+
+        return ans;
+
+    }
+
+    private int minDistinctCount(int[] arr, int mid) {
+
+        int cnt = 1, sum = 0, ep = 0;
+
+        for (int i = 0; i < arr.length ; i++) {
+
+            if (arr[i] - arr[ep] >= mid) {
+                cnt++;
+                ep = i;
+            }
+
+        }
+
+        return cnt;
+
+    }
 
 }
