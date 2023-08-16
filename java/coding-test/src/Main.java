@@ -23,7 +23,7 @@ public class Main {
         // sec04.ex05();
         // sec05.ex08();
         // sec06.ex10();
-        sec07.ex07();
+        sec07.ex14();
 
     }
 }

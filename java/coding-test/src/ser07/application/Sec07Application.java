@@ -1,8 +1,8 @@
 package ser07.application;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
-import sec06.solution.Coordinate;
 import ser07.solution.BinaryTree;
 import ser07.solution.Node;
 import ser07.solution.Sec07Solution;
@@ -87,38 +87,100 @@ public class Sec07Application {
 
         int N = sc.nextInt();
         int M = sc.nextInt();
-        int[] arr = new int[N];
-        for (int i = 0 ; i < N ; i++) {
-            arr[i] = sc.nextInt();
-        }
 
-        System.out.println(solution.binarySearch(arr, M));
+        System.out.println(solution.saveCalf(N, M));
 
     }
 
     public void ex09() {
 
-        int N = sc.nextInt();
-        int M = sc.nextInt();
-        int[] arr = new int[N];
-        for (int i = 0 ; i < N ; i++) {
-            arr[i] = sc.nextInt();
-        }
+        Node root = new Node(1);
+        root.setLeft(new Node(2));
+        root.setRight(new Node(3));
+        root.getLeft().setLeft(new Node(4));
+        root.getLeft().setRight(new Node(5));
+        root.getRight().setLeft(new Node(6));
+        root.getRight().setRight(new Node(7));
 
-        System.out.println(solution.musicVideo(arr, M));
-
+        BinaryTree bTree = new BinaryTree(root);
+        System.out.println(solution.minimumRouteDFS(0, bTree.getRoot()));
     }
 
     public void ex10() {
 
-        int N = sc.nextInt();
-        int M = sc.nextInt();
-        int[] arr = new int[N];
-        for (int i = 0 ; i < N ; i++) {
-            arr[i] = sc.nextInt();
+        Node root = new Node(1);
+        root.setLeft(new Node(2));
+        root.setRight(new Node(3));
+        root.getLeft().setLeft(new Node(4));
+        root.getLeft().setRight(new Node(5));
+
+        BinaryTree bTree = new BinaryTree(root);
+        System.out.println(solution.minimumRouteBFS(bTree.getRoot()));
+
+    }
+
+    public void ex12() {
+
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int[][] graph = new int[n + 1][n + 1];
+        for (int i = 0 ; i < m ;i++) {
+
+            int to = sc.nextInt();
+            int from = sc.nextInt();
+
+            graph[to][from] = 1;
+
         }
 
-        System.out.println(solution.selectStall(arr, M));
+        boolean[] check = new boolean[n + 1];
+        check[1] = true;
+        solution.searchRouteForMatrix(n,1, graph, check);
+
+    }
+
+    public void ex13() {
+
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        ArrayList<ArrayList<Integer>> graph = new ArrayList<ArrayList<Integer>>();
+
+        for (int i = 0 ; i <= n ;i++) {
+            graph.add(new ArrayList<Integer>());
+        }
+
+        for (int i = 0 ; i < m ;i++) {
+            int to = sc.nextInt();
+            int from = sc.nextInt();
+
+            graph.get(to).add(from);
+        }
+
+
+        boolean[] check = new boolean[n + 1];
+        check[1] = true;
+        solution.searchRouteForList(n,1, graph, check);
+
+    }
+
+    public void ex14() {
+
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        ArrayList<ArrayList<Integer>> graph = new ArrayList<ArrayList<Integer>>();
+
+        for (int i = 0 ; i <= n ;i++) {
+            graph.add(new ArrayList<Integer>());
+        }
+
+        for (int i = 0 ; i < m ;i++) {
+            int to = sc.nextInt();
+            int from = sc.nextInt();
+
+            graph.get(to).add(from);
+        }
+
+        solution.findGraphMinimumRoute(n, graph);
 
     }
 
