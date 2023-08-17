@@ -1,4 +1,4 @@
-package ser07.solution;
+package sec07.solution;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
