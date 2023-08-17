@@ -1,4 +1,4 @@
-package ser07.solution;
+package sec07.solution;
 
 public class Node {
 

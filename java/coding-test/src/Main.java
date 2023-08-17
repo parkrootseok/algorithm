@@ -4,7 +4,7 @@ import sec03.application.Sec03Application;
 import sec04.application.Sec04Application;
 import sec05.application.Sec05Application;
 import sec06.application.Sec06Application;
-import ser07.application.Sec07Application;
+import sec07.application.Sec07Application;
 
 public class Main {
     public static void main(String[] args) {
@@ -23,7 +23,7 @@ public class Main {
         // sec04.ex05();
         // sec05.ex08();
         // sec06.ex10();
-        sec07.ex14();
+        // sec07.ex14();
 
     }
 }

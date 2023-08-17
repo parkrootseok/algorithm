@@ -1,11 +1,10 @@
-package ser07.application;
+package sec07.application;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
-import ser07.solution.BinaryTree;
-import ser07.solution.Node;
-import ser07.solution.Sec07Solution;
+import sec07.solution.BinaryTree;
+import sec07.solution.Node;
+import sec07.solution.Sec07Solution;
 
 public class Sec07Application {
 
