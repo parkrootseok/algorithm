@@ -1,4 +1,4 @@
-package sec08.sec07;
+package sec08.ex07;
 
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package sec08.sec05;
+package sec08.ex05;
 
 import java.util.Arrays;
 import java.util.Collections;
