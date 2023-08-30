@@ -1,29 +1,27 @@
-import sec01.application.Sec01Application;
-import sec02.application.Sec02Application;
-import sec03.application.Sec03Application;
-import sec04.application.Sec04Application;
-import sec05.application.Sec05Application;
-import sec06.application.Sec06Application;
-import sec07.application.Sec07Application;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        Sec01Application sec01 = new Sec01Application();
-        Sec02Application sec02 = new Sec02Application();
-        Sec03Application sec03 = new Sec03Application();
-        Sec04Application sec04 = new Sec04Application();
-        Sec05Application sec05 = new Sec05Application();
-        Sec06Application sec06 = new Sec06Application();
-        Sec07Application sec07 = new Sec07Application();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        // sec01.ex12();
-        // sec02.ex12();
-        // sec03.ex06();
-        // sec04.ex05();
-        // sec05.ex08();
-        // sec06.ex10();
-        // sec07.ex14();
+        int N = Integer.parseInt(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine(), "");
+
+        int sum = 0;
+        while (st.hasMoreTokens()) {
+            sum += Integer.parseInt(st.nextToken());
+        }
+
+        bw.write(sum);
+        bw.close();
 
     }
+
 }
