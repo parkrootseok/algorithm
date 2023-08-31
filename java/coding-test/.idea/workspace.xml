@@ -5,7 +5,67 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f6491fe9-1387-4f3c-80db-d88f99aeee8d" name="변경" comment="Feat : Section 10 - 2&#10;&#10;- 동전 교환&#10;- 최대 점수 구하기">
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../baekjoon/.idea/libraries/KotlinJavaRuntime.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../baekjoon/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../baekjoon/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../baekjoon/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../baekjoon/src/openchatting/Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/../baekjoon/src/programmers/openchatting/Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../baekjoon/src/p10250/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../baekjoon/src/baekjoon/p10250/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../baekjoon/src/p10809/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../baekjoon/src/baekjoon/p10809/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../baekjoon/src/p1152/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../baekjoon/src/baekjoon/p1152/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../baekjoon/src/p11720/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../baekjoon/src/baekjoon/p11720/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../baekjoon/src/p2439/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../baekjoon/src/baekjoon/p2439/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../baekjoon/src/p2577/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../baekjoon/src/baekjoon/p2577/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../baekjoon/src/p2884/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../baekjoon/src/baekjoon/p2884/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../baekjoon/src/p2920/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../baekjoon/src/baekjoon/p2920/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../baekjoon/src/p3052/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../baekjoon/src/baekjoon/p3052/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../baekjoon/src/p8958/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../baekjoon/src/baekjoon/p8958/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec01/application/Sec01Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec01/application/Sec01Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec01/solution/Sec01Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec01/solution/Sec01Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec02/application/Sec02Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec02/application/Sec02Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec02/solution/Sec02Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec02/solution/Sec02Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec03/application/Sec03Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec03/application/Sec03Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec03/solution/Sec03Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec03/solution/Sec03Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec04/application/Sec04Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec04/application/Sec04Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec04/solution/Sec04Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec04/solution/Sec04Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec05/application/Sec05Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec05/application/Sec05Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec05/solution/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec05/solution/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec05/solution/Sec05Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec05/solution/Sec05Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec06/application/Sec06Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec06/application/Sec06Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec06/solution/Coordinate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec06/solution/Coordinate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec06/solution/Sec06Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec06/solution/Sec06Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec07/application/Sec07Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec07/application/Sec07Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec07/solution/BinaryTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec07/solution/BinaryTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec07/solution/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec07/solution/Node.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec07/solution/Sec07Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec07/solution/Sec07Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex01/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex01/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex02/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex02/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex03/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex03/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex04/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex04/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex05/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex05/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex06/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex06/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex07/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex07/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex08/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex08/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex09/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex09/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex10/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex10/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex11/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex11/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex12/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex12/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex13/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex13/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex14/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex14/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec08/ex15/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec08/ex15/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec09/ex01/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec09/ex01/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec09/ex02/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec09/ex02/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec09/ex03/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec09/ex03/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec09/ex04/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec09/ex04/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec09/ex05/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec09/ex05/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec09/ex06/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec09/ex06/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec09/ex07/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec09/ex07/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec09/ex08/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec09/ex08/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec10/ex01/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec10/ex01/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec10/ex02/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec10/ex02/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec10/ex03/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec10/ex03/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec10/ex04/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec10/ex04/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec10/ex05/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec10/ex05/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sec10/ex06/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/inflearn/sec10/ex06/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,6 +172,7 @@
       <workItem from="1693299032675" duration="2000" />
       <workItem from="1693299465971" duration="7167000" />
       <workItem from="1693375160429" duration="116000" />
+      <workItem from="1693485245757" duration="75000" />
     </task>
     <task id="LOCAL-00001" summary="Chore : 기존 파일 삭제">
       <created>1690798380659</created>
@@ -340,17 +401,17 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/sec10/ex01/Main.java</url>
+          <url>file://$PROJECT_DIR$/src/inflearn/sec10/ex01/Main.java</url>
           <line>23</line>
           <option name="timeStamp" value="64" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/sec10/ex05/Main.java</url>
+          <url>file://$PROJECT_DIR$/src/inflearn/sec10/ex05/Main.java</url>
           <line>46</line>
           <option name="timeStamp" value="68" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/sec10/ex06/Main.java</url>
+          <url>file://$PROJECT_DIR$/src/inflearn/sec10/ex06/Main.java</url>
           <line>71</line>
           <option name="timeStamp" value="71" />
         </line-breakpoint>

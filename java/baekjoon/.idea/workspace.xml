@@ -1,43 +1,224 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="6062076e-ca61-4129-82b0-0853364d01d0" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/../coding-test/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/Main.java" afterDir="false" />
+    <list default="true" id="917e819e-9ad4-441d-bd89-6c88d7d6eb2a" name="변경" comment="Feat: Open Chatting Room">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/KotlinJavaRuntime.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/openchatting/Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/programmers/openchatting/Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/p10250/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/baekjoon/p10250/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/p10809/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/baekjoon/p10809/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/p1152/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/baekjoon/p1152/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/p11720/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/baekjoon/p11720/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/p2439/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/baekjoon/p2439/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/p2577/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/baekjoon/p2577/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/p2884/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/baekjoon/p2884/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/p2920/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/baekjoon/p2920/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/p3052/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/baekjoon/p3052/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/p8958/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/baekjoon/p8958/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec01/application/Sec01Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec01/application/Sec01Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec01/solution/Sec01Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec01/solution/Sec01Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec02/application/Sec02Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec02/application/Sec02Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec02/solution/Sec02Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec02/solution/Sec02Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec03/application/Sec03Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec03/application/Sec03Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec03/solution/Sec03Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec03/solution/Sec03Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec04/application/Sec04Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec04/application/Sec04Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec04/solution/Sec04Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec04/solution/Sec04Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec05/application/Sec05Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec05/application/Sec05Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec05/solution/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec05/solution/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec05/solution/Sec05Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec05/solution/Sec05Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec06/application/Sec06Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec06/application/Sec06Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec06/solution/Coordinate.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec06/solution/Coordinate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec06/solution/Sec06Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec06/solution/Sec06Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec07/application/Sec07Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec07/application/Sec07Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec07/solution/BinaryTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec07/solution/BinaryTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec07/solution/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec07/solution/Node.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec07/solution/Sec07Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec07/solution/Sec07Solution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex01/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex01/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex02/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex02/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex03/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex03/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex04/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex04/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex05/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex05/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex06/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex06/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex07/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex07/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex08/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex08/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex09/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex09/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex10/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex10/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex11/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex11/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex12/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex12/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex13/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex13/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex14/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex14/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec08/ex15/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec08/ex15/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec09/ex01/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec09/ex01/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec09/ex02/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec09/ex02/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec09/ex03/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec09/ex03/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec09/ex04/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec09/ex04/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec09/ex05/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec09/ex05/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec09/ex06/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec09/ex06/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec09/ex07/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec09/ex07/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec09/ex08/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec09/ex08/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec10/ex01/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec10/ex01/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec10/ex02/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec10/ex02/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec10/ex03/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec10/ex03/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec10/ex04/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec10/ex04/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec10/ex05/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec10/ex05/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coding-test/src/sec10/ex06/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../coding-test/src/inflearn/sec10/ex06/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin Class" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/../.." value="programmers" />
+      </map>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="2Ugxxmsa2s8DqxbNAyo2pKll5JL" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/parkrootseok/Desktop/Programming/git/Repository/Algorithm/java/baekjoon",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/parkrootseok/Desktop/Programming/git/Repository/Algorithm/java/baekjoon/src&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="p10809" />
+      <recent name="p10250" />
+      <recent name="p8958" />
+      <recent name="p3052" />
+      <recent name="p2920" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="디폴트 작업">
-      <changelist id="6062076e-ca61-4129-82b0-0853364d01d0" name="변경" comment="" />
+      <changelist id="917e819e-9ad4-441d-bd89-6c88d7d6eb2a" name="변경" comment="Feat: 알파벳 찾기" />
       <created>1693375276339</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1693375276339</updated>
       <workItem from="1693375277633" duration="25000" />
       <workItem from="1693375373575" duration="323000" />
+      <workItem from="1693464625903" duration="13284000" />
     </task>
+    <task id="LOCAL-00001" summary="Feat: 숫자의 합">
+      <created>1693381546416</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1693381546416</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Feat: 단어의 개수">
+      <created>1693382618578</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1693382618578</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Feat: 단어의 공부">
+      <created>1693383768246</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1693383768246</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Feat: 별찍기 - 2">
+      <created>1693384551050</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1693384551050</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Feat: 숫자의 개수">
+      <created>1693395482780</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1693395482780</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Feat: 알람 시계">
+      <created>1693397171635</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1693397171635</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Feat: 음계">
+      <created>1693397188488</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1693397188488</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Feat: 나머지">
+      <created>1693397818661</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1693397818661</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Feat: OX퀴즈">
+      <created>1693404827873</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1693404827873</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Feat: ACM 호텔">
+      <created>1693406502243</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1693406502243</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Feat: 알파벳 찾기">
+      <created>1693407050752</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1693407050752</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Feat: Open Chatting Room">
+      <created>1693485126333</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1693485126333</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -53,5 +234,30 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial commit" />
+    <MESSAGE value="Feat: 숫자의 합" />
+    <MESSAGE value="Feat: 단어의 개수" />
+    <MESSAGE value="Feat: 단어의 공부" />
+    <MESSAGE value="Feat: 별찍기 - 2" />
+    <MESSAGE value="Feat: 숫자의 개수" />
+    <MESSAGE value="Feat: 알람 시계" />
+    <MESSAGE value="Feat: 음계" />
+    <MESSAGE value="Feat: 나머지" />
+    <MESSAGE value="Feat: OX퀴즈" />
+    <MESSAGE value="Feat: ACM 호텔" />
+    <MESSAGE value="Feat: 알파벳 찾기" />
+    <MESSAGE value="Feat: Open Chatting Room" />
+    <option name="LAST_COMMIT_MESSAGE" value="Feat: Open Chatting Room" />
+  </component>
+  <component name="XDebuggerManager">
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="Main$User" memberName="this$0" />
+        <PinnedItemInfo parentTag="Main$User" memberName="records" />
+        <PinnedItemInfo parentTag="Main$User" memberName="nickname" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>
