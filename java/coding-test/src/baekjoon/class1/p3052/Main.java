@@ -1,4 +1,4 @@
-package baekjoon.p3052;
+package baekjoon.class1.p3052;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
