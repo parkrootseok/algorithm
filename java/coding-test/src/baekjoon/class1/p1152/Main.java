@@ -1,11 +1,10 @@
-package baekjoon.p2884;
+package baekjoon.class1.p1152;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -13,26 +12,22 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        int H = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(br.readLine());
 
-        M -= 45;
-
-        if (M < 0) {
-
-            if (H == 0) {
-                H = 23;
-            } else {
-                H--;
+        int i, j;
+        StringBuilder sb = new StringBuilder();
+        for (i = 0 ; i < N ; i++) {
+            for (j = 0 ; j < N - (i + 1) ; j++) {
+               sb.append(" ");
             }
 
-            M += 60;
-
+            for (j = 0 ; j < i + 1 ; j++) {
+                sb.append("*");
+            }
+            sb.append("\n");
         }
 
-        bw.write(H + " " + M);
-        bw.close();
+        System.out.println(sb);
 
     }
 

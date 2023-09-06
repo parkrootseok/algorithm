@@ -1,4 +1,4 @@
-package baekjoon.p11720;
+package baekjoon.class1.p11720;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

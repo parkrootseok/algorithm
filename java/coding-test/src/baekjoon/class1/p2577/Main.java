@@ -1,4 +1,4 @@
-package baekjoon.p2439;
+package baekjoon.class1.p2577;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,22 +12,25 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        int N = Integer.parseInt(br.readLine());
+        int A = Integer.parseInt(br.readLine());
+        int B = Integer.parseInt(br.readLine());
+        int C = Integer.parseInt(br.readLine());
 
-        int i, j;
-        StringBuilder sb = new StringBuilder();
-        for (i = 0 ; i < N ; i++) {
-            for (j = 0 ; j < N - (i + 1) ; j++) {
-               sb.append(" ");
-            }
+        int num = A * B * C;
+        int[] numbers = new int[10];
 
-            for (j = 0 ; j < i + 1 ; j++) {
-                sb.append("*");
-            }
-            sb.append("\n");
+        while (num > 0) {
+
+            numbers[num % 10]++;
+            num /= 10;
+
         }
 
-        System.out.println(sb);
+        for (int x : numbers) {
+            bw.write(x + "\n");
+        }
+
+        bw.close();
 
     }
 

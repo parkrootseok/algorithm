@@ -1,4 +1,4 @@
-package baekjoon.p10250;
+package baekjoon.class1.p10250;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
