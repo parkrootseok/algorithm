@@ -20,19 +20,16 @@ public class Main {
 
         int N = Integer.parseInt(br.readLine());
 
-        double[] scores = new double[N];
+        double score, total = 0;
         double max = Integer.MIN_VALUE;
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
         for (int i = 0 ; i < N ; i++) {
-            scores[i] = Double.parseDouble(st.nextToken());
-            max = Math.max(max, scores[i]);
+            score = Double.parseDouble(st.nextToken());
+            total += score;
+            max = Math.max(max, score);
         }
 
-        for (int i = 0 ; i < N ; i++) {
-            scores[i] = ( scores[i] / max ) * 100;
-        }
-
-        System.out.println(Arrays.stream(scores).average().getAsDouble());
+        System.out.println((total / max * 100) / N);
 
     }
 
