@@ -1,33 +1,43 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-void insertionSort(int size, int * arr);
+void insertionSort(int size, long * arr);
 
-int main()
-{
+int main() {
 
-    int n;
-    scanf("%d", &n);
+    clock_t finish, start;  
+    double duration;
+    srand(time(NULL));
 
-    int * arr = (int *)malloc(sizeof(int) * n);
+    long n;
+    scanf("%ld", &n);
+
+    long * arr = (long *)malloc(sizeof(long) * n);
     for (int i = 0; i < n; i++) {
-        scanf("%d", arr + i);
+        *(arr + i) = rand() % 100;
     }
 
+    start = clock();
     insertionSort(n, arr);
+    finish = clock();
 
+    duration = (double)(finish-start)/CLOCKS_PER_SEC;
+	printf("걸린 시간 : %lf\n",duration);
     for (int i = 0; i < n; i++) {
-        printf("%d ", *(arr + i));
-    }
+        printf("%ld ", *(arr + i));
+    } printf("\n");
 
     return 0;
 }
 
-void insertionSort(int size, int *arr) {
+void insertionSort(int size, long *arr) {
 
-    int i, j, cur;
+    int i, j;
+    long cur;
 
-    for (i = 1; i < size ; i++) {
+    for (i = 1; i < size; i++)
+    {
 
         cur = *(arr + i);
 
@@ -42,7 +52,5 @@ void insertionSort(int size, int *arr) {
         }
 
         *(arr + (j + 1)) = cur;
-
     }
-
 }
