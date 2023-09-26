@@ -6,15 +6,12 @@ class Solution {
         ArrayList<Integer> result = new ArrayList<>();
         for (int i = 0; i < arr.length; ) {
 
-            if (result.size() == 0) {
-                result.add(arr[i++]);
-            } else if (result.get(result.size() - 1) == arr[i]) {
+           if (result.size() != 0 && result.get(result.size() - 1) == arr[i]) {
                 result.remove(result.size() - 1);
                 i++;
             } else {
                 result.add(arr[i++]);
             }
-
 
         }
 
