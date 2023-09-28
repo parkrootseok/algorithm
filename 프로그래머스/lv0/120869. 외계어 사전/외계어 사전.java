@@ -1,5 +1,5 @@
 class Solution {
-      public int solution(String[] spell, String[] dic) {
+ public int solution(String[] spell, String[] dic) {
 
         int answer = 2;
         for (String d : dic) {
@@ -8,7 +8,7 @@ class Solution {
 
             for (String s : spell) {
 
-                if (d.contains(s) && d.indexOf(s) == d.lastIndexOf(s)) {
+                if (d.contains(s)) {
                     cnt++;
                 }
 
@@ -17,11 +17,10 @@ class Solution {
             if (cnt == spell.length) {
                 return 1;
             }
-
+            
         }
 
         return answer;
     }
-
 
 }
