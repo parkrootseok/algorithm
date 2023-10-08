@@ -15,27 +15,21 @@ class Solution {
 
         }
 
-        if (sum == total) {
-            return log.stream()
-                    .mapToInt(n -> n)
-                    .toArray();
-        }
-
         for ( ; ; i++) {
-
-            int del = log.remove(log.size() - num);
-            log.add(i);
-            sum -= del;
-            sum += i;
 
             if (sum == total) {
                 return log.stream()
                         .mapToInt(n -> n)
                         .toArray();
             }
+            
+            sum -= log.remove(log.size() - num);;
+            log.add(i);
+            sum += i;
 
         }
 
     }
+
 
 }
