@@ -9,9 +9,7 @@ class Solution {
         for (i = 0 - num ; i < num - num ; i++) {
 
             log.add(i);
-            sum = log.stream()
-                    .mapToInt(n -> n)
-                    .sum();
+            sum += i;
 
         }
 
