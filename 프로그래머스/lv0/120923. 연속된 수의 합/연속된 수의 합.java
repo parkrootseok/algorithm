@@ -1,7 +1,7 @@
 import java.util.*;
 
 class Solution {
-    public int[] solution(int num, int total) {
+   public int[] solution(int num, int total) {
 
         ArrayList<Integer> log = new ArrayList<>();
 
@@ -23,11 +23,10 @@ class Solution {
 
         for ( ; ; i++) {
 
-            log.remove(log.size() - num);
+            int del = log.remove(log.size() - num);
             log.add(i);
-            sum = log.stream()
-                    .mapToInt(n -> n)
-                    .sum();
+            sum -= del;
+            sum += i;
 
             if (sum == total) {
                 return log.stream()
@@ -38,6 +37,5 @@ class Solution {
         }
 
     }
-
 
 }
