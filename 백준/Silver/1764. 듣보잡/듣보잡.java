@@ -6,7 +6,7 @@ import java.io.OutputStreamWriter;
 import java.util.*;
 
 /**
- * 나는야 포켓몬 마스터 이다솜
+ * 듣보잡
  */
 
 public class Main {
