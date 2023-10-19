@@ -52,9 +52,9 @@ int rBinarySearch(int * dic, int start, int end, int target) {
     if (target == dic[mid]) {
         return mid;
     } else if (target < dic[mid]) {
-        return binarySearch(dic, start, mid - 1, target);
+        return rBinarySearch(dic, start, mid - 1, target);
     } else {
-        return binarySearch(dic, mid + 1, end, target);
+        return rBinarySearch(dic, mid + 1, end, target);
     }
     
 }

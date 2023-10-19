@@ -1,109 +1,202 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-void swap(int * a, int * b) {
+typedef struct __node {
+    int data;
+    struct __node * next;
+} Node;
 
-    int tmp = * a;
-    * a = * b;
-    * b = tmp;
+typedef struct __list {
+    Node *head;
+    int numOfData;
+} List;
 
+Node * makeNode() {
+
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->next = NULL;
+
+    return newNode;
 }
 
-int * input(int N) {
-
-    int elem;
-    int *arr = (int *)malloc(sizeof(int) * N);
-    for (int i = 0; i < N; i++) {
-        scanf("%d", &elem);
-        arr[i] = elem;
-    }
-
-    return arr;
-
-}
-
-void print(int N, int * arr) {
-
-
-    for (int i = 0; i < N; i++) {
-        printf("%d ", arr[i]);
-    }
+List * initList() {
     
+    List *list = (List *)malloc(sizeof(List));
+    list->head = makeNode();
+    list->numOfData = 0;
+
+    return list;
+
+}
+
+// swap(int *a, int *b)
+// {
+
+//     int tmp = * a;
+//     * a = * b;
+//     * b = tmp;
+// }
+
+void input(List *list);
+void addLast(List *list, int data);
+int removeFirst(List *list);
+int get(List *list, int k);
+int isSize(List *list);
+bool isEmpty(List *list);
+void inPlaceQuickSort(int *arr, int l, int r);
+int inPlacePartition(int * arr, int l, int r, int k);
+void print(List * list);
+
+void quickSort(List *L);
+void partition(List *L, List * LT, List * EQ, List *GT, int k);
+void merge(List *L, List *LT, List *EQ, List *GT);
+int main()
+{
+
+    List *list = initList();
+
+    input(list);
+    quickSort(list);
+    print(list);
+
+    return 0;
+}
+
+void addLast(List *list, int data) {
+
+    Node *cur = list->head;
+    Node *node = makeNode();
+    node->data = data;
+
+    while (cur->next != NULL) {
+        cur = cur->next;
+    }
+
+    cur->next = node;
+    (list->numOfData)++;
+
+}
+
+int removeFirst(List *list) {
+
+    Node *rNode = list->head->next;
+    int rData = rNode->data;
+
+    list->head->next = rNode->next;
+    (list->numOfData)--;
+
+    free(rNode);
+    return rData;
+
+}
+
+int get(List *list, int k) {
+
+    Node *cur = list->head;
+
+    if(isSize(list) < k) {
+        return false;
+    }
+
+    for (int i = 0; i < k; i++) {
+        cur = cur->next;
+    }
+
+    return cur->data;
+}
+
+int isSize(List *list) {
+    return list->numOfData;
+}
+
+bool isEmpty(List *list) {
+
+    if(isSize(list) == 0) {
+        return true;
+    }
+
+    return false;
+
+}
+
+void input(List * list) {
+
+    int data;
+
+    while (true) {
+        
+        scanf("%d", &data);
+        getchar();
+
+        if (data == -1) {
+            return;
+        }
+
+        addLast(list, data);
+        
+    }
+
+}
+
+void print(List * list) {
+
+    Node * cur = list->head;
+
+    for (int i = 0; i < list->numOfData; i++) {
+        cur = cur->next;
+        printf(" %d", cur->data);
+    }
+
     printf("\n");
 
 }
 
-void inPlaceQuickSort(int * arr, int l, int r);
-int inPlacePartition(int * arr, int l, int r, int k);
+void quickSort(List *L) {
 
-int main() {
+    List *LT = initList(), *EQ = initList(), *GT = initList();
+    int k;
 
-    int N;
-    scanf("%d", &N);
-    
-    int *arr = input(N);
-
-    inPlaceQuickSort(arr, 0, N - 1);
-
-    print(N, arr);
-    return 0;
+    if (isSize(L) > 1) {
+        k = L->numOfData / 2;
+        partition(L, LT, EQ, GT, k);
+        quickSort(LT);
+        quickSort(GT);
+        merge(L, LT, EQ, GT);
+    }
 
 }
 
-void inPlaceQuickSort(int * arr, int l, int r) {
+void partition(List *L, List * LT, List * EQ, List *GT, int k) {
 
-    int k, a, b;
+    int data, pivot;
 
-    if (l >= r) {
-        return;
+    pivot = get(L, k);
+    while(!isEmpty(L)) {
+        data = removeFirst(L);
+        if (pivot > data) {
+            addLast(LT, data);
+        } else if (pivot == data) {
+            addLast(EQ, data);
+        } else {
+            addLast(GT, data);
+        }
     }
 
-    k = (l + r) / 2;
-    a = inPlacePartition(arr, l, r, k);
-    b = a + 1;
-
-    while (arr[b] == arr[b + 1]) {  // 중복된 원소는 정렬에서 제외
-        b++;
-    }
-
-    inPlaceQuickSort(arr, l, a - 1);
-    inPlaceQuickSort(arr, a + 1, r);
+    return;
 
 }
+void merge(List *L, List *LT, List *EQ, List *GT) {
 
-int inPlacePartition(int * arr, int l, int r, int k) {
-
-    int pivot, i, j;
-
-    // pivot 숨기기
-    pivot = arr[k];
-    swap(&arr[k], &arr[r]);
-    i = l;
-    j = r - 1;
-
-    while (i <= j) {
-        
-        // pivot보다 작으면 이동
-        while (i <= j && pivot >= arr[i]) { 
-            i++;
-        }
-
-        // pivot보다 크면 이동
-        while (j >= i && pivot <= arr[j]) {
-            j--;
-        }
-
-        // i는 피봇보다 큰수이고 j는 피봇보다 작은수이므로 둘을 교환
-        // 단, i와 j가 교차하지 않았을 때 수행
-        if (i < j) {
-            swap(&arr[i], &arr[j]);
-        }
-
+    while(!isEmpty(LT)) {
+        addLast(L, removeFirst(LT));
+    }
+    
+    while(!isEmpty(EQ)) {
+        addLast(L, removeFirst(EQ));
     }
 
-    // 피봇을 다시 가져옴
-    swap(&arr[i], &arr[r]);
-
-    return i;
-    
+    while(!isEmpty(GT)) {
+        addLast(L, removeFirst(GT));
+    }
 }
