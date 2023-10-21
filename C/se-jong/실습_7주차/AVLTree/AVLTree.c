@@ -29,10 +29,12 @@ AvlTree * initAVLTree() {
 
 }
 
+Node * parent(Node * w);
 Node *sibling(Node *w);
 Node *lChild(Node *w);
 Node *rChild(Node *w);
 
+bool isRoot(Node * w);
 bool isExternal(Node *w);
 bool isInternal(Node *w);
 
@@ -60,6 +62,7 @@ int removeElement(AvlTree *avl, int k);
 int main() {
 
 	AvlTree *avl = initAVLTree();
+
 	char oper;
 	int key, result;
 
@@ -102,11 +105,21 @@ int main() {
             break;
         case 'q':
             freeTree(avl->root);
-            return 0;
-        }
+			free(avl);
+			return 0;
+		}
 
     }
 
+}
+
+Node * parent(Node * w) {
+
+    if (w->parent != NULL) {
+        return w->parent;
+    }
+
+    return NULL;
 }
 
 Node * sibling(Node *w) {
@@ -131,9 +144,19 @@ Node * rChild(Node * w) {
     return w->rChild;
 } 
 
+bool isRoot(Node * w) {
+
+    if (w->parent == NULL) {
+        return true;
+    }
+
+    return false;
+    
+}
+
 bool isExternal(Node *w) {
 
-	if ((w->lChild == NULL) && (w->rChild == NULL)) {
+	if ((lChild(w) == NULL) && (rChild(w) == NULL)) {
 		return true;
 
 	}
@@ -144,7 +167,7 @@ bool isExternal(Node *w) {
 
 bool isInternal(Node *w) {
 
-	if ((w->lChild != NULL) && (w->rChild != NULL)) {
+	if ((lChild(w) != NULL) && (rChild(w) != NULL)) {
 		return true;
 	}
 
@@ -154,24 +177,22 @@ bool isInternal(Node *w) {
 
 void expandExternal(Node *w) {
 
-	Node * left = (Node *)malloc(sizeof(Node));
-	Node * right = (Node *)malloc(sizeof(Node));
+	Node * l = (Node *)malloc(sizeof(Node));
+	Node * r = (Node *)malloc(sizeof(Node));
 
-	left->height = 0;
-	left->parent = w;
-	left->lChild = NULL;
-	left->rChild = NULL;
-	
-	right->height = 0;
-	right->parent = w;
-	right->lChild = NULL;
-	right->rChild = NULL;
+	l->parent = w;
+    l->height = 0;
+    l->lChild = NULL;
+    l->rChild = NULL;
 
-	w->lChild = left;
-	w->rChild = right;
-	w->height = 1;
+	r->parent = w;
+    r->height = 0;
+    r->lChild = NULL;
+    r->rChild = NULL;
 
-	return;
+    w->lChild = l;
+    w->rChild = r;
+    w->height = 1;
 
 }
 
@@ -185,17 +206,13 @@ Node *reduceExternal(AvlTree *avl, Node * z) {
 	if (w->parent == NULL) {
 		avl->root = zs;
 		zs->parent = NULL;
-	}
-
-	else {
-
+	} else {
 		g = w->parent;
 		zs->parent = g;
 
 		if (w == g->lChild) {
 			g->lChild = zs;
-		}
-		else if (w == g->rChild) {
+		} else {
 			g->rChild = zs;
 		}
 	}
@@ -205,6 +222,7 @@ Node *reduceExternal(AvlTree *avl, Node * z) {
 
 	w = z = NULL;
 	return zs;
+
 }
 
 Node * treeSearch(Node *w, int k) {
@@ -213,54 +231,54 @@ Node * treeSearch(Node *w, int k) {
 		return w;
 	}
 	
-	if (w->key == k)
-		return w;
-	else if (w->key > k) {
-		return treeSearch(w->lChild, k);
+	if (w->key == k) {	// 현재 노드의 키와 k가 일치하면 종료 후
+		return w;	// 현재 노드를 반납하고
+	} else if (k <w->key) {	// k가 더 작으면
+		return treeSearch(lChild(w), k);	// 좌측 노드를
+	} else {	// 크다면
+		return treeSearch(rChild(w), k);	// 우측 노드를 탐색
 	}
-	else {
-		return treeSearch(w->rChild, k);
-	}
+
 }
 
 Node * inOrderSucc(Node *w) {
 
-	w = w->rChild;
+	w = rChild(w);	// 오른쪽 자식 노드로 이동하고
 
 	if (isExternal(w)) {
 		return NULL;
 	}
 
-	while (isInternal(w->lChild)) {
-		w = w->lChild;
+	while (isInternal(lChild(w))) {	// 현재 자식의 왼쪽 자식이 내부 노드라면
+		w = lChild(w);	// 왼쪽 자식으로 이동
 	}
 
-	return w;
+	return w;	// 결과적으로 왼쪽 자식이 외부 노드인 노드 w를 반환활 것임
 
 }
 
 bool updateHeight(Node *w) {
 
-	int lHeight = w->lChild->height; 
-    int rHeight = w->rChild->height;
+	int lHeight = lChild(w)->height; 
+    int rHeight = rChild(w)->height;
 
     int pHeight = (lHeight > rHeight ? lHeight : rHeight) + 1;
 
-    if (w->height != pHeight) {
-        w->height = pHeight;
-        return true;
-    }
+    if (w->height != pHeight) { // 부모의 높이와 자식의 높이가 다르다면
+        w->height = pHeight;	// 자식 노드 중에 가장 큰 높이 + 1로 갱신
+		return true;
+	}
 
-    return false;
+	return false;
 
 }
 
 bool isBalanced(Node *w) {
 
-	int lHegiht = w->lChild->height;
-    int rHegiht = w->rChild->height;
-
+	int lHegiht = lChild(w)->height;
+    int rHegiht = rChild(w)->height;
     int diff = abs(lHegiht - rHegiht);
+
     if (diff == 0 || diff == 1) {   // 좌우 노드 차이의 절대값이 0 or 1이라면
         return true;    // 균형
     }
@@ -275,11 +293,9 @@ void printTree(Node *w) {
 		return;
 	}
 
-	else {
-		printf(" %d", w->key);
-		printTree(w->lChild);
-		printTree(w->rChild);
-	}
+	printf(" %d", w->key);
+	printTree(w->lChild);
+	printTree(w->rChild);
 
 }
 
@@ -288,12 +304,10 @@ void freeTree(Node *w) {
 	if (isExternal(w)) {
 		return;
 	}
-
-	else {
-		freeTree(w->lChild);
-		freeTree(w->rChild);
-		free(w);
-	}
+	
+	freeTree(w->lChild); 
+	freeTree(w->rChild);
+	free(w);
 
 }
 
@@ -302,10 +316,10 @@ Node * restructure(AvlTree * avl, Node *x, Node *y, Node *z) {
 	Node *a, *b, *c;
 	Node *T0, *T1, *T2, *T3;
 
-	if ((z->key < y->key) && (y->key < x->key)) {	// LL 회전
+	if ((z->key < y->key) && (y->key < x->key)) {	// RR 회전 
 
 		a = z;
-		b = y;
+		b = y;	
 		c = x;
 
 		T0 = a->lChild;
@@ -313,7 +327,7 @@ Node * restructure(AvlTree * avl, Node *x, Node *y, Node *z) {
 		T2 = c->lChild;
 		T3 = c->rChild;
 
-	} else if (z->key > y->key && y->key > x->key) {	// RR 회전
+	} else if (z->key > y->key && y->key > x->key) {	// LL 회전
 
 		a = x;
 		b = y;
@@ -324,9 +338,7 @@ Node * restructure(AvlTree * avl, Node *x, Node *y, Node *z) {
 		T2 = b->rChild;
 		T3 = c->rChild;
 
-	}
-
-	else if (z->key < x->key && y->key > x->key) { // RL 회전
+	} else if (z->key < x->key && y->key > x->key) { // RL 회전
 
 		a = z;
 		b = x;
@@ -337,7 +349,7 @@ Node * restructure(AvlTree * avl, Node *x, Node *y, Node *z) {
 		T2 = b->rChild;
 		T3 = c->rChild;
 
-	} else {
+	} else {	// LR 회전
 
 		a = y;
 		b = x;
@@ -350,27 +362,30 @@ Node * restructure(AvlTree * avl, Node *x, Node *y, Node *z) {
 
 	}
 
-	if (z->parent == NULL) {
+	if (isRoot(z)) {
 		avl->root = b;
 		b->parent = NULL;
-	} else if (z->parent->lChild == z) {
-		z->parent->lChild = b;
-		b->parent = z->parent;
-	} else if (z->parent->rChild == z) {
-		z->parent->rChild = b;
-		b->parent = z->parent;
-	}
+	} else {
+        Node * g = parent(z);
+        b->parent = g;
 
+        if (lChild(g) == z) {
+            g->lChild = b;
+        } else {
+            g->rChild = b;
+        }
+    }
 
-
+	// 왼쪽 자식이 될 a 노드와 t0,t1 노드 연결 후 높이 갱신
 	a->lChild = T0;
 	T0->parent = a;
 
 	a->rChild = T1;
 	T1->parent = a;
 
-	updateHeight(a);
+	updateHeight(a);	
 
+	// 오른쪽 자식이 될 c 노드와 t2,t3 노드 연결 후 높이 갱신
 	c->lChild = T2;
 	T2->parent = c;
 
@@ -379,6 +394,7 @@ Node * restructure(AvlTree * avl, Node *x, Node *y, Node *z) {
 
 	updateHeight(c);
 
+	// 부모 노드 b와 두 자식 노드(a,b)를 연결 후 높이 갱신
 	b->lChild = a;
 	a->parent = b;
 
@@ -392,9 +408,10 @@ Node * restructure(AvlTree * avl, Node *x, Node *y, Node *z) {
 }
 
 void insertItem(AvlTree * avl, int k) {
-	
-	Node *w = treeSearch(avl->root, k);
 
+	Node *w;
+	
+	w = treeSearch(avl->root, k);
 	if (!isExternal(w)) {
 		return;
 	}
@@ -407,9 +424,10 @@ void insertItem(AvlTree * avl, int k) {
 
 int findElement(AvlTree * avl, int key) {
 
-    Node *w = treeSearch(avl->root, key);
-
-    if (isExternal(w)) {
+	Node *w;
+	
+	w = treeSearch(avl->root, key);
+	if (isExternal(w)) {
         return -1;
     }
 
@@ -421,8 +439,8 @@ int removeElement(AvlTree * avl, int k) {
 
 	int removeData;
 	Node *w, *z, *zs, *y;
-	w = treeSearch(avl->root, k);
 
+	w = treeSearch(avl->root, k);
 	if (isExternal(w)) {
 		return -1;
 	}
@@ -434,100 +452,100 @@ int removeElement(AvlTree * avl, int k) {
 		z = rChild(w);
 	}
 
-	if (isExternal(z)) {
+	if (isExternal(z)) {	// 외부 노드라면 기존 방식대로 진행
 		zs = reduceExternal(avl, z);
-	} else {
-
-		y = inOrderSucc(w);
+	} else {	// 외부 노드가 아니면
+		y = inOrderSucc(w);	// 중위 순위 후계자(오른쪽 서브 트리 노드 중 가장 작은 키를 가지는 노드)를 찾은 후
 		z = lChild(y);
-		w->key = y->key;
-		zs = reduceExternal(avl, z);
-
+		w->key = y->key;	// 삭제 할 노드와 중위 순위 후계자를 교환 후
+		zs = reduceExternal(avl, z);	// 외부 노드를 제거
 	}
 
-	searchAndFixAfterRemoval(avl, zs->parent);
+	searchAndFixAfterRemoval(avl, parent(zs));	// 노드를 삭제한 후 높이 갱신 및 불균형 조사
 	return removeData;
 	
 }
 
 void searchAndFixAfterInsertion(AvlTree * avl, Node *w) {
 
-	Node *x, *y, *z, *b;
+	Node *z, *x, *y, *b;
 
-	if (w->parent == NULL) {
+	if (isRoot(w)) {
 		return;
 	}
 
-	z = w->parent;
-	while (updateHeight(z) && isBalanced(z)) {
-		if (z->parent == NULL) {
+	z = parent(w);
+	while (updateHeight(z) && isBalanced(z)) {	// 루트 노드로 올라가면서 높이 갱신 및 불균형 조사
+		if (isRoot(z)) {
 			return;
 		}
-		z = z->parent;
+		z = parent(z);
 	}
 
-	if (isBalanced(z)) {
+	if (isBalanced(z)) {	// 모든 노드에 대한 조사를 진행한 후 마지막 노드가 균형을 이룬다면 종료
 		return;
 	}
 
-	if (lChild(z)->height > rChild(z)->height) {
+	// 그렇지 않다면
+	if (lChild(z)->height > rChild(z)->height) {	// z의 자식 노드 중 높이가 높은 노드를 y로
 		y = lChild(z);
 	} else {
 		y = rChild(z);
 	}
 	
-	if (lChild(y)->height > rChild(y)->height) {
+	if (lChild(y)->height > rChild(y)->height) {	// y의 자식 노드 중 높이가 높은 노드를 x로
 		x = lChild(y);
 	} else {
 		x = rChild(y);
 	}
 
-	restructure(avl, x, y, z);
+	// 설정하고 재구조화 진행
+	b = restructure(avl, x, y, z);
 
 }
 
 void searchAndFixAfterRemoval(AvlTree * avl, Node *w) {
 
-	Node *x, *y, *z, *b;
+	Node *z, *y, *x, *b;
 
 	if (w == NULL) {
 		return;
 	}
 
 	z = w;
-
-	while (updateHeight(z) && isBalanced(z)) {
-		if (z->parent == NULL) {
+	while (updateHeight(z) && isBalanced(z)) {	// 루트 노드로 올라가면서 높이 갱신 및 불균형 조사
+		if (isRoot(z)) {
 			return;
 		}
-		z = z->parent;
+		z = parent(z);
 	}
 
-	if (isBalanced(z)) {
+	if (isBalanced(z)) {	// 모든 노드에 대한 조사를 진행한 후 마지막 노드가 균형을 이룬다면 종료
 		return;
 	}
 
-	if (lChild(z)->height > rChild(z)->height) {
+	if (lChild(z)->height > rChild(z)->height) {	// z의 자식 노드 중 높이가 높은 노드를 y로
 		y = lChild(z);
 	} else {
 		y = rChild(z);
 	}
 
-	if (lChild(y)->height > rChild(y)->height) {
+	if (lChild(y)->height > rChild(y)->height) {	// y의 자식 노드 중 높이가 높은 노드를 x로
         x = lChild(y);
-    } else if (lChild(y)->height < rChild(y)->height) {
+    } else if(lChild(y)->height < rChild(y)->height) {
         x = rChild(y);
-    } else {
-		if (lChild(z) == y) {
+    } else {	// 먄약 자식 노드의 높이가 같다면 단일 회전으로
+		if (lChild(z) == y) { 
             x = lChild(y);
-        }
-        else if (rChild(z) == y) {
+        } else {
             x = rChild(y);
         }
     }
 
+	// 설정하고 재구조화 진행
 	b = restructure(avl, x, y, z);
-	searchAndFixAfterRemoval(avl, b->parent);
+
+	// 재구조화를 진행한 후 해당 지점의 부모 노드에 대한 균형 조사를 다시 진행
+	searchAndFixAfterRemoval(avl, parent(b));
 
 }
-
