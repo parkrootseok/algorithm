@@ -32,21 +32,17 @@ class Solution {
                 price[k++] = Integer.parseInt(st.nextToken());
             }
 
-            long max = Long.MIN_VALUE, sum = 0, profit = 0, cnt = 0;
-            for (int j = N - 1; j >= 0; j--) {
+            long max = price[k - 1], profit = 0;
+            for (int j = N - 2; j >= 0; j--) {
 
                 if(max > price[j]) {
-                    sum += price[j];
-                    cnt++;
+                    profit += max - price[j];
                 } else {
-                    profit += (max * cnt) - sum;
                     max = price[j];
-                    cnt = sum = 0;
                 }
 
             }
 
-            profit += (max * cnt) - sum;
             bw.write(sb.append(" " + profit) + "\n");
 
         }
