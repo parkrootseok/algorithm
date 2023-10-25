@@ -10,11 +10,6 @@ class Solution {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        for (int i = 1 ; i <= 10 ; i++) {
-
-
-        }
-
         int T = Integer.parseInt(br.readLine());
 
         for (int i = 1 ; i <= T ; i++) {
