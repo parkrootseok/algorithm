@@ -13,40 +13,32 @@ class Solution {
 
         int xCount = 0, yCount = 0, answer = 0;
 
-        for (int y = 0 ; y < N ; y++) {
-
-            if (board[pos][y] == 1) {
+        for (int cur = 0 ; cur < N ; cur++) {
+            
+            if (board[pos][cur] == 1) {
                 xCount++;
             } else {
-
                 if (xCount == K) {
                     answer++;
                 }
-
                 xCount = 0;
             }
 
-        }
-
-        for (int x = 0 ; x < N ; x++) {
-
-            if (board[x][pos] == 1) {
+            if (board[cur][pos] == 1) {
                 yCount++;
             } else {
-
                 if (yCount == K) {
                     answer++;
                 }
-
                 yCount = 0;
             }
-
+            
         }
 
         if (xCount == K) {
             answer++;
         }
-
+        
         if (yCount == K) {
             answer++;
         }
@@ -71,16 +63,15 @@ class Solution {
             K = Integer.parseInt(input[1]);
 
             board = new int[N][N];
-            visited = new boolean[N][N];
             for (int j = 0; j < N; j++) {
-
+                
                 input = br.readLine().split(" ");
-
+                
                 int k = 0;
                 for (String n : input) {
                     board[j][k++] = Integer.parseInt(n);
                 }
-
+                
             }
 
             int answer = 0;
