@@ -32,14 +32,11 @@ class Solution {
             calendarA.add(Calendar.HOUR, calendarB.get(Calendar.HOUR));
             calendarA.add(Calendar.MINUTE, calendarB.get(Calendar.MINUTE));
 
-            int h;
             if (calendarA.get(Calendar.HOUR_OF_DAY) > 12) {
-                h = calendarA.get(Calendar.HOUR_OF_DAY) - 12;
-            } else {
-                h = calendarA.get(Calendar.HOUR_OF_DAY);
+                calendarA.set(Calendar.HOUR_OF_DAY, calendarA.get(Calendar.HOUR_OF_DAY) - 12);
             }
 
-            bw.write(h + " " + calendarA.get(Calendar.MINUTE));
+            bw.write( calendarA.get(Calendar.HOUR_OF_DAY) + " " + calendarA.get(Calendar.MINUTE));
             bw.write("\n");
 
         }
