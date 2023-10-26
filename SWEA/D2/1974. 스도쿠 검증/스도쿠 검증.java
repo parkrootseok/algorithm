@@ -3,12 +3,8 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeSet;
 
 class Solution {
 
@@ -22,14 +18,13 @@ class Solution {
         Map<String, Integer> grid = new HashMap<>();
 
         for (int i = 1 ; i <= 9 ; i++) {
-            
-            if (cur == 1 || cur == 4 || cur == 7) {
+
+            if (cur % 3 == 1) {
 
                 if (i % 3 == 1) {
                     grid.clear();
                 }
 
-                
                 for (int j = cur; j < cur + 3; j++) {
 
                     grid.put(board[i][j], grid.getOrDefault(board[i][j], 0) + 1);
@@ -39,6 +34,7 @@ class Solution {
                     }
 
                 }
+
             }
 
             row.put(board[cur][i], row.getOrDefault(board[cur][i], 0) + 1);
