@@ -14,7 +14,7 @@ class Solution {
 
     static int N, K;
     static String[][] board = new String[10][10];
-    static String[] checkGridPosition = new String[]{"1", "4", "7"};
+
     public static boolean solution(int cur) {
 
         Map<String, Integer> row = new HashMap<>();
@@ -24,6 +24,7 @@ class Solution {
         if (cur == 1 || cur == 4 || cur == 7) {
 
            for (int i = 1; i <= 9 ; i++) {
+
                for (int j = cur; j < cur + 3; j++) {
                    grid.put(board[i][j], grid.getOrDefault(board[i][j], 0) + 1);
                }
@@ -35,7 +36,6 @@ class Solution {
            }
 
         }
-
 
         for (int i = 1 ; i <= 9 ; i++) {
             row.put(board[cur][i], row.getOrDefault(board[cur][i], 0) + 1);
