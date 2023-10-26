@@ -22,7 +22,7 @@ class Solution {
         Map<String, Integer> grid = new HashMap<>();
 
         if (cur == 1 || cur == 4 || cur == 7) {
-
+            
            for (int i = 1; i <= 9 ; i++) {
 
                for (int j = cur; j < cur + 3; j++) {
@@ -39,7 +39,7 @@ class Solution {
 
         for (int i = 1 ; i <= 9 ; i++) {
             row.put(board[cur][i], row.getOrDefault(board[cur][i], 0) + 1);
-            col.put(board[i][cur], row.getOrDefault(board[i][cur], 0) + 1);
+            col.put(board[i][cur], col.getOrDefault(board[i][cur], 0) + 1);
         }
 
         if (row.size() != 9 || col.size() != 9) {
