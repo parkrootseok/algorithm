@@ -21,33 +21,29 @@ class Solution {
         Map<String, Integer> col = new HashMap<>();
         Map<String, Integer> grid = new HashMap<>();
 
-        if (cur == 1 || cur == 4 || cur == 7) {
-
-           for (int i = 1; i <= 9 ; i++) {
-
-               if (i % 3 == 1) {
-                   grid.clear();
-               }
-
-               for (int j = cur; j < cur + 3; j++) {
-                   
-                   grid.put(board[i][j], grid.getOrDefault(board[i][j], 0) + 1);
-                   
-                   if (grid.getOrDefault(board[i][j], 0) == 2) {
-                       return false;
-                   }
-                   
-               }
-
-           }
-
-        }
-
         for (int i = 1 ; i <= 9 ; i++) {
+            
+            if (cur == 1 || cur == 4 || cur == 7) {
+
+                if (i % 3 == 1) {
+                    grid.clear();
+                }
+
+                
+                for (int j = cur; j < cur + 3; j++) {
+
+                    grid.put(board[i][j], grid.getOrDefault(board[i][j], 0) + 1);
+
+                    if (grid.getOrDefault(board[i][j], 0) == 2) {
+                        return false;
+                    }
+
+                }
+            }
 
             row.put(board[cur][i], row.getOrDefault(board[cur][i], 0) + 1);
             col.put(board[i][cur], col.getOrDefault(board[i][cur], 0) + 1);
-            
+
             if (row.getOrDefault(board[cur][i], 0) == 2 || col.getOrDefault(board[i][cur], 0) == 2) {
                 return false;
             }
