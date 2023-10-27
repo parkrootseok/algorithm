@@ -22,8 +22,7 @@ class Solution {
             bw.write("#" + i + "\n");
 
             N = Integer.parseInt(br.readLine());
-
-
+            
             for (int j = 0 ; j < money.length ; j++) {
                 int cnt = 0;
                 while (N >= money[j]) {
