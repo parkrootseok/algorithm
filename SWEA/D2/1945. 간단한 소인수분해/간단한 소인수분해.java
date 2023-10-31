@@ -13,7 +13,6 @@ class Solution {
 
     public static void main(String args[]) throws Exception {
 
-        ArrayList<Integer> exp = new ArrayList<>();
         int[] prime = {2, 3, 5, 7, 11};
 
         int T = Integer.parseInt(br.readLine());
