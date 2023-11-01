@@ -14,42 +14,23 @@ class Solution {
     public static int solution() {
 
         int i, j;
-        int mid = N / 2;
+        int left, right;
+
+        left = right = N / 2;
         int sum = 0;
+        for (i = 0 ; i < N ; i++) {
 
-        for (i = 0 ; i < (N + 1) / 2 ; i++) {
-
-            for (j = 0 ; j <= i ; j++) {
-
-                int left = mid + j;
-                int right = mid - j;
-
-                if (left == right) {
-                    sum += field[i][left];
-                } else {
-                    sum += (field[i][left] + field[i][right]);
-                }
-
+            for (j = left ; j <= right ; j++) {
+                sum += field[i][j];
             }
 
-        }
-
-        for (int k = i - 1; k > 0 ; k--) {
-
-            for (j = 0 ; j < k ; j++) {
-
-                int left = mid + j;
-                int right = mid - j;
-
-                if (left == right) {
-                    sum += field[i][left];
-                } else {
-                    sum += (field[i][left] + field[i][right]);
-                }
-
+            if (i < N / 2) {
+                left--;
+                right++;
+            } else {
+                left++;
+                right--;
             }
-
-            i++;
 
         }
 
@@ -75,8 +56,7 @@ class Solution {
                 }
             }
 
-            ANSWER = solution();
-            bw.write(" " + ANSWER + "\n");
+            bw.write(" " + solution() + "\n");
 
         }
 
