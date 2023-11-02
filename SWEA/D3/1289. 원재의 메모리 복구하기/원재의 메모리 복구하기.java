@@ -22,27 +22,17 @@ class Solution {
         for (int i = 1; i <= T; i++) {
 
             bw.write("#" + i);
-            String[] N = br.readLine().split("");
-            String[] original = new String[N.length];
-            Arrays.fill(original, "0");
+            String[] input = br.readLine().split("");
+            String original = "0";
 
-            int j = 0, k = 0, cnt = 0;
-            while (true) {
+            int cnt = 0;
+            for (int j = 0 ; j < input.length ; j++) {
 
-                if (N[j].equals(original[k])) {
-                    j++;
-                    k++;
-                } else {
+                if (!input[j].equals(original)) {
+                    original = input[j];
                     cnt++;
-                    Arrays.fill(original, j, original.length, N[j]);
-
-                    String n = Arrays.stream(N).collect(Collectors.joining());
-                    String o = Arrays.stream(original).collect(Collectors.joining());
-
-                    if (n.equals(o)) {
-                        break;
-                    }
                 }
+
             }
 
             bw.write(" "  + cnt + "\n");
