@@ -99,7 +99,7 @@ int get(List *list, int k) {
         return false;
     }
 
-    for (int i = 0; i < k; i++) {
+    for (int i = 0; i <= k; i++) {
         cur = cur->next;
     }
 
