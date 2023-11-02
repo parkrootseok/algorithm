@@ -17,10 +17,6 @@ int main() {
     input(n, dic);
 
     int find = binarySearch(dic, 0, n - 1, target);
-    if (find == n) {
-        find = n;        
-    }
-    
     printf(" %d\n", find);
     return 0;
 
