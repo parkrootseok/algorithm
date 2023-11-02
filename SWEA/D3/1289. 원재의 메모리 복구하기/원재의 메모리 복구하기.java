@@ -35,12 +35,14 @@ class Solution {
                 } else {
                     cnt++;
                     Arrays.fill(original, j, original.length, N[j]);
-                }
 
-                if (Arrays.stream(N).collect(Collectors.joining()).equals(Arrays.stream(original).collect(Collectors.joining()))) {
-                    break;
-                }
+                    String n = Arrays.stream(N).collect(Collectors.joining());
+                    String o = Arrays.stream(original).collect(Collectors.joining());
 
+                    if (n.equals(o)) {
+                        break;
+                    }
+                }
             }
 
             bw.write(" "  + cnt + "\n");
