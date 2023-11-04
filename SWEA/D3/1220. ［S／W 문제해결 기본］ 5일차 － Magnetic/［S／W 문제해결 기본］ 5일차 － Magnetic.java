@@ -17,7 +17,6 @@ class Solution {
     public static void solution(int col) {
 
         int last = 0;
-
         for (int row = 0 ; row < 100 ; row++) {
 
             if (board[row][col] == N_POLE) {
@@ -33,7 +32,6 @@ class Solution {
                 last = S_POLE;
 
             }
-
 
         }
 
