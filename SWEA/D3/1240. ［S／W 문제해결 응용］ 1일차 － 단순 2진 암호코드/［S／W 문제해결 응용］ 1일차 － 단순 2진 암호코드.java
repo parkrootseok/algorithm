@@ -2,10 +2,8 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 class Solution {
 
@@ -36,6 +34,7 @@ class Solution {
     public static int decode(String code) {
 
         String[] codes = new String[code.length() / 7];
+        
         int k = 0;
         for (int i = 0 ; i < code.length() ; i += 7) {
             codes[k++] = code.substring(i, i + 7);
