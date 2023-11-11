@@ -24,9 +24,7 @@ class Solution {
                 check(depth + 1, x + dx[i], y + dy[i], dx[i], dy[i]);
             }
         }
-
-        return;
-
+        
     }
 
     public static void check(int depth, int x, int y, int dx, int dy) {
