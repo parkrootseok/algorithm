@@ -20,18 +20,13 @@ class Solution {
     static int[] dy = {1, 0, 1, -1};
 
     public static void solution() {
-
-
+        
         for (int i = 0; i < N - 1; i++) {
-
             for (int j = i + 1; j < N; j++) {
-
                 if (sequence[i] < sequence[j]) {
                     dp[j] = Math.max(dp[j], dp[i] + 1);
                 }
-
             }
-
         }
 
 
