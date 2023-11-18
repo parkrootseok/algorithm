@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.Scanner;
 
 class Solution {
@@ -34,10 +35,7 @@ class Solution {
             for (int j = 1; j <= Q; j++) {
 
                 inputs = br.readLine().split(" ");
-
-                for (int k = Integer.parseInt(inputs[0]); k <= Integer.parseInt(inputs[1]); k++) {
-                    boxes[k] = j;
-                }
+                Arrays.fill(boxes, Integer.parseInt(inputs[0]), Integer.parseInt(inputs[1]) + 1, j);
 
             }
 
