@@ -29,7 +29,7 @@ class Solution {
 
         for (int i = 1; i <= 10; i++) {
 
-            bw.write("#" + i);
+            bw.write("#" + i + " ");
             N = Integer.parseInt(br.readLine());
 
             height = new int[N];
@@ -43,7 +43,7 @@ class Solution {
                 answer += solution(j);
             }
 
-            bw.write(" " + answer + "\n");
+            bw.write(answer + "\n");
 
         }
 
