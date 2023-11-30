@@ -43,8 +43,7 @@ Graph * buildGraph(int * n, int * m);
 void insertVertex(Graph * G, int i);
 void insertDirectedEdge(Graph * G, int from, int to, int i);
 
-void topologicalSortDFS(Graph * G);
-void topologicalSort(int v);
+void topologicalSortDFS(Graph *G);
 
 int main() {
 
@@ -164,12 +163,12 @@ void topologicalSortDFS(Graph * G) {
         if (!visited[v]) {
 
             push(S, v);
-            visited[v] = true;
 
             while (!isEmpty(S)) {
-
+                
                 bool allVisit = true;
-                int v = peek(S);
+                visited[v] = true;
+                int v = peek(S);    // 가장 최근에 방문한 노드
                 Node *outEdge = G->vertices[v].outEdges->next; // 최근에 방문한 정점에 대한 진출 간선
 
                 while (outEdge != NULL) {
@@ -203,7 +202,6 @@ void topologicalSortDFS(Graph * G) {
 
     for (int i = 1; i <= G->numVertices; i++) {
         if (!visited[i]) {
-            visited[i] = true;
             printf("%d\n", i);
         }
     }           
