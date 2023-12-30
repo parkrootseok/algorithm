@@ -11,21 +11,31 @@ class Solution {
     public static int checkPlus(int x, int y) {
 
         int sum = board[x][y];
-        int[] dx = {-1, 1, 0, 0};
-        int[] dy = {0, 0, -1, 1};
+
 
         for (int i = 1 ; i < M ; i++) {
 
-            for (int j = 0 ; j < 4 ; j++) {
+            int px = x - i;
+            int nx = x + i;
 
-                int nx = x + dx[j] * i;
-                int ny = y + dy[j] * i;
+            int py = y - i;
+            int ny = y + i;
 
 
-                if(0 <= nx && nx < N && 0 <= ny && ny < N) {
-                    sum += board[nx][ny];
-                }
+            if(0 <= px && px < N) {
+                sum += board[px][y];
+            }
 
+            if(0 <= nx && nx < N) {
+                sum += board[nx][y];
+            }
+
+            if(0 <= py && py < N) {
+                sum += board[x][py];
+            }
+
+            if(0 <= ny && ny < N) {
+                sum += board[x][ny];
             }
 
         }
@@ -36,27 +46,38 @@ class Solution {
 
     public static int checkCross(int x, int y) {
 
-        int sum = board[x][y];
-        int[] dx = {-1, 1, 1, -1};
-        int[] dy = {1, -1, 1, -1};
 
+        int sum = board[x][y];
 
         for (int i = 1 ; i < M ; i++) {
 
-            for (int j = 0 ; j < 4 ; j++) {
+            int px = x - i;
+            int py = y - i;
 
-                int nx = x + dx[j] * i;
-                int ny = y + dy[j] * i;
+            int nx = x + i;
+            int ny = y + i;
 
-                if(0 <= nx && nx < N && 0 <= ny && ny < N) {
-                    sum += board[nx][ny];
-                }
 
+            if(0 <= px && px < N && 0 <= py && py < N) {
+                sum += board[px][py];
+            }
+
+            if(0 <= nx && nx < N && 0 <= ny && ny < N) {
+                sum += board[nx][ny];
+            }
+
+            if(0 <= nx && nx < N && 0 <= py && py < N) {
+                sum += board[nx][py];
+            }
+
+            if(0 <= px && px < N && 0 <= ny && ny < N) {
+                sum += board[px][ny];
             }
 
         }
 
         return sum;
+
 
     }
 
