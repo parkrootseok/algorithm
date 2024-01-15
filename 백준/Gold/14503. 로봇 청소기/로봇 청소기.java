@@ -42,6 +42,41 @@ public class Main {
 	static int[][] room; // 방 정보
 	static int cleaningCount; // 청소한 횟수
 	
+	public static boolean isValid(int nRow, int nCol) {
+		
+		if(0 <= nRow && nRow < N && 0 <= nCol && nCol < M) {
+			
+			return true;
+			
+		}
+		
+		return false;
+		
+	}
+	
+	public static boolean checkDirtyRoom( ) {
+		
+		int[] dx = {1, -1, 0, 0};
+		int[] dy = {0, 0, 1, -1};
+		
+		for(int index = 0; index < dx.length; index++) {
+			
+			int nRow = currentRow + dx[index];
+			int nCol = currentCol + dy[index];
+			
+			if(0 <= nRow && nRow < N && 0 <= nCol && nCol < M) {
+				
+				if(room[nRow][nCol] == DIRTY) {
+					return true;
+				}
+				
+			}
+				
+		}
+		
+		return false;
+	}
+	
 	public static void cleaning() {
 		
 		int[] dx = {1, -1, 0, 0};
@@ -56,23 +91,7 @@ public class Main {
 			}
 			
 //			4-2. 현재 칸의 4방향 모두 청소되었는지 확인
-			boolean isExist = false;
-			for(int index = 0; index < dx.length; index++) {
-				
-				int nRow = currentRow + dx[index];
-				int nCol = currentCol + dy[index];
-				
-				if(0 <= nRow && nRow < N && 0 <= nCol && nCol < M) {
-					
-					if(room[nRow][nCol] == DIRTY) {
-						isExist = true;
-						break;
-					}
-					
-				}
-				
-				
-			}
+			boolean isExist = checkDirtyRoom();
 			
 //			4-3. 존재하지 않으면 후진(단, 뒤쪽칸이 벽이라면 작동을 멈춘다) 
 			if(!isExist) {
@@ -97,7 +116,7 @@ public class Main {
 				}
 				
 				// 후진한 곳이 벽이라면 종료
-				if(0 <= nRow && nRow < N && 0 <= nCol && nCol < M) {
+				if(isValid(nRow, nCol)) {
 					
 					if(room[nRow][nCol] == WALL) {
 						return;
@@ -148,7 +167,7 @@ public class Main {
 					break;
 				}
 				
-				if(0 <= nRow && nRow < N && 0 <= nCol && nCol < M) {
+				if(isValid(nRow, nCol)) {
 					
 					if(room[nRow][nCol] == DIRTY) {
 						currentRow = nRow;
