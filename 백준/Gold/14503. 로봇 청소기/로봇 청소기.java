@@ -79,9 +79,6 @@ public class Main {
 	
 	public static void cleaning() {
 		
-		int[] dx = {1, -1, 0, 0};
-		int[] dy = {0, 0, 1, -1};
-		
 		while(true) {
 			
 //			4-1. 현재 칸 청소
