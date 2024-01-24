@@ -28,7 +28,7 @@ import java.util.Stack;
  *  3-1. 이동하는 방향으로 주사위 값 재배치
  *  3-2. 이동한 칸에 쓰여 있는 수가 0이면, 주사위의 바닥면에 쓰여 있는 수가 칸에 복사
  *  3-3. 아니라면 칸에 쓰여 있는 수가 주사위의 바닥면으로 복사
- *  3-4. 이동한 주사위의 윗면의 숫자를 출력
+ *  
  */
 
 public class Main {
@@ -49,7 +49,7 @@ public class Main {
 			this.uPosition = 1;
 		}
 		
-		void move(int direction) {
+		boolean move(int direction) {
 			
 			// 이동할 칸의 좌표를 받아서
 			int nx = dice.x + dx[direction - 1];
@@ -77,14 +77,16 @@ public class Main {
 					map[nx][ny] = 0;
 				}
 				
-				// 3-4. 이동한 주사위의 윗면의 숫자를 출력
-				System.out.println(numbers[6]);
 				
 				// 움직인 위치로 주사위를 이동
 				this.x = nx;
 				this.y = ny;
 				
+				return true;
+				
 			}
+			
+			return false;
 			
 		}
 		
@@ -175,7 +177,6 @@ public class Main {
 
 		br = new BufferedReader(new InputStreamReader(System.in));
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
 		sb = new StringBuilder();
 
 		// 1. N, M, X, Y, K(명령 갯수) 를 입력받는다.
@@ -197,13 +198,13 @@ public class Main {
 
 		// 3. 명령을 받아 주사위를 이동한다.
 		dice = new Dice(X, Y);
-		
 		inputs = br.readLine().trim().split(" ");
 		for (int index = 0; index < K; index++) {
-			dice.move(Integer.parseInt(inputs[index]));
+			if(dice.move(Integer.parseInt(inputs[index]))) {
+				sb.append(dice.numbers[6]).append("\n");
+			}
 		}
 
-		sb.append("\n");
 		bw.write(sb.toString());
 		bw.close();
 		return;
