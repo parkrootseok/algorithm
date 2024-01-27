@@ -8,7 +8,7 @@ import java.io.OutputStreamWriter;
  * SWEA_10726_이진수 표현
  * @author parkrootseok
  * 
- * - M의 이진수 표현의 마지막 N비트가 모두 1로 켜져 있는지 아닌지를 판별하려 출력
+ * - M의 이진수 표현의 마지막 N비트가 모두 1로 켜져 있는지 아닌지를 판별하여 출력
  * 
  * 1. 테스트 케이스 수 T를 받는다.
  * 2. 각 테스트 케이스마다 N과 M을 받는다.
