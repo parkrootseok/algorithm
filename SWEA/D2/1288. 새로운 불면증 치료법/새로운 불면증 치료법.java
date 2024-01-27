@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 /**
- * SWEA_10726_이진수 표현
+ * SWEA_1288_새로운 불면증 치료
  * @author parkrootseok
  * 
  * - N의 배수 번호인 양을 세기로 함
