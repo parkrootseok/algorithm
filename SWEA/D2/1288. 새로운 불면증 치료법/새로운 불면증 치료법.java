@@ -13,7 +13,10 @@ import java.io.OutputStreamWriter;
  * 
  * 1. 테스트 케이스 수 T를 받는다.
  * 2. 각 테스트 케이스마다 N을 받는다.
- * 
+ * 3. 종료 조건을 만족하는지 확인한다.
+ *  3-1. N의 배수를 구한 후
+ *  3-2. 각 자릿수를 카운트
+ *  3-3. 배수 증가
  *  
  */
 
@@ -48,23 +51,27 @@ public class Solution {
 		testCaseNumber = Integer.parseInt(br.readLine().trim());
 		
 		int N;
-		
 		for (int curT = 1 ; curT <= testCaseNumber; curT++) {
 			
 			N = Integer.parseInt(br.readLine().trim());
 			count = new int[10];
 			
-			String curN = String.valueOf(N);
+			String curN = "";
 			int mul = 1;
+			
+			// 3. 종료 조건을 만족하는지 확인한다.
 			while(!isFinish()) {
 				
-				curN = String.valueOf(N * (mul++));
+				// 3-1. N의 배수를 구한 후
+				curN = String.valueOf(N * mul);
+				
+				// 3-2. 각 자릿수를 카운트
 				for(char digit : curN.toCharArray()) {
-					
 					count[digit - '0']++;
-					
 				}
 					
+				// 3-3. 배수 증가
+				mul++;
 			}
 			
 			sb.append("#").append(curT).append(" ").append(curN).append("\n");
