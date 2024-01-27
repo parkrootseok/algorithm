@@ -1,52 +1,79 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
-class Solution {
+/**
+ * SWEA_12288_새로운 붋면증 치료
+ * @author parkrootseok
+ * 
+ * - N의 배수 번호인 양을 세기로 함
+ * - 배수들 중에서 0-9 모든 숫자롤 보는것 최소 몇 번의 양을 세어야할까?
+ * 
+ * 1. 테스트 케이스 수 T를 받는다.
+ * 2. 각 테스트 케이스마다 N을 받는다.
+ * 
+ *  
+ */
 
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+public class Solution {
 
-    static int N, M;
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringBuilder sb;
+	static String[] inputs;
+	
+	static int testCaseNumber;
+	static int[] count;
+	
+	public static boolean isFinish() {
+		
+		for (int c : count) {
+			if(c == 0) {
+				return false;
+			}
+		}
+		
+		return true;
+		
+	}
+	
+	public static void main(String[] args) throws IOException {
 
-    public static void main(String args[]) throws Exception {
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
+		
+		testCaseNumber = Integer.parseInt(br.readLine().trim());
+		
+		int N;
+		
+		for (int curT = 1 ; curT <= testCaseNumber; curT++) {
+			
+			N = Integer.parseInt(br.readLine().trim());
+			count = new int[10];
+			
+			String curN = String.valueOf(N);
+			int mul = 1;
+			while(!isFinish()) {
+				
+				curN = String.valueOf(N * (mul++));
+				for(char digit : curN.toCharArray()) {
+					
+					count[digit - '0']++;
+					
+				}
+					
+			}
+			
+			sb.append("#").append(curT).append(" ").append(curN).append("\n");
+			
+		}
 
-        int T = Integer.parseInt(br.readLine());
+		bw.write(sb.toString());
+		bw.close();
+		return;
 
-        for (int i = 1; i <= T; i++) {
-
-            bw.write("#" + i);
-            String numbers = br.readLine();
-
-            int mul = 1;
-            Map<Character, Integer> visited = new HashMap<>();
-            while (true) {
-
-                String mulNum = String.valueOf(Integer.parseInt(numbers) *  mul++);
-
-                for (char n : mulNum.toCharArray()) {
-                  visited.put(n, visited.getOrDefault(n, 0) + 1);
-                }
-
-                if(visited.size() == 10) {
-                    bw.write(" " + mulNum + "\n");
-                    break;
-                }
-
-            }
-
-            bw.flush();
-
-        }
-
-        bw.close();
-
-    }
-
+	}
 }
