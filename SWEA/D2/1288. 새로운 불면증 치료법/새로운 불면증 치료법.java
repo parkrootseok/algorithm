@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 /**
- * SWEA_12288_새로운 붋면증 치료
+ * SWEA_10726_이진수 표현
  * @author parkrootseok
  * 
  * - N의 배수 번호인 양을 세기로 함
@@ -15,8 +15,9 @@ import java.io.OutputStreamWriter;
  * 2. 각 테스트 케이스마다 N을 받는다.
  * 3. 종료 조건을 만족하는지 확인한다.
  *  3-1. N의 배수를 구한 후
- *  3-2. 각 자릿수를 카운트
+ * 3-2. 각 자릿수의 bit를 1로 변환
  *  3-3. 배수 증가
+ * 4. 종료 조건을 만족하면 정답을 출력한다.
  *  
  */
 
@@ -28,17 +29,26 @@ public class Solution {
 	static String[] inputs;
 	
 	static int testCaseNumber;
-	static int[] count;
+	
+	// static int[] count;
+	static int completeCondition = (1 << 10) - 1;
+	static int visited;
 	
 	public static boolean isFinish() {
 		
-		for (int c : count) {
-			if(c == 0) {
-				return false;
-			}
-		}
+//		for (int c : count) {
+//			if(c == 0) {
+//				return false;
+//			}
+//		}
+//		
+//		return true;
 		
-		return true;
+		if(visited == completeCondition) {
+			return true;
+		}
+
+		 return false;
 		
 	}
 	
@@ -53,25 +63,32 @@ public class Solution {
 		int N;
 		for (int curT = 1 ; curT <= testCaseNumber; curT++) {
 			
+			// 2. 각 테스트 케이스마다 N을 받는다.
 			N = Integer.parseInt(br.readLine().trim());
-			count = new int[10];
 			
+//			count = new int[10];	
+			int mul = 0;
 			String curN = "";
-			int mul = 1;
+			visited = 0;
 			
-			// 3. 종료 조건을 만족하는지 확인한다.
-			while(!isFinish()) {
+			
+			// 3. 비트마스킹을 활용해 각 자릿수가 모두 등장하는지 확인
+			while(true) {	
 				
 				// 3-1. N의 배수를 구한 후
-				curN = String.valueOf(N * mul);
+				curN = String.valueOf(N * (++mul));
 				
-				// 3-2. 각 자릿수를 카운트
+				// 3-2. 각 자릿수의 bit를 1로 변환
 				for(char digit : curN.toCharArray()) {
-					count[digit - '0']++;
+//					count[digit - '0']++;
+					visited |= (1 << (digit - '0'));
 				}
-					
-				// 3-3. 배수 증가
-				mul++;
+				
+				// 3-3. 종료 조건을 만족하면 반복문 종료
+				if(isFinish()) {
+					break;
+				}
+				
 			}
 			
 			sb.append("#").append(curT).append(" ").append(curN).append("\n");
@@ -83,4 +100,5 @@ public class Solution {
 		return;
 
 	}
+	
 }
