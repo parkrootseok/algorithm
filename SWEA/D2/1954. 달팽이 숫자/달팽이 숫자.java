@@ -15,8 +15,8 @@ import java.io.OutputStreamWriter;
  *  3. 출력할 횟수 - 1
  *  4. row를 움직이면서 출력
  *  5. 방향 전환
+ *  	-> 증가하는 방향 or 감소하는 방향
  *  
- * 
  */
 
 class Solution {
@@ -45,11 +45,11 @@ class Solution {
 			N = Integer.parseInt(br.readLine().trim());
 			map = new int[N][N];
 			
-			int direction = 1;
-			int curNumber = 1;
-			int cRow = 0;
-			int cCols = -1;
-			int cLimit = N;
+			int direction = 1;	// 방향을 조정하기 위한 변수
+			int curNumber = 1;	// 현재 숫자를 출력하기 위한 변수
+			int cRow = 0;	// 행에 대한 변수
+			int cCols = -1;	// 열에 대한 변수
+			int cLimit = N;	// 출력할 횟수를 위한 변수
 			
 			while(curNumber <= N * N) {
 				
