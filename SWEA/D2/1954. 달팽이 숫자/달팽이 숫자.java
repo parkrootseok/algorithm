@@ -1,65 +1,98 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+
+/**
+ * SWEA_1954_달팽이숫자
+ * @author parkrootseok
+ * 
+ * - 1 ~ N*N까지 숫자가 시계방향으로 출력 
+ *  
+ *  1. 테스트 케이스 횟수를 입력받는다.
+ *  2. N을 입력받는다.
+ *  2. cols를 움직이면서 출력
+ *  3. 출력할 횟수 - 1
+ *  4. row를 움직이면서 출력
+ *  5. 방향 전환
+ *  
+ * 
+ */
 
 class Solution {
 
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringBuffer sb;
+	static String[] inputs;
 
-    static int N, M;
-    static int[][] numbers;
+	static int tcNumber;
+	static int N;
+	static int[][] map;
 
-    public static void main(String args[]) throws Exception {
+	public static void main(String args[]) throws Exception {
 
-        int T = Integer.parseInt(br.readLine());
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuffer();
+		
+		// 1. 테스트 케이스 횟수를 입력받는다.
+		tcNumber = Integer.parseInt(br.readLine().trim());
+		
+		for(int curTc = 1; curTc <= tcNumber; curTc++) {
+			
+			// 2. N을 입력받는다.
+			N = Integer.parseInt(br.readLine().trim());
+			map = new int[N][N];
+			
+			int direction = 1;
+			int curNumber = 1;
+			int cRow = 0;
+			int cCols = -1;
+			int cLimit = N;
+			
+			while(curNumber <= N * N) {
+				
+				// 2. cols를 움직이면서 출력
+				for(int limit = 0; limit < cLimit; limit++) {
+					
+					cCols += direction;
+					map[cRow][cCols] = curNumber++;
+					
+				}
+				
+				// 3. 출력할 횟수 - 1
+				cLimit--;
+				
+				// 4. row를 움직이면서 출력
+				for(int limit = 0; limit < cLimit; limit++) {
+					
+					cRow += direction;
+					map[cRow][cCols] = curNumber++;
+					
+				}
+				
+				// 5. 방향 전환	
+				direction *= -1;
+				
+			}
+			
+			// 결과 출력
+			sb.append("#").append(curTc).append("\n");
+			for(int row = 0; row < N; row++) {
+				
+				for(int cols = 0; cols < N; cols++) {
+					sb.append(map[row][cols]).append(" ");
+				}
+				sb.append("\n");
+			}
+			
+		}
 
-        for (int i = 1; i <= T; i++) {
+		bw.write(sb.toString());
+		bw.close();
+		return;
 
-            bw.write("#" + i + "\n");
-
-            N = Integer.parseInt(br.readLine());
-            int[][] numbers = new int[N][N];
-            
-            int dic = 1, num = 1, x = 0, y = -1, rep = N;
-            while (num <= N * N) {
-
-                for (int j = 0 ; j < rep ; j++) {
-                    y += dic;
-                    numbers[x][y] = num++;
-                }
-
-                rep--;
-
-                for (int j = 0 ; j < rep ; j++) {
-                    x += dic;
-                    numbers[x][y] = num++;
-                }
-
-                dic *= -1;
-
-            }
-
-            for (int j = 0 ; j < N ; j++) {
-                
-                for (int k = 0 ; k < N ; k++) {
-                    
-                    bw.write(numbers[j][k] + " ");
-                }
-                
-                
-                bw.write("\n");
-            }
-
-            bw.flush();
-
-        }
-
-        bw.close();
-
-    }
+	}
 
 }
