@@ -1,54 +1,72 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- * 구간 합 구하기 4
+ * BOJ_11659_구간합구하기4
+ * @author parkrootseok
+ * 
+ * - 수 N개가 주어졌을 때, i ~ j까지 합을 구하자
+ * 
+ * 1. N과 M을 받는다.
+ * 2. N개의 수를 입력 받는다.
+ * 		-> 단, 이전 인덱스에서 합을 누적하면서 배열에 저장
+ * 3. i ~ j까지 합을 구한다
+ *  2-1. 현재 level이 M과 같으면 종료
+ *  2-2. 그렇지 않으면 조합을 이어서 만든다.
+ * 
  */
 
-public class Main {
+class Main {
 
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static StringBuffer sb = new StringBuffer();
+	static String[] inputs;
 
-    static int T, M, N, K, ANSWER;
-    static int[] numbers;
-    static int[] sum;
+	static int N;
+	static int M;
+	static int numbers[];
 
-    public static void main(String[] args) throws IOException {
+	public static void main(String args[]) throws Exception {
 
-        Main main = new Main();
+		// 1. 주어질 테스트 케이스에 대한 수를 입력 받는다.
+		inputs = br.readLine().trim().split(" ");
+		N = Integer.parseInt(inputs[0]);
+		M = Integer.parseInt(inputs[1]);
 
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        M = Integer.parseInt(st.nextToken());
-        N = Integer.parseInt(st.nextToken());
+		// 2. N개의 수를 입력 받는다.
+		numbers = new int[N + 1];
+		inputs = br.readLine().trim().split(" ");
+		for(int index = 1; index <= N; index++) {
+			
+			// 이전 인덱스에서 합을 누적하면서 배열에 저장
+			numbers[index] = Integer.parseInt(inputs[index - 1]) + numbers[index - 1];
+		}
+	
+		// 3. i ~ j까지 합을 구한다
+		int start, end;
+		for(int curM = 0; curM < M; curM++) {
+			
+			// 시작과 끝 범위를 입력받고
+			inputs = br.readLine().trim().split(" ");
+			start = Integer.parseInt(inputs[0]);
+			end = Integer.parseInt(inputs[1]);
+			
+			// 끝 인덱스의 값은 [1 ~ 끝 인덱스]의 모든 합
+			// 즉, 끝 - (시작-1) = 시작 ~ 끝의 합
+			sb.append(numbers[end] - numbers[start - 1]).append("\n");
+			
+		}
 
-        numbers = new int[M + 1];
-        st = new StringTokenizer(br.readLine(), " ");
+		bw.write(sb.toString());
+		bw.close();
+		return;
 
-        int i = 1;
-        while (st.hasMoreTokens()) {
-            numbers[i] = numbers[i - 1] + Integer.parseInt(st.nextToken());
-            i++;
-        }
-
-        for (i = 0 ; i < N ; i++) {
-
-            st = new StringTokenizer(br.readLine(), " ");
-
-            int s = Integer.parseInt(st.nextToken());
-            int e = Integer.parseInt(st.nextToken());
-
-            ANSWER = numbers[e] - numbers[s - 1];
-            bw.write(ANSWER + "\n");
-
-        }
-
-        bw.close();
-
-    }
+	}
 
 }
