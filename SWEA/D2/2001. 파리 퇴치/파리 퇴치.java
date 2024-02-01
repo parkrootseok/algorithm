@@ -2,73 +2,98 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
+
+/**
+ * SWEA_2001_파리퇴치
+ * @author parkrootseok
+ * 
+ * - N by N 배열안에 파리가 존재
+ * - M by M 파리채를 한 번 내리쳐 최대한 많은 파리를 사냥
+ * - 가장 많이 사냥한 파리의 개수를 구하라
+ * 
+ * 1. 테스트 케이스 횟수 입력
+ * 2. 배열 크기와 파리채 크기 입력
+ * 3. 파리에 대한 정보 입력
+ * 4. 파리 잡기 
+ * 
+ */
 
 class Solution {
 
-    static int[][] board;
-    static int N, M;
+	public static int kill(int x, int y) {
 
-    public static int solution(int x, int y) {
+		int nextRow;
+		int nextCols;
+		int sum;
 
-        int sum = 0;
+		sum = 0;
+		for (int flapperRow = 0; flapperRow < flapperSize; flapperRow++) {
 
-        for (int i = 0 ; i < M ; i++) {
+			for (int flapperCols = 0; flapperCols < flapperSize; flapperCols++) {
 
-            for (int j = 0 ; j < M ; j++) {
+				nextRow = x + flapperRow;
+				nextCols = y + flapperCols;
 
-                int nx = x + i;
-                int ny = y + j;
+				if (0 <= nextRow && nextRow < mapSize && 0 <= nextCols && nextCols < mapSize) {
+					sum += board[nextRow][nextCols];
+				}
 
-                if(0 <= nx && nx < N && 0 <= ny && ny < N) {
-                    sum += board[nx][ny];
-                }
+			}
 
-            }
+		}
 
-        }
+		return sum;
+	}
 
-        return sum;
-    }
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringBuilder sb;
+	static String[] inputs;
 
-    public static void main(String args[]) throws Exception {
+	static int mapSize, flapperSize;
+	static int tcNumber;
+	static int[][] board;
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	public static void main(String args[]) throws Exception {
 
-        int T = Integer.parseInt(br.readLine());
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-        for (int i = 1; i <= T; i++) {
+		// 1. 테스트 케이스 횟수 입력
+		tcNumber = Integer.parseInt(br.readLine());
 
-            bw.write("#" + i + " ");
+		for (int curTC = 1; curTC <= tcNumber; curTC++) {
 
-            String[] input = br.readLine().split(" ");
-            N = Integer.parseInt(input[0]);
-            M = Integer.parseInt(input[1]);
+			// 2. 배열 크기와 파리채 크기 입력
+			inputs = br.readLine().split(" ");
+			mapSize = Integer.parseInt(inputs[0]);
+			flapperSize = Integer.parseInt(inputs[1]);
 
-            board = new int[N][N];
-            for (int j = 0; j < N; j++) {
-                input = br.readLine().split(" ");
+			// 3. 파리에 대한 정보 입력
+			board = new int[mapSize][mapSize];
+			for (int mapRow = 0; mapRow < mapSize; mapRow++) {
+				inputs = br.readLine().split(" ");
+				for (int mapCols = 0; mapCols < mapSize; mapCols++) {
+					board[mapRow][mapCols] = Integer.parseInt(inputs[mapCols]);
+				}
+			}
 
-                for (int k = 0; k < input.length; k++) {
-                    board[j][k] = Integer.parseInt(input[k]);
-                }
+			// 4. 파리 잡기
+			long max = Long.MIN_VALUE;
+			for (int mapRow = 0; mapRow < mapSize; mapRow++) {
+				for (int mapCols = 0; mapCols < mapSize; mapCols++) {
+					max = Math.max(max, kill(mapRow, mapCols));
+				}
+			}
 
-            }
+			sb.append("#").append(curTC).append(" ").append(max).append("\n");
 
-            long max = Long.MIN_VALUE;
-            for (int j = 0 ; j < N ; j++) {
-                for (int k = 0 ; k < N ; k++) {
-                    max = Math.max(max, solution(j, k));
-                }
-            }
-            
-            bw.write(max + "\n");
+		}
 
-        }
+		bw.write(sb.toString());
+		bw.close();
 
-        bw.close();
-
-    }
+	}
 
 }
