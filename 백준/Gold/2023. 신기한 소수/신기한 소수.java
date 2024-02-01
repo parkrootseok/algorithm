@@ -30,13 +30,11 @@ class Main {
 	static StringBuffer sb;
 	static String[] inputs;
 	
-	static int N;
-	static String[] elements = {"1", "2", "3", "5", "7", "9"};
+	static int length;
+	static int[] elements = {1, 2, 3, 5, 7, 9};
 	
-	public static boolean isPrime(String prime) {
+	public static boolean isPrime(int primeNumber) {
 		
-		
-		int primeNumber = Integer.valueOf(prime);
 		
 		// 1이면 소수
 		if(primeNumber == 1) {
@@ -51,7 +49,7 @@ class Main {
 		
 		
 		// 현재 primeNumber가 자신을 제외한 약수가 있는지 확인
-		for(int number = 2; number < primeNumber; number++) {
+		for(int number = 2; number * number <= primeNumber; number++) {
 			
 			if(primeNumber % number == 0) {
 				return false;
@@ -63,26 +61,24 @@ class Main {
 		
 	}
 	
-	public static void permutaion(int level, String prime) throws IOException {
+	public static void permutaion(int level, int primeNumber) throws IOException {
 		
 		// 2-1. 현재 조합된 숫자가 소수가 아니라면 중단
-		if(!prime.equals("") && !isPrime(prime)) {
+		if(!isPrime(primeNumber)) {
 			return;
 		}
 		
 		// 2-2. 완성되었다면 출력
-		if(level == N) {
-			
-			sb.append(prime).append("\n");
+		if(level == length) {
+			sb.append(primeNumber).append("\n");
 			return;
-			
 		}
 		
 		// 순열을 만든다
 		for(int elementIdx = 0; elementIdx < elements.length; elementIdx++) {
 			
 			// 왼쪽부터 소수인지 판단하므로 기존 숫자에 추가되는 숫자를 이어 붙여준다.
-			permutaion(level + 1, prime + elements[elementIdx]);
+			permutaion(level + 1, (primeNumber * 10) + elements[elementIdx]);
 			
 		}
 		
@@ -96,11 +92,10 @@ class Main {
 		sb = new StringBuffer();
 		
 		// 1. N자리 숫자를 입력
-		N = Integer.parseInt(br.readLine().trim());
+		length = Integer.parseInt(br.readLine().trim());
 		
 		// 2. 1, 2, 3, 5, 9, 7의 숫자로 N자리 순열 생성
-		String prime = "";
-		permutaion(0, prime);
+		permutaion(0, 0);
 		
 		bw.write(sb.toString());
 		bw.close();
