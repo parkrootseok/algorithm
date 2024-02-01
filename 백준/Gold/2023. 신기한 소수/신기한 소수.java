@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * BOJ_2023_신기한소수
+ * BOJ_2023_신기한소수찾기
  * @author parkrootseok
  * 
  * - 7331 소수임 근데 733, 73, 7도 소수
@@ -20,8 +20,6 @@ import java.util.List;
  * 2. 1, 2, 3, 5, 9, 7의 숫자로 N자리 순열 생성
  *  2-1. 현재 순열이 소수가 아니라면 중단
  *  2-2. 완성되었다면 출력
- * 
- * 
  *
  */
 
@@ -52,16 +50,11 @@ class Main {
 		}
 		
 		
-		// 2부터 배수에 있는지 확인하고
-		for(int number = 2; number <= Math.sqrt(primeNumber); number++) {
+		// 현재 primeNumber가 자신을 제외한 약수가 있는지 확인
+		for(int number = 2; number < primeNumber; number++) {
 			
-			for (int mul = number * number; mul <= primeNumber; mul += number) {
-				
-				// 있다면 소수가 아님
-				if(mul == primeNumber) {
-					return false;
-				}
-				
+			if(primeNumber % number == 0) {
+				return false;
 			}
 			
 		}
