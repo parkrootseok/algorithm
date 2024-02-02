@@ -1,11 +1,10 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 /**
- * BOJ_2961_도영이가 만든 맛있는 음식
+ * BOJ_2961_도영이가만든맛있는음식
  * @author parkrootseok
  * 
  * - 재료 N개
@@ -35,7 +34,6 @@ class Main {
 			this.bitter = bitter;
 		}
 		
-		
 	}
 
 	static BufferedReader br;
@@ -43,51 +41,10 @@ class Main {
 	static StringBuffer sb;
 	static String[] inputs;
 
-	static int difference = Integer.MAX_VALUE;
+	static int difference;
 	static int ingredientNumber;
 	static Ingredient[] ingredients;
-	static boolean[] isUsed;
-	
-	public static void powerSet(int level) {
-		
-		// 3-1. 완성된 집합의 재료 중 가장 차이가 적은 것을 고른다
-		if(level == ingredientNumber) {
-			
-			int totalSour = 1;
-			int totalBitter = 0;
 
-			boolean nothing = true;
-			
-			for(int index = 0; index < isUsed.length; index++) {
-				
-				if(isUsed[index]) {
-					totalSour *= ingredients[index].sour;
-					totalBitter += ingredients[index].bitter;
-					nothing = false;
-				}
-				
-			}
-			
-			// 3-2. 아무것도 쓰지 않은 경우는 종료
-			if(nothing) {
-				return;
-			}
-			
-			difference = Math.min(difference, Math.abs(totalBitter - totalSour));
-			return;
-			
-		}
-		
-		// 3-2. 부분 집합을 생성
-		isUsed[level] = true;
-		powerSet(level + 1);
-		
-		isUsed[level] = false;
-		powerSet(level + 1);
-		
-		
-	}
-	
 	public static void main(String args[]) throws Exception {
 
 		br = new BufferedReader(new InputStreamReader(System.in));
@@ -107,8 +64,29 @@ class Main {
 		}
 		
 		// 3. 재료에 대한 부분집합을 생성
-		isUsed = new boolean[ingredientNumber];
-		powerSet(0);
+		difference = Integer.MAX_VALUE;
+		for (int numbers = 1; numbers < (1 << ingredients.length); numbers++) {
+			
+			int totalSour = 1;
+			int totalBitter = 0;
+			
+			for(int bitPosition = 0; bitPosition < ingredients.length; bitPosition++) {
+				
+				// bitPostion에 해당하는 bit가 1이라면
+				if((numbers & 1 << bitPosition) != 0) {
+					
+					// 맛을 추가
+					totalSour *= ingredients[bitPosition].sour;
+					totalBitter += ingredients[bitPosition].bitter;
+					
+				}
+				
+			}
+			
+			// 3-1. 완성된 집합의 재료 중 가장 차이가 적은 것을 고른다
+			difference = Math.min(difference, Math.abs(totalBitter - totalSour));
+			
+		}
 		
 		sb.append(difference).append("\n");
 		bw.write(sb.toString());
