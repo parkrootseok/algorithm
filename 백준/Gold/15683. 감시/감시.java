@@ -50,18 +50,19 @@ class Main {
 	static final int EMPTY = 0;
 	static final int WALL = 6;
 
-	// 위, 오, 아, 왼
+	// 위 -> 오 -> 아 -> 왼
+	// 90도 회전하는 순서대로 방향 델타 배열을 생성
 	static int[] dr = {-1, 0, 1, 0};
 	static int[] dc = {0, 1, 0, -1};
 
 	// cctv 방향에 대한 정보
 	static int[][] cctvDirection = {
 		{},
-		{1},
-		{1, 3},
-		{0, 1},
-		{0, 1, 3},
-		{0, 1, 2, 3},
+		{1},			// 1번 CCTV
+		{1, 3},			// 2번 CCTV
+		{0, 1},			// 3번 CCTV
+		{0, 1, 3},		// 4번 CCTV
+		{0, 1, 2, 3},	// 5번 CCTV
 	};
 
 	static int officeRow;
