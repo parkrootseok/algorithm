@@ -14,7 +14,6 @@ import java.util.Stack;
  * - N개의 식재료를 반으로 나누어 두 개의 요리
  * - 두 음식 맛의 차이가 최소가 되도록 재료 분배
  * 
- * 
  * 1. 테스트 케이스 횟수 입력
  * 2. 재료 갯수 입력
  * 3. 재료들의 시너지에 대한 정보 입력
@@ -33,10 +32,14 @@ class Solution {
 	static int tcNumber;
 	static int ingredientNumber;
 	static int minDifference;
+	static boolean isFinish;
 	static int[][] synerge;
 	static boolean[] usedIngredients;
 	
-	
+	/**
+	 * 두 음식의 시너지 차이를 계산
+	 * @return
+	 */
 	public static int calcSynnergeDifference() {
 		
 		int totalASynnerge = 0;
@@ -46,13 +49,13 @@ class Solution {
 		for(int row = 0; row < ingredientNumber; row++) {
 			for(int cols = row + 1; cols < ingredientNumber; cols++) {
 				
-				// 사용한 재료일 경우
+				// 사용한 재료일 경우 시너지 누적합
 				if(usedIngredients[row] && usedIngredients[cols]) {
 					totalASynnerge += synerge[row][cols];
 					totalASynnerge += synerge[cols][row];
 				} 
 				
-				// 사용하지 않은 재료일 경우
+				// 사용하지 않은 재료일 경우 시너지 누적합
 				else if(!usedIngredients[row] && !usedIngredients[cols]) {
 					totalBSynnerge += synerge[row][cols];
 					totalBSynnerge += synerge[cols][row];
@@ -68,11 +71,21 @@ class Solution {
 	
 	public static void combination(int level, int start) {
 		
+		if(isFinish) {
+			return;
+		}
+		
 		// 4. 조합이 완성되었으면
 		if (level == ingredientNumber / 2) {
 			
 			// 4-1. 시너지의 차이를 계산
 			minDifference = Math.min(minDifference, calcSynnergeDifference());
+			
+			
+			// 최소값이 0이라면 더이상 경우의 수를 계산할 필요 없으므로 종료
+			if(minDifference == 0) {
+				isFinish = true;
+			}
 			
 			return;
 			
@@ -117,6 +130,7 @@ class Solution {
 			
 			// 4. 총 N/2개의 식재료를 사용하는 조합을 생성
 			minDifference = Integer.MAX_VALUE;
+			isFinish = false;
 			usedIngredients = new boolean[ingredientNumber];
 			combination(0, 0);
 			
