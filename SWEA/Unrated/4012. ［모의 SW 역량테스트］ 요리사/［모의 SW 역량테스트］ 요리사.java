@@ -20,6 +20,7 @@ import java.util.Stack;
  * 3. 재료들의 시너지에 대한 정보 입력
  * 4. 총 N/2개의 식재료를 사용하는 조합을 생성
  *  4-1. 조합이 완성되었으면 시너지의 차이를 계산
+ *  
  */
 
 class Solution {
@@ -35,27 +36,30 @@ class Solution {
 	static int[][] synerge;
 	static boolean[] usedIngredients;
 	
-	public static int calcSynnergeDifference(
-		List<Integer> usedIngredientIndex,
-		List<Integer> unusedIngredientIndex
-		) {
+	
+	public static int calcSynnergeDifference() {
 		
 		int totalASynnerge = 0;
 		int totalBSynnerge = 0;
 		
 		// 분리된 재료들을 탐색
-		for(int row = 0; row < ingredientNumber / 2; row++) {
-			for(int cols = row + 1; cols < ingredientNumber / 2; cols++) {
+		for(int row = 0; row < ingredientNumber; row++) {
+			for(int cols = row + 1; cols < ingredientNumber; cols++) {
 				
-				// 동일한 재료가 아닐경우
-				if(row != cols) {
-					// (row, cols) / (cols, row)를 탐색항여 시너지를 누적합
-					totalASynnerge += synerge[usedIngredientIndex.get(row)][usedIngredientIndex.get(cols)];
-					totalASynnerge += synerge[usedIngredientIndex.get(cols)][usedIngredientIndex.get(row)];
-					totalBSynnerge += synerge[unusedIngredientIndex.get(row)][unusedIngredientIndex.get(cols)];
-					totalBSynnerge += synerge[unusedIngredientIndex.get(cols)][unusedIngredientIndex.get(row)];
+				// 사용한 재료일 경우
+				if(usedIngredients[row] && usedIngredients[cols]) {
+					totalASynnerge += synerge[row][cols];
+					totalASynnerge += synerge[cols][row];
+				} 
+				
+				// 사용하지 않은 재료일 경우
+				else if(!usedIngredients[row] && !usedIngredients[cols]) {
+					totalBSynnerge += synerge[row][cols];
+					totalBSynnerge += synerge[cols][row];
 				}
+				
 			}
+			
 		}
 		
 		return Math.abs(totalASynnerge - totalBSynnerge);
@@ -67,25 +71,8 @@ class Solution {
 		// 4. 조합이 완성되었으면
 		if (level == ingredientNumber / 2) {
 			
-			List<Integer> usedIngredientIndex = new ArrayList<>();
-			List<Integer> unusedIngredientIndex = new ArrayList<>();
-			
-			for(int index = 0; index < ingredientNumber; index++) {
-				
-				// 사용한 재료와 사용하지 않은 재료를 분리
-				if(usedIngredients[index]) {
-					usedIngredientIndex.add(index);
-				} else {
-					unusedIngredientIndex.add(index);
-				}
-				
-			}
-			
 			// 4-1. 시너지의 차이를 계산
-			minDifference = Math.min(
-				minDifference,
-				calcSynnergeDifference(usedIngredientIndex, unusedIngredientIndex)
-				);
+			minDifference = Math.min(minDifference, calcSynnergeDifference());
 			
 			return;
 			
