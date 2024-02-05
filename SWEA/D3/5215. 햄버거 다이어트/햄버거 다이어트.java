@@ -2,10 +2,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
 
 /**
  * SWEA_5215_햄버거다이어트(subset)
@@ -17,11 +13,10 @@ import java.util.Stack;
  * 1. 테스트 케이스 횟수 입력
  * 2. 재료 갯수와 제한 칼로리 입력
  * 3. 재료에 대한 정보 입력
- * 4. 재료에 대한 조합을 만들고
- *  4-2. 제한 칼로리를 넘으면 종료
- *  4-3. 제한 칼로리 이하라면 최대값 초기화
- *  4-4. 모든 재료를 사요했다면 종료
- *  
+ * 4. 재료에 대한 부분집합을 만들고
+ *  4-1. 부분집합에 포함된 재료들의 칼로리를 계산
+ *  4-2. 제한 칼로리를 넘지 않는다면
+ *  4-3. 계산한 점수가 최대값이라면 초기화
  */
 
 class Ingredient {
@@ -49,32 +44,6 @@ class Solution {
     static int ANSWER;
     static int tcNumber;
     static Ingredient[] ingredients;
-    
-    public static void comibnation(int level, int start, int score, int kcal) {
-    	
-    	// 4-2. 제한 칼로리를 넘으면 종료
-    	if(kcal > limitKcal) {
-    		return;
-    	}
-    	
-    	// 4-3. 제한 칼로리 이하라면 최대값 초기화
-    	if(kcal <= limitKcal) {
-    		ANSWER = Math.max(ANSWER, score);
-    	}
-    	
-    	// 4-4. 모든 재료를 사요했다면 종료
-    	if(level == ingredientNumber) {
-    		return;
-    	}
-    	
-    	// 조합 생성
-    	for(int index = start; index < ingredientNumber; index++) {
-    		
-    		comibnation(level + 1, index + 1, score + ingredients[index].score, kcal + ingredients[index].cal);
-    		
-    	}
-    	
-    }
 
     public static void main(String args[]) throws Exception {
     	
@@ -100,9 +69,32 @@ class Solution {
                 ingredients[idx] =  new Ingredient(inputs[0], inputs[1]);
             }
             
+            // 4. 재료에 대한 부분집합을 만들고
             ANSWER = 0;
-            comibnation(0, 0, 0, 0);
-          
+            for(int subset = 1; subset < (1 << ingredientNumber); subset++) {
+            	
+            	int curCal = 0;
+            	int curScore = 0;
+            	
+            	// 4-1. 부분집합에 포함된 재료들의 칼로리를 계산
+            	for(int bit = 0; bit < ingredientNumber; bit++) {
+            		
+            		if((subset & 1 << bit) != 0) {
+            			curCal += ingredients[bit].cal;
+            			curScore += ingredients[bit].score;
+            		}
+            		
+            	}
+            	
+            	// 4-2. 제한 칼로리 보다 이하라면 
+            	if(curCal <= limitKcal) {
+            		
+            		// 4-3. 계산한 점수가 최대값이라면 초기화
+            		ANSWER = Math.max(ANSWER, curScore);
+            		
+            	}
+            	
+            }
 
             
             sb.append("#").append(curTC).append(" ").append(ANSWER).append("\n");
