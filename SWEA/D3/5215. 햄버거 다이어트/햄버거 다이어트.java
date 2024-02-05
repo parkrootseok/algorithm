@@ -2,12 +2,29 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
-class Ingredient implements Comparable<Ingredient> {
+/**
+ * SWEA_5215_햄버거다이어트(subset)
+ * @author parkrootseok
+ * 
+ * - 정해진 칼로리를 넘지 않고, 선호도가 높은 햄버거를 제작
+ * - 해당하는 햄버거의 점수를 출력
+ * 
+ * 1. 테스트 케이스 횟수 입력
+ * 2. 재료 갯수와 제한 칼로리 입력
+ * 3. 재료에 대한 정보 입력
+ * 4. 재료에 대한 조합을 만들고
+ *  4-2. 제한 칼로리를 넘으면 종료
+ *  4-3. 제한 칼로리 이하라면 최대값 초기화
+ *  4-4. 모든 재료를 사요했다면 종료
+ *  
+ */
+
+class Ingredient {
 
     int score;
     int cal;
@@ -17,60 +34,82 @@ class Ingredient implements Comparable<Ingredient> {
         this.cal = Integer.parseInt(cal);
     }
 
-    @Override
-    public int compareTo(Ingredient o) {
-        return o.cal - this.cal;
-    }
 
 }
 
 class Solution {
 
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static BufferedReader br;
+    static BufferedWriter bw;
+    static StringBuilder sb;
+    static String[] inputs;
 
-
-    static int N, L, ANSWER;
-    static int[] dp;
+    static int ingredientNumber;
+    static int limitKcal;
+    static int ANSWER;
+    static int tcNumber;
     static Ingredient[] ingredients;
-
-    public static void knapsack() {
-
-        for (int i = 0 ; i < N ; i++) {
-
-            for (int j = L ; j >= ingredients[i].cal ; j--) {
-
-                dp[j] = Math.max(dp[j], dp[j - ingredients[i].cal] + ingredients[i].score);
-
-            }
-
-        }
+    
+    public static void comibnation(int level, int start, int score, int kcal) {
+    	
+    	// 4-2. 제한 칼로리를 넘으면 종료
+    	if(kcal > limitKcal) {
+    		return;
+    	}
+    	
+    	// 4-3. 제한 칼로리 이하라면 최대값 초기화
+    	if(kcal <= limitKcal) {
+    		ANSWER = Math.max(ANSWER, score);
+    	}
+    	
+    	// 4-4. 모든 재료를 사요했다면 종료
+    	if(level == ingredientNumber) {
+    		return;
+    	}
+    	
+    	// 조합 생성
+    	for(int index = start; index < ingredientNumber; index++) {
+    		
+    		comibnation(level + 1, index + 1, score + ingredients[index].score, kcal + ingredients[index].cal);
+    		
+    	}
+    	
     }
 
     public static void main(String args[]) throws Exception {
+    	
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
+    	
+		// 1. 테스트 케이스 횟수 입력
+        tcNumber = Integer.parseInt(br.readLine().trim());
+        
 
-        int T = Integer.parseInt(br.readLine());
+        for (int curTC = 1; curTC <= tcNumber; curTC++) {
 
-        for (int i = 1; i <= T; i++) {
+        	// 2. 재료 갯수와 제한 칼로리 입력
+            inputs = br.readLine().trim().split(" ");
+            ingredientNumber = Integer.parseInt(inputs[0]);
+            limitKcal = Integer.parseInt(inputs[1]);
 
-            bw.write("#" + i);
-            String[] inputs = br.readLine().split(" ");
-            N = Integer.parseInt(inputs[0]);
-            L = Integer.parseInt(inputs[1]);
-
-            dp = new int[L+1];
-            ingredients = new Ingredient[N];
-            for (int j = 0 ; j < N ; j++) {
+            // 3. 재료에 대한 정보 입력
+            ingredients = new Ingredient[ingredientNumber];
+            for (int idx = 0 ; idx < ingredientNumber ; idx++) {
                 inputs = br.readLine().split(" ");
-                ingredients[j] =  new Ingredient(inputs[0], inputs[1]);
+                ingredients[idx] =  new Ingredient(inputs[0], inputs[1]);
             }
             
-            Arrays.sort(ingredients);
-            knapsack();
-            bw.write(" "  + dp[L] + "\n");
+            ANSWER = 0;
+            comibnation(0, 0, 0, 0);
+          
+
+            
+            sb.append("#").append(curTC).append(" ").append(ANSWER).append("\n");
 
         }
 
+        bw.write(sb.toString());
         bw.close();
 
     }
