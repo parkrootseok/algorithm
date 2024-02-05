@@ -6,31 +6,48 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * SWEA_1228_암호문1
+ * @author parkrootseok
+ * 
+ * - 주어진 명령어에 따라 기존 암호문을 수정
+ * 
+ * 1. 테스트 케이스 횟수 입력
+ * 2. 원본 암호문 입력
+ * 3. 명령어 갯수 입력
+ * 4. 명령어 입력
+ * 5. 명령어 수행
+ * 6. 암호문 수정 후 첫 10개만 출력
+ *  
+ */
+
 class Solution {
 
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-    static int N, K;
-    static int ANSWER;
-    static List<String> secrets;
-    static String[] command;
-
-    static int[] dx = {0, 1, 1, 1};
-    static int[] dy = {1, 0, 1, -1};
-
-    public static void solution() {
-
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringBuilder sb;
+	static String[] inputs;
+	
+	static int tcNumber;
+	static int commandNumber;
+	static List<String> secrets;
+	static String[] command;
+	
+	public static void runCommand() {
+		
+		int start, end;
+		
         for (String cmd : command) {
+        	
+        	// 명령을 " "를 구분자로 하여 분리
+            String[] splitCommand = cmd.split(" ");
 
-            String[] split = cmd.split(" ");
+            // start위치 부터 end개 삽입
+            start = Integer.parseInt(splitCommand[0]);
+            end = Integer.parseInt(splitCommand[1]);
 
-            int x = Integer.parseInt(split[0]);
-            int y = Integer.parseInt(split[1]);
-
-            int i = x;
-            for (int j = 2 ; j < y + 2; i++, j++) {
-                secrets.add(i, split[j]);
+            for (int commandIdx = 2 ; commandIdx < end + 2; start++, commandIdx++) {
+                secrets.add(start, splitCommand[commandIdx]);
             }
 
         }
@@ -39,36 +56,48 @@ class Solution {
 
     }
 
-    public static void main(String args[]) throws Exception {
+	public static void main(String args[]) throws Exception {
 
-        for (int i = 1; i <= 10; i++) {
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-            bw.write("#" + i + " ");
 
-            N = Integer.parseInt(br.readLine());
-            
-            String[] inputs = br.readLine().split(" ");
-            secrets = new ArrayList<>();
-            for (String input : inputs) {
-                secrets.add(input);
-            }
+		 for (int curTC = 1; curTC <= 10; curTC++) {
+	               
+	    		// 1. 테스트 케이스 횟수 입력
+	            tcNumber = Integer.parseInt(br.readLine().trim());
+	            
+	            // 2. 원본 암호문 입력
+	            inputs = br.readLine().trim().split(" ");
+	            secrets = new ArrayList<>();
+	            for (String input : inputs) {
+	                secrets.add(input);
+	            }
 
-            K = Integer.parseInt(br.readLine());
+	            // 3. 명령어 갯수 입력
+	            commandNumber = Integer.parseInt(br.readLine());
 
-            command = br.readLine().split("I ");
-            command = Arrays.copyOfRange(command, 1, command.length);
+	            // 4. 명령어 입력
+	            command = br.readLine().split("I ");
+	            command = Arrays.copyOfRange(command, 1, command.length);
 
-            solution();
+	            // 5. 명령어 수행
+	            runCommand();       
+	            
+	            // 6. 암호문 수정 후 첫 10개만 출력
+	            sb.append("#").append(curTC).append(" ");
+	            for (int index = 0; index < 10; index++) {
+	                sb.append(secrets.get(index)).append(" ");
+	            }
+	            sb.append("\n");
+	            
+	        }
 
-            for (int j = 0; j < 10; j++) {
-                bw.write(secrets.get(j) + " ");
-            }
-            bw.write("\n");
+		bw.write(sb.toString());
+		bw.close();
+		return;
 
-        }
-
-        bw.close();
-
-    }
+	}
 
 }
