@@ -68,18 +68,21 @@ class Main {
 
 		Queue<int[]> union = new ArrayDeque<>();
 		List<int[]> unionCountry = new ArrayList<>();
+		
 		int nextRow, nextCols;
+		int totalUnionPerson;
 
 		union.add(new int[] {row, cols});
 		unionCountry.add(new int[] {row, cols});
 		isVisited[row][cols] = true;
-
-		// 4방 탐색을 해서 국경이 열리는 나라를 찾아서 큐에 삽입
+		totalUnionPerson = ground[row][cols];
+		
 		while (!union.isEmpty()) {
 
 			int[] curCountry = union.poll();
 
 			// 3-1. 현재 국가와 연합할 수 있는 나라를 탐색
+			// 4방 탐색을 해서 국경이 열리는 나라를 찾아서 큐에 삽입
 			for (int idx = 0; idx < dx.length; idx++) {
 
 				nextRow = curCountry[0] + dx[idx];
@@ -105,17 +108,13 @@ class Main {
 				isVisited[nextRow][nextCols] = true;
 				union.add(new int[] {nextRow, nextCols});
 				unionCountry.add(new int[] {nextRow, nextCols});
+				totalUnionPerson += ground[nextRow][nextCols];
 
 			}
 
 		}
 
 		// 3-2. 인구 이동
-		int totalUnionPerson = 0;
-		for (int[] country : unionCountry) {
-			totalUnionPerson += ground[country[0]][country[1]];
-		}
-
 		for (int[] country : unionCountry) {
 			ground[country[0]][country[1]] = totalUnionPerson / unionCountry.size();
 		}
