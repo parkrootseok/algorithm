@@ -13,6 +13,8 @@ import java.io.OutputStreamWriter;
  * 
  * 1. 색종이 수 입력
  * 2. 색종이 붙인 위치 입력(row 좌표, cols 좌표)
+ * 3. 검은색 색종이만큼 도화지에 붙인다
+ * 4. 색종이 영역을 계산 후 출력
  * 
  */
 
@@ -41,6 +43,7 @@ class Main {
 			int row = Integer.parseInt(inputs[0]);
 			int cols = Integer.parseInt(inputs[1]);
 			
+			// 3. 검은색 색종이만큼 도화지에 붙인다
 			for(int curRow = row; curRow < row + 10; curRow++) {
 				for(int curCols = cols; curCols < cols + 10; curCols++) {
 					drawingPaper[curRow][curCols] = 1;
@@ -49,6 +52,7 @@ class Main {
 			
 		}
 		
+		// 4. 색종이 영역을 계산 후 출력
 		int black = 0;
 		for(int row = 0; row < 100; row++) {
 			for(int cols = 0; cols < 100 ; cols++) {
