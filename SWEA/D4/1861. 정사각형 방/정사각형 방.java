@@ -142,11 +142,16 @@ class Solution {
 			// 4. 하나의 방에서 4방 탐색을 진행
 			maxMoveCount = Integer.MIN_VALUE;
 			minRoomNumber = roomSize * roomSize + 1;
+			
+			int moveCount = 0;
 			for (int row = 0; row < roomSize; row++) {
 				for (int cols = 0; cols < roomSize; cols++) {
 
 					isVisted = new boolean[roomSize][roomSize];
-					int moveCount = getMoveCount(row, cols);
+					
+					if(!isVisted[row][cols]) {
+						moveCount = getMoveCount(row, cols);
+					}
 
 					// 5. 탐색한 방 수가 최대이면 초기화 후 위치 저장
 					if (moveCount == maxMoveCount) {
