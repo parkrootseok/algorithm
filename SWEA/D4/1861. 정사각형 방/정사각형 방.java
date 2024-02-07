@@ -21,7 +21,7 @@ import java.util.Queue;
  * 2. 방 크기 입력
  * 3. 방에 대한 입력
  * 4. 하나의 방에서 4방 탐색을 진행
- *  4-1. 이동할 수 있는 방이라면 큐에 삽입
+ *  4-1. 다음 방으로 이동가능 하면 재귀 호출
  * 5. 탐색한 방 수가 최대이면 초기화 후 위치 저장
  *  
  */
@@ -86,9 +86,9 @@ class Solution {
 				continue;
 			}
 
-			// 재귀 호출
-			getMoveCount(nextRow, nextCols);
+			// 4-1. 다음 방으로 이동가능 하면 재귀 호출 방문 횟수 증가
 			moveCount++;
+			getMoveCount(nextRow, nextCols);
 
 		}
 
@@ -120,7 +120,6 @@ class Solution {
 			// 4. 하나의 방에서 4방 탐색을 진행
 			maxMoveCount = Integer.MIN_VALUE;
 			minRoomNumber = roomSize * roomSize + 1;
-
 			for (int row = 0; row < roomSize; row++) {
 				for (int cols = 0; cols < roomSize; cols++) {
 					
