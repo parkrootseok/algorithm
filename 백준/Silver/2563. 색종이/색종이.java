@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 /**
- * BOJ_11286_색종이
+ * BOJ_2563_색종이
  * @author parkrootseok
  * 
  * - 흰색 도화지 있음(100 by 100)
