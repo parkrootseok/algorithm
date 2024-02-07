@@ -26,7 +26,7 @@ class Main {
 	static String[] inputs;
 
 	static int paperNumber;
-	static int[][] drawingPaper = new int[100][100]; 
+	static boolean[][] drawingPaper = new boolean[100][100]; 
 		
 	public static void main(String args[]) throws Exception {
 
@@ -46,7 +46,7 @@ class Main {
 			// 3. 검은색 색종이만큼 도화지에 붙인다
 			for(int curRow = row; curRow < row + 10; curRow++) {
 				for(int curCols = cols; curCols < cols + 10; curCols++) {
-					drawingPaper[curRow][curCols] = 1;
+					drawingPaper[curRow][curCols] = true;
 				}
 			}
 			
@@ -56,7 +56,7 @@ class Main {
 		int black = 0;
 		for(int row = 0; row < 100; row++) {
 			for(int cols = 0; cols < 100 ; cols++) {
-				if(drawingPaper[row][cols] == 1) {
+				if(drawingPaper[row][cols]) {
 					black++;
 				}
 			}
