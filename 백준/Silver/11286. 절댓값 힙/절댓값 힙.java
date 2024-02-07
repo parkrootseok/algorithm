@@ -172,7 +172,6 @@ class Main {
 
 		}
 
-		sb.append("\n");
 		bw.write(sb.toString());
 		bw.close();
 		return;
