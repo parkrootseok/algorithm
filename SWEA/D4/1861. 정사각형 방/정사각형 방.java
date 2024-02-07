@@ -68,51 +68,37 @@ class Solution {
 	}
 
 	public static int getMoveCount(int row, int cols) {
+		
+		// 방문한 방이라면 종료
+		if (isVisted[row][cols]) {
+			return 0;
+		}
 
-		int moveCount = 0;
-
-		Queue<int[]> queue = new ArrayDeque<>();
-
-		queue.add(new int[] {row, cols});
 		isVisted[row][cols] = true;
-		moveCount++;
+		
+		int moveCount = 0;
+		int nextRow, nextCols;
+		for (int index = 0; index < dx.length; index++) {
 
-		while (!queue.isEmpty()) {
+			nextRow = row + dx[index];
+			nextCols = cols + dy[index];
 
-			int[] curRoom = queue.poll();
-
-			// 4-1. 이동할 수 있는 방이라면 큐에 삽입
-			int nextRow, nextCols;
-			for (int index = 0; index < dx.length; index++) {
-
-				nextRow = curRoom[0] + dx[index];
-				nextCols = curRoom[1] + dy[index];
-
-				// 인덱스가 범위내에 존재하고
-				if (!isValid(nextRow, nextCols)) {
-					continue;
-				}
-
-				// 두 방의 차이가 정확이 1이고
-				if (!isPossible(room[curRoom[0]][curRoom[1]], room[nextRow][nextCols])) {
-					continue;
-				}
-
-				// 방문한적이 없다면
-				if (isVisted[nextRow][nextCols]) {
-					continue;
-				}
-
-				// 큐에 삽입 후 방문 표시 및 방문 횟수 카운트
-				queue.add(new int[] {nextRow, nextCols});
-				isVisted[nextRow][nextCols] = true;
-				moveCount++;
-
+			// 인덱스가 범위내에 존재하고
+			if (!isValid(nextRow, nextCols)) {
+				continue;
 			}
+
+			// 두 방의 차이가 정확이 1이면
+			if (!isPossible(room[row][cols], room[nextRow][nextCols])) {
+				continue;
+			}
+
+			// 재귀 호출
+			moveCount = Math.max(moveCount, getMoveCount(nextRow, nextCols));
 
 		}
 
-		return moveCount;
+		return moveCount + 1;
 
 	}
 
@@ -142,22 +128,22 @@ class Solution {
 			// 4. 하나의 방에서 4방 탐색을 진행
 			maxMoveCount = Integer.MIN_VALUE;
 			minRoomNumber = roomSize * roomSize + 1;
-			
 			int moveCount = 0;
 			for (int row = 0; row < roomSize; row++) {
 				for (int cols = 0; cols < roomSize; cols++) {
 
 					isVisted = new boolean[roomSize][roomSize];
-					
-					if(!isVisted[row][cols]) {
-						moveCount = getMoveCount(row, cols);
+
+					// 방문한 방이 아니라면 탐색 시작
+					if (!isVisted[row][cols]) {
+						moveCount = getMoveCount(row, cols); 
 					}
 
 					// 5. 탐색한 방 수가 최대이면 초기화 후 위치 저장
 					if (moveCount == maxMoveCount) {
 						minRoomNumber = Math.min(minRoomNumber, room[row][cols]);
 						maxMoveCount = moveCount;
-					} else if(moveCount > maxMoveCount ) {
+					} else if (moveCount > maxMoveCount) {
 						minRoomNumber = room[row][cols];
 						maxMoveCount = moveCount;
 					}
@@ -166,7 +152,8 @@ class Solution {
 			}
 
 			// 결과 출력
-			sb.append("#").append(curTC).append(" ").append(minRoomNumber).append(" ").append(maxMoveCount).append("\n");
+			sb.append("#").append(curTC).append(" ").append(minRoomNumber).append(" ").append(maxMoveCount)
+				.append("\n");
 
 		}
 
