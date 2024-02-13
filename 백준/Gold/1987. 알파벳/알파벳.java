@@ -22,7 +22,6 @@ import java.io.OutputStreamWriter;
  *  3-3. 방문한 알파벳이 아니라면
  *  3-4. 말을 이동
  * 
- * 
  */
 
 public class Main {
