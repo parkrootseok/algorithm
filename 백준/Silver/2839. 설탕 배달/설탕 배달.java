@@ -4,51 +4,77 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-/**
- * 설탕 배달
+/***
+ * BOJ_2839_설탕배달
+ * @author parkrootseok
+ * 
+ * - 설탕 Nkg 배달
+ * - 봉지는 3, 5 존재
+ * - 최대한 적은 봉지
+ * - 봉지 몇개 가져가야해? 불가하면 -1 출력
+ * 
+ * 1. 배댈해야하는 설탕을 입력 받는다
+ * 2. 필요한 봉지의 개수를 구한다
+ *  2-1. 1의 자리 숫자의 설탕양만 따로 계산
+ * 	2-2. 1의 자리를 제외한 설탕양 계산
+ *  2-3. 총 필요한 봉지 갯수 계산
+ *  
  */
 
 public class Main {
 
+	static int[] dx = {1, -1, 0, 0};
+	static int[] dy = {0, 0, 1, -1};
 
-    public int solution(int n) {
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringBuilder sb;
+	static String[] inputs;
+	
+	static final int KG_3 = 3;
+	static final int KG_5 = 5;
+	
 
-        // 불가능한 경우
-        if (n == 4 || n == 7) {
-            return -1;
-        }
+	static int needSugar;
+	static int totalPlasticBag;
+	
+	public static void main(String[] args) throws IOException {
 
-        // 5의 배수인 경우
-        if (n % 5 == 0) {
-            return (n / 5);
-        }
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-        // 나머지가 1 또는 3인 경우 [ 6, 8, 11, 13, 16, ... , (x / 5) + 1, (x / 5) + 3) ]
-        // n을 5로 나눈 몫의 1개를 더한것과 같음
-        if (n % 5 == 1 || n % 5 == 3)   {
-            return (n / 5) + 1;
-        }
-        
-        
-        // 나머지가 2 또는 4인 경우 [ 9, 12, 14, 17, 19, ... , (x / 5) + 2, (x / 5) + 4) ]
-        // n을 5로 나눈 몫의 2개를 더한것과 같음
-        if (n % 5 == 2 || n % 5 == 4)   {
-            return (n / 5) + 2;
-        }
+		// 1. 배댈해야하는 설탕을 입력 받는다
+		needSugar = Integer.parseInt(br.readLine().trim());
+		
+		// 2. 필요한 봉지의 개수를 구한다.
+		
+		if(needSugar == 4 || needSugar == 7) {
+			// 필요한 설탕이 4 or 7일 경우 불가
+			totalPlasticBag = -1;
+		}
+		
+		else if(needSugar % 5 == 0) {
+			
+			// 필요한 설탕이 5의 배수일 경우
+			totalPlasticBag = needSugar / 5;
+			
+		}
+		
+		else if(needSugar % 5 == 1 || needSugar % 5 == 3) {
+			// 필요한 설탕이 5로 나누었을 때 나머지가 1인 경우
+			totalPlasticBag = (needSugar / 5) + 1;
+		}
+		
+		else if(needSugar % 5 == 2 || needSugar % 5 == 4) {
+			// 필요한 설탕이 5로 나누었을 때 나머지가 1인 경우
+			totalPlasticBag = (needSugar / 5) + 2;
+		}
+		
+		sb.append(totalPlasticBag);
+		bw.write(sb.toString());
+		bw.close();
 
-        return -1;
-    }
-
-    public static void main(String[] args) throws IOException {
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        Main m = new Main();
-
-        int n = Integer.parseInt(br.readLine());
-        bw.write( m.solution(n) + "");
-        bw.close();
-
-    }
+	}
 
 }
