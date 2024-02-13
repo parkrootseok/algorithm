@@ -15,9 +15,10 @@ import java.io.OutputStreamWriter;
  * 
  * 1. 배댈해야하는 설탕을 입력 받는다
  * 2. 필요한 봉지의 개수를 구한다
- *  2-1. 1의 자리 숫자의 설탕양만 따로 계산
- * 	2-2. 1의 자리를 제외한 설탕양 계산
- *  2-3. 총 필요한 봉지 갯수 계산
+ *  2-1. 4or7인 경우는 불가
+ *  2-2. 5의 배수인 경우는 5로 나눈 몫이 정답
+ *  2-3. 나머지가 1or3인 경우 5로 나눈 몫 + 1
+ *  2-4. 나머지가 2or4인 경우 5로 나눈 몫 + 2
  *  
  */
 
@@ -30,14 +31,13 @@ public class Main {
 	static BufferedWriter bw;
 	static StringBuilder sb;
 	static String[] inputs;
-	
+
 	static final int KG_3 = 3;
 	static final int KG_5 = 5;
-	
 
 	static int needSugar;
 	static int totalPlasticBag;
-	
+
 	public static void main(String[] args) throws IOException {
 
 		br = new BufferedReader(new InputStreamReader(System.in));
@@ -46,31 +46,30 @@ public class Main {
 
 		// 1. 배댈해야하는 설탕을 입력 받는다
 		needSugar = Integer.parseInt(br.readLine().trim());
-		
+
 		// 2. 필요한 봉지의 개수를 구한다.
-		
-		if(needSugar == 4 || needSugar == 7) {
-			// 필요한 설탕이 4 or 7일 경우 불가
+
+		// 2-1. 4or7인 경우는 불가
+		if (needSugar == 4 || needSugar == 7) {
 			totalPlasticBag = -1;
 		}
-		
-		else if(needSugar % 5 == 0) {
-			
-			// 필요한 설탕이 5의 배수일 경우
+
+		// 2-2. 5의 배수인 경우는 5로 나눈 몫이 정답
+		else if (needSugar % 5 == 0) {
 			totalPlasticBag = needSugar / 5;
-			
+
 		}
-		
-		else if(needSugar % 5 == 1 || needSugar % 5 == 3) {
-			// 필요한 설탕이 5로 나누었을 때 나머지가 1인 경우
+
+		//  2-3. 나머지가 1or3인 경우 5로 나눈 몫 + 1
+		else if (needSugar % 5 == 1 || needSugar % 5 == 3) {
 			totalPlasticBag = (needSugar / 5) + 1;
 		}
-		
-		else if(needSugar % 5 == 2 || needSugar % 5 == 4) {
-			// 필요한 설탕이 5로 나누었을 때 나머지가 1인 경우
+
+		// 2-4. 나머지가 2or4인 경우 5로 나눈 몫 + 2
+		else if (needSugar % 5 == 2 || needSugar % 5 == 4) {
 			totalPlasticBag = (needSugar / 5) + 2;
 		}
-		
+
 		sb.append(totalPlasticBag);
 		bw.write(sb.toString());
 		bw.close();
