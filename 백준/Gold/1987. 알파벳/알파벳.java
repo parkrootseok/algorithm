@@ -25,7 +25,7 @@ import java.io.OutputStreamWriter;
  */
 
 public class Main {
-	
+
 	static int[] dx = {1, -1, 0, 0};
 	static int[] dy = {0, 0, 1, -1};
 
@@ -37,53 +37,53 @@ public class Main {
 	static int rowSize;
 	static int colSize;
 	static int maxMoveCnt;
-	
+
 	static char[][] board;
 	static boolean[] isVisited;
-	
+
 	public static boolean isValid(int row, int col) {
-		
-		if(0 <= row && row < rowSize && 0 <= col && col < colSize) {
+
+		if (0 <= row && row < rowSize && 0 <= col && col < colSize) {
 			return true;
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 	public static void move(int level, int row, int col) {
-		
+
 		maxMoveCnt = Math.max(maxMoveCnt, level);
-		
+
 		// 3-1. 방문 완료한 알파벳 기록
 		isVisited[board[row][col] - 'A'] = true;
-		
+
 		int nextRow, nextCol;
-		for(int direction = 0; direction < dx.length; direction++) {
-			
+		for (int direction = 0; direction < dx.length; direction++) {
+
 			nextRow = row + dx[direction];
 			nextCol = col + dy[direction];
-			
+
 			// 3-2. 이동할 위치가 유효하고
-			if(!isValid(nextRow, nextCol)) {
+			if (!isValid(nextRow, nextCol)) {
 				continue;
 			}
-			
+
 			// 3-3. 방문한 알파벳이 아니라면
-			if(isVisited[board[nextRow][nextCol] - 'A']) {
+			if (isVisited[board[nextRow][nextCol] - 'A']) {
 				continue;
 			}
-				
-			
+
 			// 3-3. 말을 이동
 			move(level + 1, nextRow, nextCol);
-			
+
 			// 사용한 알파벳들은 반납
 			isVisited[board[nextRow][nextCol] - 'A'] = false;
+
 		}
-	
+
 	}
-	
+
 	public static void main(String[] args) throws IOException {
 
 		br = new BufferedReader(new InputStreamReader(System.in));
@@ -94,17 +94,17 @@ public class Main {
 		inputs = br.readLine().trim().split(" ");
 		rowSize = Integer.parseInt(inputs[0]);
 		colSize = Integer.parseInt(inputs[1]);
-		
+
 		// 2. 보드에 대한 정보를 입력 받는다.
 		board = new char[rowSize][colSize];
-		for(int curRow = 0; curRow < rowSize; curRow++) {
+		for (int curRow = 0; curRow < rowSize; curRow++) {
 			String input = br.readLine().trim();
-			for(int curCol = 0; curCol < colSize; curCol++) {
+			for (int curCol = 0; curCol < colSize; curCol++) {
 				board[curRow][curCol] = input.charAt(curCol);
 			}
-			
+
 		}
-		
+
 		// 3. 말을 4가지 방향으로 이동 시작
 		isVisited = new boolean[27];
 		maxMoveCnt = Integer.MIN_VALUE;
