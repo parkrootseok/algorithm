@@ -19,8 +19,10 @@ import java.util.Queue;
  * - 3개씩 총 6번 주어짐
  * 
  * 1. 6개의 나라에 대한 승무패 기록을 받는다
- * 2. 
- * 
+ * 2. 대진표를 생성
+ * 3. 미리 작성한 대진표를 통해 매치를 진행
+ *  3-1. 매치가 총 15번 진행된 경우 모두 진행되었으므로 true 리턴
+ *  3-2. 홈팀과 어웨이팀이 진행할 수 있는 모든 경기를 진행
  */
 
 public class Main {
@@ -65,6 +67,8 @@ public class Main {
 			return;
 		}
 
+		
+		// 3-2. 홈팀과 어웨이팀이 진행할 수 있는 모든 경기를 진행
 		Country home = allMatch[curMatch][0];
 		Country away = allMatch[curMatch][1];
 
