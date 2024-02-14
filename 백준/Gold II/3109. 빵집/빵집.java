@@ -55,8 +55,6 @@ public class Main {
 	static int mapRow;
 	static int mapCol;
 	static char[][] map;
-
-	static boolean isPossible;
 	static int connectCount;
 	
 	public static boolean inRange(int row, int col) {
@@ -71,17 +69,16 @@ public class Main {
 	/**
 	 * 파이프 연결
 	 */
-	public static void connectPipe(int startRow, int startCol) {
+	public static boolean connectPipe(int startRow, int startCol) {
 		
 		// 3-1. 끝 지점까지 도착 확인(파이프 연결이 완료된 경우)
-		if(startCol == END_COL) {
+		if(startCol + 1 == END_COL) {
 			// 한 번 파이프가 연결되면 동일한 경로에 파이프는 사용할 수 없기 때문에 파이프 연결이 완료되었다고 표시
-			isPossible = true;
-			return;
+			return true;
 		}
 		
 		// 3-2. 다음 파이프를 연결할 곳을 탐색
-		int nextRow, nextCol = startCol + 1;
+		int nextRow;
 		for(int direction = 0; direction < dx.length; direction++) {
 			
 			// 3-2-1. 다음 위치가 유효한 인덱스안에 존재하고 빌딩도 파이프도 아니라면
@@ -89,31 +86,33 @@ public class Main {
 			nextRow = startRow + dx[direction];
 			
 			// 범위를 벗어나지 않고
-			if(!inRange(nextRow, nextCol)) {
+			if(!inRange(nextRow, startCol + 1)) {
 				continue;
 			}
 			
 			// 다음 위치가 빌딩도 아니고
-			if(map[nextRow][nextCol] == BUILDING) {
+			if(map[nextRow][startCol + 1] == BUILDING) {
 				continue;
 			}
 			
 			// 다음 위치가 파이프도 아니라면
-			if(map[nextRow][nextCol] == PIPE) {
+			if(map[nextRow][startCol + 1] == PIPE) {
 				continue;
 			}
 			
 			// 3-2-2. 파이프 연결
-			map[nextRow][nextCol] = PIPE;
-			connectPipe(nextRow, nextCol);
+			map[nextRow][startCol + 1] = BUILDING;
 			
-			// 3-2-3. 이미 파이프가 완성이 되었다면 더이상 진행하지 않도록 종료
-			if(isPossible) {
-				return;
+			// 3-2-3. 다음 위치로 이동하여 파이프 연결
+			if(connectPipe(nextRow, startCol + 1)) {
+				// 최종적으로 파이프 연결이 완료되었다면 true를 리턴하고 종료
+				return true;
 			}
 			
 		}
 			
+		return false;
+		
 	}
 	
 	public static void main(String[] args) throws IOException {
@@ -141,12 +140,8 @@ public class Main {
 		END_COL = mapCol - 1;
 		for(int curRow = 0; curRow < mapRow; curRow++) {
 			
-			isPossible = false;
-			
-			connectPipe(curRow, START_COL);
-			
 			// 4. curRow에서 시작해서 파이프 연결이 가능하다면 카운트
-			if(isPossible) {
+			if(connectPipe(curRow, START_COL)) {
 				connectCount++;
 			}
 			
