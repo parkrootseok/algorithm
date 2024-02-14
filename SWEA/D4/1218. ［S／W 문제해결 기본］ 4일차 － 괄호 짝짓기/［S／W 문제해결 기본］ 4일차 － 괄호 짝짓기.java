@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Stack;
 
 /**
- * SWEA_2001_괄호 짝짓기
+ * SWEA_1218_괄호 짝짓기
  * @author parkrootseok
  * 
  * - 괄호문자들로 이루어진 문자열이 주어지고
