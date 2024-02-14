@@ -39,7 +39,6 @@ public class Main {
 	// 오른쪽 위, 중간, 오른쪽 아래
 	// 파이프를 위에서 부터 아래 방향으로 연결해야 많이 연결 가능
 	static int[] dx = {-1, 0, 1};
-	static int[] dy = {1, 1, 1};
 
 	static char BUILDING = 'x';
 	static char PIPE = '-';
@@ -51,6 +50,7 @@ public class Main {
 	static BufferedWriter bw;
 	static StringBuilder sb;
 	static String[] inputs;
+	static String input;
 
 	static int mapRow;
 	static int mapCol;
@@ -129,9 +129,9 @@ public class Main {
 		// 2. 빵집 근처에 대한 정보 입력
 		map = new char[mapRow][mapCol];
 		for(int curRow = 0; curRow < mapRow; curRow++) {
-			inputs = br.readLine().trim().split("");
+			input = br.readLine().trim();
 			for(int curCol = 0; curCol < mapCol; curCol++) {
-				map[curRow][curCol] = inputs[curCol].charAt(0);
+				map[curRow][curCol] = input.charAt(curCol);
 			}
 		}
 		
