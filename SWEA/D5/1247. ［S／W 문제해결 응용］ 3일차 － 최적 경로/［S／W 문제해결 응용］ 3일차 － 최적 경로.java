@@ -19,12 +19,10 @@ import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
  * 1. 테스트 케이스 횟수를 받는다.
  * 2. 고객의 수와 회사, 집, 고객의 좌표를 받아 초기화한다.
  * 3. N명의 고객들에 대한 수열을 생성
- * 	3-1. 수열이 완성되었다면 총 이동 거리를 구한 후 최소값으로 갱신
- *   3-1-1. 고객의 좌표를 모두 탐색(고객의 수만큼 방문이 이루어져야 함)
- *   3-1-2. 현재위치와 고객 거리를 구하여 누적합
- *   3-1-3. 현재 위치를 갱신
- *   3-1-4. 고객의 좌표를 모두 탐색하여 총 이동 거리를 구했다면 마지막 고객과 집과의 거리를 덧셈
- *   3-1-5. 최소값으로 갱신
+ *  3-1. 현재까지 이동거리가 최소 거리보다 멀다면 종료
+ * 	3-2. 수열이 완성되었다면 총 이동 거리를 구한 후 최소값으로 갱신
+ *   3-2-1. 마지막 손님과 집과의 거리를 계산하여 누적합
+ *   3-2-2. 최소값으로 갱신
  *  3-2. 수열 만들기
  */
 
@@ -67,31 +65,22 @@ class Solution {
 		
 	}
 	
-	public static void permutation(int level) {
+	public static void permutation(int level, Position curPosition, int curTotalDistance) {
+		
+		// 3-2. 현재까지 이동거리가 최소 거리보다 멀다면 종료
+		if(minTotalDistance < curTotalDistance) {
+			return;
+		}
 		
 		// 3-1. 수열이 완성되었다면 총 이동 거리를 구한 후 최소값으로 갱신		
 		if(level == customerNumber) {
+		
+			// 3-1-1. 마지막 손님과 집과의 거리를 계산하여 누적합
+			curTotalDistance += getDistance(home.row, home.col, curPosition.row, curPosition.col);
 			
-			int curTotalDistance = 0;
-			
-			// 3-1-1. 고객의 좌표를 모두 탐색(고객의 수만큼 방문이 이루어져야 함)
-			// 처음 위치는 회사로 고정
-			Position curPosition = company;
-			for(int curCustomer = 0; curCustomer < customerNumber; curCustomer++) {
-				
-				// 3-1-2. 현재위치와 고객 거리를 구하여 누적합
-				curTotalDistance += getDistance(curPosition.row, curPosition.col, perm[curCustomer].row, perm[curCustomer].col); 
-				
-				// 3-1-3. 현재 위치를 갱신
-				curPosition = perm[curCustomer];
-				
-			}
-			
-			// 3-1-4. 고객의 좌표를 모두 탐색하여 총 이동 거리를 구했다면 마지막 고객과 집과의 거리를 덧셈
-			curTotalDistance += getDistance(home.row, home.col, perm[level - 1].row, perm[level - 1].col);
-			
-			// 3-1-5. 최소값으로 갱신
+			// 3-1-2. 최소값으로 갱신
 			minTotalDistance = Math.min(minTotalDistance, curTotalDistance);
+			
 			return;
 			
 		}
@@ -100,10 +89,8 @@ class Solution {
 		for(int curCustomer = 0; curCustomer < customerNumber; curCustomer++) {
 			
 			if(!isVisted[curCustomer]) {
-				
 				isVisted[curCustomer] = true;
-				perm[level] = customers[curCustomer];
-				permutation(level + 1);
+				permutation(level + 1, customers[curCustomer], curTotalDistance + getDistance(curPosition.row, curPosition.col, customers[curCustomer].row, customers[curCustomer].col));
 				isVisted[curCustomer] = false;
 			}
 			
@@ -140,9 +127,8 @@ class Solution {
 			
 			// 3. N명의 고객들에 대한 수열을 생성
 			minTotalDistance = Integer.MAX_VALUE;
-			perm = new Position[customerNumber];
 			isVisted = new boolean[customerNumber];
-			permutation(0);
+			permutation(0, company, 0);
 
 			sb.append("#").append(curtestCase).append(" ").append(minTotalDistance).append("\n");
 
