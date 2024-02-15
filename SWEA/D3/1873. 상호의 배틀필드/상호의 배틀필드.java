@@ -2,257 +2,340 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
+/**
+ * SWEA_1873_상호의배틀필드
+ * @author parkrootseok
+ * 
+ * - 배틀 필드를 진행
+ * - 수행할 동작이 주어지고 주어진 동작에 따라 탱크를 작동
+ * - 평지만 이동 가능하고 강철로 만든 벽은 부술수 없다
+ * - 전차의 방향은 평지와 동일함
+ * - 동작으로는 UP, DOWN, LEFT, RIGHT, SHOOT
+ * 
+ * 1. 테스트 케이스 횟수를 받는다.
+ * 2. 맵의 높이와 너비를 입력 후 맵 초기화 및 탱크 생성
+ * 3. 명령을 받아 수행
+ */
 
 class Solution {
 
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static class Tank {
+
+		int row;
+		int col;
+		String direction;
+
+		public Tank(int x, int y, String direction) {
+			this.row = x;
+			this.col = y;
+			this.direction = direction;
+		}
+
+		public void up() {
+
+			this.direction = UP;
+
+			// 이동할 위치가 유효하고 움직일 수 있다면 이동
+			if (inRange(this.row - 1, this.col) && isFlat(this.row - 1, this.col)) {
+				
+				// 이동후 평지로 변경
+				map[row][col] = FLAT;
+				
+				// 탱크 이동
+				this.row--;
+				
+			}
+
+			map[row][col] = this.direction;
+
+		}
+
+		public void down() {
+
+			this.direction = DOWN;
+			
+			// 이동할 위치가 유효하고 움직일 수 있다면 이동
+			if (inRange(this.row + 1, this.col) && isFlat(this.row + 1, this.col)) {
+				
+				// 이동후 평지로 변경
+				map[row][col] = FLAT;
+				
+				// 탱크 이동
+				this.row++;
+				
+			}
+
+			map[row][col] = this.direction;
+
+		}
+
+		public void left() {
+
+			this.direction = LEFT;
+
+			// 이동할 위치가 유효하고 움직일 수 있다면 이동
+			if (inRange(this.row, this.col - 1) && isFlat(this.row, this.col - 1)) {
+				
+				// 이동후 평지로 변경
+				map[row][col] = FLAT;
+				
+				// 탱크 이동
+				this.col--;
+				
+			}
+
+			map[row][col] = this.direction;
+
+		}
+
+		public void right() {
+
+			this.direction = RIGHT;
+
+			// 이동할 위치가 유효하고 움직일 수 있다면 이동
+			if (inRange(this.row, this.col + 1) && isFlat(this.row, this.col + 1)) {
+				
+				// 이동후 평지로 변경
+				map[row][col] = FLAT;
+				
+				// 탱크 이동
+				this.col++;
+			
+			}
+
+			map[row][col] = this.direction;
+
+		}
+
+		public void shoot() {
+
+			int move = 0;
+
+			// 위로 발사
+			if (this.direction.equals(UP)) {
+
+				int nextRow = this.row - 1;
+				int nextCol = this.col;
+				
+				// 위치가 유효하고 철이 아니라면
+				while (inRange(nextRow, nextCol) && !map[nextRow][nextCol].equals(IRON)) {
+					
+					// 벽돌 부수기
+					if (map[nextRow][nextCol].equals(BRICK)) {
+						map[nextRow][nextCol] = FLAT;
+						return;
+					}
+
+					nextRow--;
+				}
+
+			} 
+			
+			// 아래로 발사
+			else if (this.direction.equals(DOWN)) {
+
+				int nextRow = this.row + 1;
+				int nextCol = this.col;
+				
+				// 위치가 유효하고 철이 아니라면
+				while (inRange(nextRow, nextCol) && !map[nextRow][nextCol].equals(IRON)) {
+					
+					// 벽돌 부수기
+					if (map[nextRow][nextCol].equals(BRICK)) {
+						map[nextRow][nextCol] = FLAT;
+						return;
+					}
+
+					nextRow++;
 
-    static int H, W, N;
-    static int ANSWER;
+				}
 
-    static String[][] map;
-    static Tank tank;
+			} 
+			
+			// 좌로 발사
+			else if (this.direction.equals(LEFT)) {
 
-    static int[] dx = {0, 1, 1, 1};
-    static int[] dy = {1, 0, 1, -1};
+				int nextRow = this.row;
+				int nextCol = this.col - 1;
+				
+				// 위치가 유효하고 철이 아니라면
+				while (inRange(nextRow, nextCol) && !map[nextRow][nextCol].equals(IRON)) {
 
-    static String FLAT = ".";
-    static String BRICK = "*";
-    static String IRON = "#";
-    static String WATER = "-";
+					// 벽돌 부수기
+					if (map[nextRow][nextCol].equals(BRICK)) {
+						map[nextRow][nextCol] = FLAT;
+						return;
+					}
 
-    static String UP = "^";
-    static String DOWN = "v";
-    static String LEFT = "<";
-    static String RIGHT = ">";
+					nextCol--;
 
-    static class Tank {
+				}
+			} 
+			
+			// 우로 발사
+			else {
 
-        int x;
-        int y;
-        String direction;
+				int nextRow = this.row;
+				int nextCol = this.col + 1;
+				
+				// 위치가 유효하고 철이 아니라면
+				while (inRange(nextRow, nextCol) && !map[nextRow][nextCol].equals(IRON)) {
 
-        public Tank(int x, int y, String direction) {
-            this.x = x;
-            this.y = y;
-            this.direction = direction;
-        }
+					// 벽돌 부수기
+					if (map[nextRow][nextCol].equals(BRICK)) {
+						map[nextRow][nextCol] = FLAT;
+						return;
+					}
 
-        public void up() {
+					nextCol++;
 
-            this.direction = UP;
+				}
 
-            if (isValid(this.x - 1, this.y) && canMove(this.x - 1, this.y)) {
-                map[x][y] = FLAT;
-                this.x--;
-            }
+			}
 
-            map[x][y] = this.direction;
+		}
 
-        }
+		/**
+		 * 위치가 유효한지 확인
+		 */
+		public boolean inRange(int nx, int ny) {
 
-        public void down() {
+			if (0 <= nx && nx < mapRow && 0 <= ny && ny < mapCol) {
+				return true;
+			}
 
-            this.direction = DOWN;
+			return false;
 
-            if (isValid(this.x + 1, this.y) && canMove(this.x + 1, this.y)) {
-                map[x][y] = FLAT;
-                this.x++;
-            }
+		}
 
-            map[x][y] = this.direction;
+		/**
+		 * 움직일 수 있는지 확인
+		 */
+		public boolean isFlat(int nx, int ny) {
+
+			if (!map[nx][ny].equals(FLAT)) {
+				return false;
+			}
 
-        }
+			return true;
 
-        public void left() {
+		}
 
-            this.direction = LEFT;
+	}
 
-            if (isValid(this.x, this.y - 1) && canMove(this.x, this.y - 1)) {
-                map[x][y] = FLAT;
-                this.y--;
-            }
+	static int[] dx = {0, 1, 1, 1};
+	static int[] dy = {1, 0, 1, -1};
 
-            map[x][y] = this.direction;
+	static final String FLAT = ".";
+	static final String BRICK = "*";
+	static final String IRON = "#";
+	static final String WATER = "-";
 
+	static final String UP = "^";
+	static final String DOWN = "v";
+	static final String LEFT = "<";
+	static final String RIGHT = ">";
 
-        }
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringBuilder sb;
+	static String[] inputs;
 
-        public void right() {
+	static int tcNumber;
 
-            this.direction = RIGHT;
+	static int mapRow;
+	static int mapCol;
+	static String[][] map;
 
-            if (isValid(this.x, this.y + 1) && canMove(this.x, this.y + 1)) {
-                map[x][y] = FLAT;
-                this.y++;
-            }
+	static int length;
 
-            map[x][y] = this.direction;
+	static Tank tank;
 
+	public static void main(String args[]) throws Exception {
 
-        }
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-        public void shoot() {
+		// 1. 테스트 케이스 횟수를 받는다.
+		tcNumber = Integer.parseInt(br.readLine());
 
-            int move = 0;
+		for (int curTestCase = 1; curTestCase <= tcNumber; curTestCase++) {
 
-            if (this.direction.equals(UP)) {
+			// 2. 맵의 높이와 너비를 입력 후 맵 초기화
+			inputs = br.readLine().split(" ");
+			mapRow = Integer.parseInt(inputs[0]);
+			mapCol = Integer.parseInt(inputs[1]);
 
-                int nx = this.x - 1;
-                int y = this.y;
+			map = new String[mapRow][mapCol];
+			for (int curRow = 0; curRow < mapRow; curRow++) {
 
-                while (isValid(nx, y) && !map[nx][y].equals(IRON)) {
+				inputs = br.readLine().trim().split("");
 
-                    if (map[nx][y].equals(BRICK)) {
-                        map[nx][y] = FLAT;
-                        return;
-                    }
+				for (int curCol = 0; curCol < mapCol; curCol++) {
 
-                    nx--;
-                }
+					map[curRow][curCol] = inputs[curCol];
 
-            } else if (this.direction.equals(DOWN)) {
+					// 탱크를 찾아 생성
+					if (map[curRow][curCol].equals(UP)) {
+						tank = new Tank(curRow, curCol, map[curRow][curCol]);
+					} else if (map[curRow][curCol].equals(DOWN)) {
+						tank = new Tank(curRow, curCol, map[curRow][curCol]);
+					} else if (map[curRow][curCol].equals(LEFT)) {
+						tank = new Tank(curRow, curCol, map[curRow][curCol]);
+					} else if (map[curRow][curCol].equals(RIGHT)) {
+						tank = new Tank(curRow, curCol, map[curRow][curCol]);
+					}
 
-                int nx = this.x + 1;
-                int y = this.y;
+				}
 
-                while (isValid(nx, y) && !map[nx][y].equals(IRON)) {
+			}
 
-                    if (map[nx][y].equals(BRICK)) {
-                        map[nx][y] = FLAT;
-                        return;
-                    }
+			// 3. 명령을 받아 수행
+			length = Integer.parseInt(br.readLine());
+			inputs = br.readLine().trim().split("");
+			for (String input : inputs) {
 
-                    nx++;
+				switch (input) {
 
-                }
+					case "U":
+						tank.up();
+						break;
+					case "D":
+						tank.down();
+						break;
+					case "L":
+						tank.left();
+						break;
+					case "R":
+						tank.right();
+						break;
+					case "S":
+						tank.shoot();
+						break;
 
-            } else if (this.direction.equals(LEFT)) {
+				}
 
-                int x = this.x;
-                int ny = this.y - 1;
+			}
 
-                while (isValid(x, ny) && !map[x][ny].equals(IRON)) {
+			sb.append("#").append(curTestCase).append(" ");
+			for (int curRow = 0; curRow < mapRow; curRow++) {
 
-                    if (map[x][ny].equals(BRICK)) {
-                        map[x][ny] = FLAT;
-                        return;
-                    }
+				for (int curCol = 0; curCol < mapCol; curCol++) {
 
-                    ny--;
+					sb.append(map[curRow][curCol]);
 
-                }
-            } else {
+				}
 
-                int x = this.x;
-                int ny = this.y + 1;
+				sb.append("\n");
 
-                while (isValid(x, ny) && !map[x][ny].equals(IRON)) {
+			}
+		}
 
-                    if (map[x][ny].equals(BRICK)) {
-                        map[x][ny] = FLAT;
-                        return;
-                    }
+		bw.write(sb.toString());
+		bw.close();
 
-                    ny++;
-
-                }
-
-            }
-
-        }
-
-        public boolean isValid(int nx, int ny) {
-
-            if (0 <= nx && nx < H && 0 <= ny && ny < W) {
-                return true;
-            }
-
-            return false;
-
-        }
-
-        public boolean canMove(int nx, int ny) {
-
-            if (!map[nx][ny].equals(FLAT)) {
-                return false;
-            }
-
-            return true;
-
-        }
-
-    }
-
-    public static void main(String args[]) throws Exception {
-
-        int T = Integer.parseInt(br.readLine());
-
-        for (int i = 1; i <= T; i++) {
-
-            bw.write("#" + i + " ");
-
-            String[] inputs = br.readLine().split(" ");
-            H = Integer.parseInt(inputs[0]);
-            W = Integer.parseInt(inputs[1]);
-
-            map = new String[H][W];
-            for (int j = 0; j < H; j++) {
-                map[j] = br.readLine().split("");
-            }
-
-            for (int j = 0; j < H; j++) {
-                for (int k = 0; k < W; k++) {
-                    if (map[j][k].equals(UP)) {
-                        tank = new Tank(j, k, map[j][k]);
-                    } else if (map[j][k].equals(DOWN)) {
-                        tank = new Tank(j, k, map[j][k]);
-                    } else if (map[j][k].equals(LEFT)) {
-                        tank = new Tank(j, k, map[j][k]);
-                    } else if (map[j][k].equals(RIGHT)) {
-                        tank = new Tank(j, k, map[j][k]);
-                    }
-                }
-            }
-
-            N = Integer.parseInt(br.readLine());
-            inputs = br.readLine().split("");
-            for (String input : inputs) {
-
-                switch (input) {
-
-                    case "U":
-                        tank.up();
-                        break;
-                    case "D":
-                        tank.down();
-                        break;
-                    case "L":
-                        tank.left();
-                        break;
-                    case "R":
-                        tank.right();
-                        break;
-                    case "S":
-                        tank.shoot();
-                        break;
-
-                }
-
-            }
-
-            for (int j = 0; j < H; j++) {
-               String m = Arrays.stream(map[j]).collect(Collectors.joining());
-                bw.write(m + "\n");
-            }
-
-        }
-
-        bw.close();
-    }
+	}
 
 }
