@@ -17,12 +17,10 @@ import java.io.OutputStreamWriter;
  * 4. 목표한 채널로 가기 위해 최소 클릭수를 구한다.
  * 4-1. 목표한 채널과 현재 채널이 같을 경우 카운트
  * 4-2. '+' or '-' 를 사용하여 바로 갈 수 있는 카운트
- * 4-3. 버튼을 조합하여 갈 수 있을 때 카운트
- * 
- */
+ * 4-3. 버튼을 조합하여 갈 수 있을 때 카운트 
+***/
 
 public class Main {
-	
 	
 	static final int START_CHANNEL = 100;
 	static final int TOTAL_BUTTON_NUMBER = 10;
@@ -40,10 +38,8 @@ public class Main {
 
 	static boolean[] wrongButtons;
 	static int[] perm;
-	
 	static int totalClickCount;
-	static int minDiffChannel;
-	static int minDiff;
+
 	
 	public static void permutation(int level, int channel) {
 		
