@@ -10,18 +10,12 @@ import java.io.OutputStreamWriter;
  * 
  * - 그림판에 R,G,B 픽셀이 존재
  * - 같은 색상이 상하좌우로 인접해 있다면 같은 구역(적록색약자는 R == G)
- * 
- * 1. 맵에 대한 크기를 받는다.
- * 2. 치즈가 놓여져 있는 위치에 대한 정보를 맵에 초기화	
- * 
- * 
+ * 1. 픽셀에 대한 크기를 받는다.
+ * 2. 픽셀 R, G, B 정보를 받는다.
+ * 3. 적록색약이 안닌 사람의 영역 갯수 구하기
+ * 4. 녹색인 픽셀을 모두 빨간색으로 변경
+ * 5. 적록색약인 사람의 영역 갯수 구하기
  */
-
-// R R R B B
-// G G B B B
-// B B B R R
-// B B R R R
-// R R R R R
 
 public class Main {
 
@@ -94,7 +88,7 @@ public class Main {
 			}
 		}
 
-		// 2. 적록색약이 안닌 사람의 영역 갯수 구하기
+		// 3. 적록색약이 안닌 사람의 영역 갯수 구하기
 		redNoneqaulGreen = 0;
 		isVisited = new boolean[pixelSize][pixelSize];
 		for (int curRow = 0; curRow < pixelSize; curRow++) {
