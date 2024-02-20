@@ -3,12 +3,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
-
-import javax.accessibility.AccessibleTable;
-import javax.swing.border.EtchedBorder;
 
 /***
  * BOJ_15961_회전초밥
@@ -38,7 +32,7 @@ public class Main {
 
 	static int dishNumber;
 	static int sushiNumber;
-	static int eatableContinuosNumber;
+	static int continuosEatableNumber;
 	static int cuponNumber;
 
 	static int[] dishes;
@@ -54,7 +48,7 @@ public class Main {
 		inputs = br.readLine().trim().split(" ");
 		dishNumber = Integer.parseInt(inputs[0]);
 		sushiNumber = Integer.parseInt(inputs[1]);
-		eatableContinuosNumber = Integer.parseInt(inputs[2]);
+		continuosEatableNumber = Integer.parseInt(inputs[2]);
 		cuponNumber = Integer.parseInt(inputs[3]);
 
 		// 2. 벨트 초기화
@@ -72,7 +66,7 @@ public class Main {
 		eatableSushi[cuponNumber]++;
 		
 		// 3-2. 초기값을 위해 eatableContinuosNumber만큼 먹을 수 있는 초밥수를 카운트
-		for (int beltIdx = 0; beltIdx < eatableContinuosNumber; beltIdx++) {
+		for (int beltIdx = 0; beltIdx < continuosEatableNumber; beltIdx++) {
 
 			// 현재 먹을 수 있는 초밥이아니라면
 			if (eatableSushi[dishes[beltIdx]] == 0) {
@@ -88,12 +82,15 @@ public class Main {
 		}
 
 		int maxEatableCount = eatableCount;
-		for (int curDish = 0; curDish < dishNumber; curDish++) {
+		
+		// 회전 초밥은 연결되어 있으므로 [접시수 - 연속으로 먹을 수 있는 접시수]가 아닌 [접시수] 만큼 반복문을 수행해야함
+		// 마지막 초밥 + 연속으로 먹을 수 있는 접시수에 대한 카운트도 필요
+		for (int curDish = continuosEatableNumber; curDish < dishNumber + continuosEatableNumber; curDish++) {
 			
 
 			//  3-3. 가장 처음에 선택한 초밥에 대한 카운트를 감소시키고 0이라면 가짓 수를 줄인다.
 			
-			int firstInSushi = dishes[curDish];
+			int firstInSushi = dishes[curDish - continuosEatableNumber];
 			
 			// 가지고 있는 초밥 개수를 감소
 			eatableSushi[firstInSushi]--;
@@ -105,7 +102,8 @@ public class Main {
 			
 
 			// 3-4. 다음으로 고를 초밥이 없는 초밥이라면 가짓수를 증가
-			int lastInSushi = dishes[(curDish + eatableContinuosNumber) % dishNumber];
+			int lastInSushi = dishes[(curDish) % dishNumber];
+			
 			if (eatableSushi[lastInSushi] == 0) {
 
 				// 가짓수 증가
