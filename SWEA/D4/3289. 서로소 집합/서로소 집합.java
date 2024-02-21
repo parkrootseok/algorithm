@@ -59,9 +59,15 @@ class Solution {
 			return;
 		}
 		
-		// 아니라면 둘을 합집합
-		set[representationB] = set[representationA];
-	
+		// 아니라면 둘을 합집합 수행
+		if(rank[representationA] >= rank[representationB]) {
+			// A가 속한 집합의 랭크가 더 같거나 높은 경우 B를 A 밑으로
+			set[representationB] = set[representationA];
+		} else {
+			// B가 속한 집합의 랭크가 더 같거나 높은 경우 A를 B 밑으로
+			set[representationA] = set[representationB];
+		}
+		
 	}
 	
 	public static int find(int element) {
