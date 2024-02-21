@@ -1,100 +1,197 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
+/***
  * BOJ_15683_감시
  * @author parkrootseok
  * 
- * - 사무실엔 K개의 CCTV 존재
- * - CCTV엔 5종류가 있음(CCTV마다 감시 방향이 다름)
- * - CCTV는 회전이 가능함(90도)
- * - CCTV 방향을 회전해서 사각 지대 크기의 최소를 구해라
+ * - 5종류의 cctv가 존재하는데 각각 감시할 수 있는 방향이 다름
+ * - 감시를 수행할 때 벽은 감시할 수 없는 영역
+ * - cctv는 회전이 가능함(90도 회전만 가능)
+ * - cctv 각도를 조절하여 사각지대의 최소 크기를 구해라
  * 
- * 1. 사무실의 크기와 CCTV의 개수를 받음
- * 2. 사무실의 정보를 받음
- *  2-1. CCTV이면 CCTV리스트에 추가
- * 3. DFS
- * 4. 4가지 각도에 따른
- *  4-1. CCTV가 볼 수 있는 모든 방향을 탐색
- * 5. 최종 사각지대 개수를 구하고 최소값으로 초기화
- * 
- */
+ * 1. 사무실에 대한 정보를 받는다
+ *  1-1. cctv라면 cctv list에 삽입
+ * 2. 완전탐색을 수행
+ *   2-1. 모든 cctv를 작동시켰다면 사각지대를 카운트
+ *   2-2. 모든 방향에 대하여 cctv 동작 수행
+ *   2-3. 다음 cctv를 수행하기 위해 재귀 호출
+ ***/
 
-class Main {
+class CCTV {
 
-	static class CCTV {
+	int number;
+	int row;
+	int col;
 
-		int index;
-		int row;
-		int cols;
+	CCTV(int number, int row, int col) {
+		this.number = number;
+		this.row = row;
+		this.col = col;
+	}
 
-		public CCTV(int index, int row, int cols) {
-			this.index = index;
-			this.row = row;
-			this.cols = cols;
-		}
+	// cctv 수행
+	void run(int[][] office) {
 
 	}
+
+}
+
+public class Main {
+
+	// 상, 우, 하, 좌
+	static int[] dx = {-1, 0, 1, 0};
+	static int[] dy = {0, 1, 0, -1};
+
+	// cctv 방향 정보에 대한 배열
+	static int[][] cctvDirections = {
+
+		{}, // 미사용
+		{1}, // 1
+		{1, 3}, // 2
+		{0, 1}, // 3
+		{0, 1, 3}, // 4
+		{0, 1, 2, 3} // 5
+
+	};
+
+	static final int UNSAFETYZONE = 0;
+	static final int SAFETYZONE = 9;
+	static final int WALL = 6;
 
 	static BufferedReader br;
 	static BufferedWriter bw;
 	static StringBuilder sb;
 	static String[] inputs;
 
-	static final int SAFE = 7;
-	static final int EMPTY = 0;
-	static final int WALL = 6;
-
-	// 위 -> 오 -> 아 -> 왼
-	// 90도 회전하는 순서대로 방향 델타 배열을 생성
-	static int[] dr = {-1, 0, 1, 0};
-	static int[] dc = {0, 1, 0, -1};
-
-	// cctv 방향에 대한 정보
-	static int[][] cctvDirection = {
-		{},
-		{1},			// 1번 CCTV
-		{1, 3},			// 2번 CCTV
-		{0, 1},			// 3번 CCTV
-		{0, 1, 3},		// 4번 CCTV
-		{0, 1, 2, 3},	// 5번 CCTV
-	};
-
-	static int officeRow;
-	static int officeCols;
 	static int[][] office;
+	static int officeRow;
+	static int officeCol;
 
-	static int minSafeField;
 	static List<CCTV> cctvs;
+	static int minUnSafetyZoneCount;
 
-	public static int[][] officeCopy(int[][] office) {
+	public static void main(String[] args) throws IOException {
 
-		int[][] officeTmp = new int[officeRow][officeCols];
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-		for (int row = 0; row < officeRow; row++) {
-			officeTmp[row] = office[row].clone();
-		}
+		// 1. 사무실에 대한 정보를 받는다
+		inputs = br.readLine().trim().split(" ");
+		officeRow = Integer.parseInt(inputs[0]);
+		officeCol = Integer.parseInt(inputs[1]);
 
-		return officeTmp;
-	}
+		cctvs = new ArrayList<>();
+		office = new int[officeRow][officeCol];
+		for (int curRow = 0; curRow < officeRow; curRow++) {
 
-	public static int getSafeFieldCount(int[][] office) {
+			inputs = br.readLine().trim().split(" ");
 
-		int count = 0;
+			for (int curCol = 0; curCol < officeCol; curCol++) {
 
-		for (int row = 0; row < officeRow; row++) {
+				office[curRow][curCol] = Integer.parseInt(inputs[curCol]);
 
-			for (int cols = 0; cols < officeCols; cols++) {
-
-				if (office[row][cols] == EMPTY) {
-					count++;
+				//  1-1. cctv라면 cctv list에 삽입
+				if (1 <= office[curRow][curCol] && office[curRow][curCol] <= 5) {
+					cctvs.add(new CCTV(office[curRow][curCol], curRow, curCol));
 				}
 
+			}
+
+		}
+
+		// 2. 완전탐색을 수행하여 사각지대 최소 크기를 구한다.
+		minUnSafetyZoneCount = Integer.MAX_VALUE;
+		bruteForce(0, office);
+
+		sb.append(minUnSafetyZoneCount).append("\n");
+		bw.write(sb.toString());
+		bw.close();
+
+		return;
+
+	}
+
+	public static void bruteForce(int level, int[][] curOffice) {
+
+		// 2-1. 모든 cctv를 작동시켰다면 사각지대를 카운트
+		if (level == cctvs.size()) {
+			minUnSafetyZoneCount = Math.min(minUnSafetyZoneCount, getUnsafetyZoneCount(curOffice));
+			return;
+		}
+
+		// 2-2. 모든 방향에 대하여 cctv 동작 수행
+		CCTV curCCTV = cctvs.get(level);
+		for (int angle = 0; angle < 4; angle++) {
+
+			int[][] officeTmp = copyOfOffice(curOffice);
+
+			// 초기 방향 배열을 참고하여 각도에 따라 이동 방향을 변경한다.
+//			int nextRow = curCCTV.row;
+//			int nextCol = curCCTV.col;
+
+			//  4-1. CCTV가 볼 수 있는 모든 방향을 탐색
+			for (int direction : cctvDirections[curCCTV.number]) {
+
+				int nd = (direction + angle) % 4; // 각도가 증가할 때 마다 감시하는 방향도 회전
+				int nextRow = curCCTV.row;
+				int nextCols = curCCTV.col;
+
+				// 인덱스를 증가하면서 유효하면 안전지대로 변경
+				while (true) {
+
+					nextRow += dx[nd];
+					nextCols += dy[nd];
+
+					// 인덱스가 유효하고 벽이 아니라면
+					if (!isValid(nextRow, nextCols)) {
+						break;
+					}
+
+					if (office[nextRow][nextCols] == WALL) {
+						break;
+					}
+
+					// 안전지대로 표시
+					officeTmp[nextRow][nextCols] = SAFETYZONE;
+
+				}
+
+			}
+
+			// 2-3. 다음 cctv를 수행하기 위해 재귀 호출
+			bruteForce(level + 1, officeTmp);
+
+		}
+
+	}
+	
+	public static boolean isValid(int row, int col) {
+
+		if (0 <= row && row < officeRow && 0 <= col && col < officeCol) {
+			return true;
+		}
+
+		return false;
+
+	}
+
+	public static int getUnsafetyZoneCount(int[][] office) {
+
+		int count = 0;
+		for (int curRow = 0; curRow < officeRow; curRow++) {
+
+			for (int curCol = 0; curCol < officeCol; curCol++) {
+
+				if (office[curRow][curCol] == 0) {
+					count++;
+				}
 			}
 
 		}
@@ -103,110 +200,17 @@ class Main {
 
 	}
 
-	public static boolean isValid(int row, int cols) {
+	public static int[][] copyOfOffice(int[][] office) {
 
-		if (0 <= row && row < officeRow && 0 <= cols && cols < officeCols) {
-			return true;
-		}
+		int[][] officeTmp = new int[officeRow][officeCol];
 
+		for (int curRow = 0; curRow < officeRow; curRow++) {
 
-		return false;
-
-	}
-
-	public static void dfs(int cctvCount, int[][] office) {
-
-		// 조합이 완성되었다면
-		if (cctvCount == cctvs.size()) {
-			// 5. 최종 사각지대 개수를 구하고 최소값으로 초기화
-			minSafeField = Math.min(minSafeField, getSafeFieldCount(office));
-			return;
-		}
-
-		 // 4. 4가지 각도에 따른
-		CCTV curCCTV = cctvs.get(cctvCount);
-
-		for (int angle = 0; angle < 4; angle++) {
-
-			int[][] officeTmp = officeCopy(office);
-
-			 //  4-1. CCTV가 볼 수 있는 모든 방향을 탐색
-			for (int direction : cctvDirection[curCCTV.index]) {
-				
-				int nd = (direction + angle) % 4;	// 각도가 증가할 때 마다 감시하는 방향도 회전
-				int nextRow = curCCTV.row;
-				int nextCols = curCCTV.cols;
-
-				// 인덱스를 증가하면서 유효하면 안전지대로 변경
-				while (true) {
-
-					nextRow += dr[nd];
-					nextCols += dc[nd];
-
-					// 인덱스가 유효하고 벽이 아니라면
-					if (!isValid(nextRow, nextCols)) {
-						break;
-					}
-					
-					if (office[nextRow][nextCols] == WALL) {
-						break;
-					}
-
-					
-					// 안전지대로 표시
-					officeTmp[nextRow][nextCols] = SAFE;
-
-				}
-
-			}
-			
-			// 안전지대로 표시한 office를 넘겨 다른 CCTV에 대한 DFS 진행
-			dfs(cctvCount + 1, officeTmp);
+			officeTmp[curRow] = office[curRow].clone();
 
 		}
 
-	}
-
-	public static void main(String args[]) throws Exception {
-
-		br = new BufferedReader(new InputStreamReader(System.in));
-		bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		sb = new StringBuilder();
-
-		// 1. 사무실의 크기와 CCTV의 개수를 받음
-		inputs = br.readLine().trim().split(" ");
-		officeRow = Integer.parseInt(inputs[0]);
-		officeCols = Integer.parseInt(inputs[1]);
-
-		// 2. 사무실의 정보를 받음 
-		office = new int[officeRow][officeCols];
-		cctvs = new LinkedList<>();
-		for (int row = 0; row < officeRow; row++) {
-
-			inputs = br.readLine().trim().split(" ");
-			for (int cols = 0; cols < officeCols; cols++) {
-
-				int input = Integer.parseInt(inputs[cols]);
-
-				// CCTV라면 목록에 추가
-				if (input != WALL && input != EMPTY) {
-					cctvs.add(new CCTV(input, row, cols));
-				}
-
-				office[row][cols] = input;
-
-			}
-
-		}
-
-		// 3. DFS
-		minSafeField = Integer.MAX_VALUE;
-		dfs(0, office);
-
-		sb.append(minSafeField).append("\n");
-		bw.write(sb.toString());
-		bw.close();
-		return;
+		return officeTmp;
 
 	}
 
