@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-/***
+/**
  * BOJ_17471_게리맨더링
  * @author parkrootseok
  * 
@@ -24,9 +24,17 @@ import java.util.Queue;
  *  3-1. 인접한 구역수를 받고
  *  3-2. 인접한 구역을 받는다
  *  3-3. 인접한 구역은 서로 인접
- * 4. 완전 탐색을 실행한다.
- * 
- ***/
+ * 4. 부분집합을 생성
+ * 5. 생성된 두 집합의 연결성을 확인한다.
+ *  5-1. 현재 선거구에 포함되는지 확인
+ *   5-1-1. 포함하지 않는다면 패스
+ *   5-1-2. 이미 방문한 지역이면 패스
+ *   5-1-3. 포함한다면 다음 탐색
+ *  5-2. 현재 선거구에 포함된 모든 지역이 연결되어있는지 확인
+ *   5-2-1. 포함되어 있지 않다면 false
+ *   5-2-2. 포함되어 있다면 true
+ * 6. 두 집합 모두 연결된 경우 두 집합의 인구수 차이를 구하여 최소값인지 확인하고 갱신한다.
+ **/
 
 public class Main {
 
@@ -149,7 +157,6 @@ public class Main {
 			boolean isLinkedB = isLinked(electionAreaB);
 
 			// 6. 두 집합 모두 연결된 경우 두 집합의 인구수 차이를 구하여 최소값인지 확인하고 갱신한다.
-
 			if (isLinkedA && isLinkedB) {
 
 				int aPopulation = getPopulation(electionAreaA);
@@ -201,7 +208,7 @@ public class Main {
 					continue;
 				}
 
-				// 5-1-2. 포함한다면 다음 탐색
+				// 5-1-3. 포함한다면 다음 탐색
 				isVisted[adj.number] = true;
 				areaQ.add(adj);
 
@@ -212,14 +219,14 @@ public class Main {
 		// 5-2. 현재 선거구에 포함된 모든 지역이 연결되어있는지 확인
 		for (Area curArea : electionArea) {
 
-			// 선거구에 방문하지 않은 곳이 있다면 false
+			// 5-2-1. 포함되어 있지 않다면 false
 			if (!isVisted[curArea.number]) {
 				return false;
 			}
 
 		}
 
-		// 모두 연결되었다면 true
+		// 5-2-2. 포함되어 있다면 true
 		return true;
 	}
 
