@@ -113,7 +113,6 @@ class Solution {
 			}
 			
 			// 6. 각 해저 터널을 탐색하여 모든 섬을 환경 부담금을 최소로 연결할 수 있을 때를 구해라
-//			prim();
 			make(islandNumber);
 			kruskal();
 			
