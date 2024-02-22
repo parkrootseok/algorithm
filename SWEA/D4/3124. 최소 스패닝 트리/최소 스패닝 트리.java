@@ -105,30 +105,6 @@ class Solution {
 			
 			@Override
 			public int compare(int[] o1, int[] o2) {
-				
-//				// 두 숫자의 부호가 음수, 양수 조합인 경우
-//				if(o1[2] < 0 && 0 < o2[2]) {
-//			
-//					if(o1[2] - o2[2] < 0) {
-//						return 1;
-//					}
-//					
-//				} 
-//				
-////				else if (o1[2] > 0 && o2[2] < 0) {
-////					
-////				}
-//				
-//				// 두 숫자의 부호가 같을 경우
-//				else {
-//					
-//					if(o1[2] - o2[2] > 0) {
-//						return 1;
-//					}
-//					
-//				}
-				
-				
 				return Integer.compare(o1[2], o2[2]);
 			}
 			
