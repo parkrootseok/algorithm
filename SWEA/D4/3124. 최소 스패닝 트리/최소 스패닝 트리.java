@@ -105,6 +105,7 @@ class Solution {
 			
 			@Override
 			public int compare(int[] o1, int[] o2) {
+				
 				return Integer.compare(o1[2], o2[2]);
 			}
 			
