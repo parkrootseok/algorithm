@@ -271,7 +271,7 @@ void bellmanford() {
         if (i != s && v->distance != MAX_VALUE) {
             printf("%d %d\n", i, v->distance);
         }
-        
+
     }
 
     return;
