@@ -1,3 +1,5 @@
+package permutaion;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -5,11 +7,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 /**
- * Duplication Permutaion (중복 순열)
+ * Permutaion(순열)
  * @author parkrootseok
  **/
-
-public class DuplicationPermutation {
+public class Permutation {
 
     static BufferedReader br;
     static BufferedWriter bw;
@@ -38,7 +39,7 @@ public class DuplicationPermutation {
     }
 
     /**
-     * 중복 원소를 포함하는 순열
+     * 중복 원소를 포함하지 않는 순열
      * @param level -> 현재 순열의 원소가 들어갈 자리
      */
     public static void permutation(int level) {
@@ -61,6 +62,11 @@ public class DuplicationPermutation {
 
         // 이전 기저 조건에서 종료가 되지 않았음은 아직 수열에 사용한 원소가 모두 삽입되지 않았음을 의미 하므로 현재 레벨에 원소를 삽입하는 과정을 진행
         for (int elementIdx = 0; elementIdx < elementNumber; elementIdx++) {
+
+            // 중복된 원소를 삽입하지 않기 위해 사용한 원소라면 스킵
+            if (isUsed[elements[elementIdx]]) {
+                continue;
+            }
 
             /**
              * 전처리 로직
