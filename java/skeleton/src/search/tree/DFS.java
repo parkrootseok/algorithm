@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 /**
- * DFS for Tree (트리 BFS 탐색)
+ * DFS for Tree
  * @author parkrootseok
  *
  * 1. 현재 방문한 노드와 연결된 노드를 탐색

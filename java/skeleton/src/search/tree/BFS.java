@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 /**
- * BFS for Tree (트리 BFS 탐색)
+ * BFS for Tree
  * @author parkrootseok
  *
  * 1. 큐에 첫 방문을 진행할 노드를 삽입
