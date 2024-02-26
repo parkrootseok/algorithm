@@ -3,11 +3,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Queue;
 
-/***
+/**
  * BOJ_10971_외판원순회2
  * @author parkrootseok
  * 
@@ -25,9 +22,6 @@ import java.util.Queue;
  **/
 
 public class Main {
-	
-	static final int START_CHANNEL = 100;
-	static final int TOTAL_BUTTON_NUMBER = 10;
 
 	static BufferedReader br;
 	static BufferedWriter bw;
@@ -37,7 +31,6 @@ public class Main {
 
 	static int cityNumber;
 	static int[][] cost;
-	static int[] minCost;
 	static boolean[] isVisited;
 	static int minTotalCost;
 
