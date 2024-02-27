@@ -118,28 +118,9 @@ public class Solution {
 			for (int row = 0; row < mapSize; row++) {
 
 				for (int col = 0; col < mapSize; col++) {
-
-					// 5-1. 1개의 봉우리를 최대 offset만큼 깎을 수 있으므로 모든 경우를 확인
-					for (int curOffset = 0; curOffset <= offset; curOffset++) {
 					
-						// 5-1-1. 현재 봉우리 높이를 curOffset 차감
-						map[row][col] -= curOffset;
-
-						// 5-1-2. 최대 높이를 가지는 봉우리를 탐색하여 등산로 길이를 구한다.
-						for(Peak peak : peaks) {
-							
-							// 5-1-2-1. offset을 차감한 봉우리는 제외
-							if(peak.row == row && peak.col == col) {
-								continue;
-							} 
-							
-							getLength(1, peak.height, peak.row, peak.col);
-							
-						}
-
-						// 5-1-3. 차감했던 curOffset을 다시 더해준다.
-						map[row][col] += curOffset;
-						
+					if(map[row][col] == maxHeight) {
+						getLength(1, true, map[row][col], row, col);
 					}
 
 				}
@@ -165,13 +146,16 @@ public class Solution {
 		
 	}
  	
-	public static void getLength(int level, int height, int row, int col) {
+	public static void getLength(int level, boolean isCutable, int height, int row, int col) {
 		
 		int[] dx = {1, -1, 0, 0};
 		int[] dy = {0, 0, 1, -1};
 		
 		int nextRow;
 		int nextCol;
+		
+		// 방문 처리
+		isVisited[row][col] = true;
 		
 		// 4가지 방향으로 탐색을 시작
 		for(int dir = 0; dir < dx.length; dir++) {
@@ -189,18 +173,24 @@ public class Solution {
 				continue;
 			}
 			
-			// 현재 봉우리랑 높이가 같거나 높다면 스킵
-			if (height <= map[nextRow][nextCol]) {
-				continue;
-			}
+			// 현재 봉우리 높이보다 낮다면 바로 진행
+			if (height > map[nextRow][nextCol]) {
+				getLength(level + 1, isCutable, map[nextRow][nextCol], nextRow, nextCol);				
+			} 
 			
-			// 위 2조건을 모두 만족하지 않는다면 해당 위치로 이동
-			isVisited[nextRow][nextCol] = true;
-			getLength(level + 1, map[nextRow][nextCol], nextRow, nextCol);
-			isVisited[nextRow][nextCol] = false;
+			// 깎을 수 있고 offset 범위 내에 존재하는 높이를 깎아서 진행할 수 있다면
+			else if (isCutable && (map[nextRow][nextCol] - height) < offset) {
+					
+				getLength(level + 1, false, height - 1, nextRow, nextCol);
+				
+			}
 			
 		}
 		
+		// 방문 처리 무효
+		isVisited[row][col] = false;
+		
+		// 최대 길이 갱신
 		maxLength = Math.max(maxLength, level);
 		
 	}
