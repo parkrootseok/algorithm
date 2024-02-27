@@ -17,6 +17,12 @@ import java.util.PriorityQueue;
  * 1. 정점과 간선의 개수를 받자
  * 2. 시작 정점의 번호를 받자
  * 3. 간선 정보를 받자
+ * 4. 다익스트라 알고리즘을 수행
+ *  4-1. 시작 정점은 비용을 0으로 초기화
+ *  4-2. 큐를 탐색
+ *   4-2-1. from에 대한 인접 정점을 탐색
+ *   4-2-2. 현재 정점의 비용이 from으로 부터 오는 간선의 가중치 + from 비용보다 크다면 갱신
+ * 5. 수행 후 결과를 출력
  **/
 
 public class Main {
@@ -118,16 +124,17 @@ public class Main {
 
 			// 5-1. 경로가 존재하는 경우
 			if (cost != Integer.MAX_VALUE) {
-				System.out.println(cost);
+				sb.append(cost).append("\n");
 			}
 
 			// 5-2. 경로가 존재하지 않는 경우
 			else {
-				System.out.println("INF");
+				sb.append("INF").append("\n");
 			}
 
 		}
-
+		
+		bw.write(sb.toString());
 		bw.close();
 
 	}
@@ -136,21 +143,21 @@ public class Main {
 
 		PriorityQueue<Vertex> vertexQ = new PriorityQueue<>();
 		
-		// 1. 시작 정점은 비용을 0으로 초기화
+		// 4-1. 시작 정점은 비용을 0으로 초기화
 		graph.vertices[startVertex].cost = 0;
 		vertexQ.add(graph.vertices[startVertex]);
 	
-		// 3. 큐를 탐색
+		// 4-2. 큐를 탐색
 		while (!vertexQ.isEmpty()) {
 
 			Vertex from = vertexQ.poll();
 
-			// 3-1. from에 대한 인접 정점을 탐색
+			// 4-2-1. from에 대한 인접 정점을 탐색
 			for (AdjacentVertex adjVertex : from.adjacentVertices) {
 
 				Vertex to = graph.vertices[adjVertex.name];
 
-				// 3-2. 현재 정점의 비용이 from으로 부터 오는 간선의 가중치 + from 비용보다 크다면 갱신
+				// 4-2-2. 현재 정점의 비용이 from으로 부터 오는 간선의 가중치 + from 비용보다 크다면 갱신
 				if(to.cost > from.cost + adjVertex.weight) {
 					to.cost = from.cost + adjVertex.weight;
 					vertexQ.add(to);
