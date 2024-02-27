@@ -26,8 +26,17 @@ import java.util.Queue;
  * 1. 테스트 케이스 횟수를 받는다.
  * 2. 방 크기를 받는다.
  * 3. 방에 대한 정보를 받는다.
- * 4. 1번 계단을 선택하는 경우와 아닌 경우로 나누자
- *  4-1. 계단을 이용할 때 걸리는 총 시간을 구한다
+ * 4. 두 계단을 기준으로 집합을 생성
+ * 5. 생성한 두 집합에 대해서 완료되는 시간을 구한다.
+ *  5-1. 계단에 도착하는 시간을 구하자
+ *   5-1-1. 도착 시간을 오름차순 정렬
+ * 	5-2. 계단을 이용할 때 걸리는 총 시간을 구한다.
+ *   5-2-1. 도착한 사람이 있다면 하나의 계단을 내려간다.
+ *    5-2-1-1. 탈출하지 못했다면 다시 큐로 삽입
+ *    5-2-1-2. 탈출 했다면 계단큐에 공백이 생겼으므로 대기열에서 가져온다.
+ *  5-3. 완료 숫자가 도착한 사람들의 숫자와 같다면 모두 탈출 했으므로 종료
+ *  5-4. 현재 시간에 도착한 사람이 있는지 확인 
+ * 6. 두 그룹 중 최대 시간을 구하고 최대 시간 중 가장 작은 시간을 구한다.
  **/
 
 public class Solution {
@@ -125,7 +134,7 @@ public class Solution {
 
 			}
 
-			// 4. 1번 계단을 선택하는 경우와 아닌 경우로 나누자 
+			// 4. 두 계단을 기준으로 집합을 생성
 			minTotalHour = Integer.MAX_VALUE;
 			List<Person> stepAPerson = new ArrayList<>();
 			List<Person> stepBPerson = new ArrayList<>();
@@ -142,20 +151,23 @@ public class Solution {
 					stepBPerson.add(people.get(bit));
 
 				}
+				
+				// 5. 생성한 두 집합에 대해서 완료되는 시간을 구한다.
 
-				int totalAHour = Integer.MIN_VALUE;
-				int totalBHour = Integer.MIN_VALUE;
+				int aGroupTime = Integer.MIN_VALUE;
+				int bGroupTime = Integer.MIN_VALUE;
 
 				// 집합에 사람이 포함되어 있는 집합만 시간을 계산한다.
 				if (stepAPerson.size() != 0) {
-					totalAHour = getTotalHour(steps.get(0), stepAPerson);
+					aGroupTime = getTotalHour(steps.get(0), stepAPerson);
 				}
 
 				if (stepBPerson.size() != 0) {
-					totalBHour = getTotalHour(steps.get(1), stepBPerson);
+					bGroupTime = getTotalHour(steps.get(1), stepBPerson);
 				}
 
-				minTotalHour = Math.min(minTotalHour, Math.max(totalAHour, totalBHour));
+				// 6. 두 그룹 중 최대 시간을 구하고 최대 시간 중 가장 작은 시간을 구한다.
+				minTotalHour = Math.min(minTotalHour, Math.max(aGroupTime, bGroupTime));
 
 				stepAPerson.clear();
 				stepBPerson.clear();
@@ -179,34 +191,31 @@ public class Solution {
 
 	public static int getTotalHour(Stair stair, List<Person> arrivedPeople) {
 
-		// 4-1. 계단을 이용할 때 걸리는 총 시간을 구한다
 		Queue<Person> stairQ = new ArrayDeque<>();
 		Queue<Person> watingQ = new ArrayDeque<>();
 
-		// 4-1-1. 계단에 도착하는 시간을 구하자
+		// 5-1. 계단에 도착하는 시간을 구하자
 		for (Person p : arrivedPeople) {
 			p.isReady = false;
 			p.position = 0;
 			p.arriveTime = getHour(p.row, p.col, stair.row, stair.col);
 		}
 
-		// 4-1-2. 도착 시간을 오름차순 정렬
+		// 5-1-1. 도착 시간을 오름차순 정렬
 		Collections.sort(arrivedPeople);
 
-		// 4-1-3. 계단을 이용할 때 걸리는 총 시간을 구한다.
-		// 계단을 내려가기 시작하는 시간은 도착 시간 + 1
+		// 5-2. 계단을 이용할 때 걸리는 총 시간을 구한다.
 		int completeCount = 0;
 		int totalTime = 1;
 		while (completeCount < arrivedPeople.size()) {
 
-			// 도착한 사람이 있다면 하나의 계단을 내려가자
 			int curPersonNumber = stairQ.size();
 			for (int curPerson = 0; curPerson < curPersonNumber; curPerson++) {
 
 				boolean isExit = false;
 				Person p = stairQ.poll();
 
-				// 내려갈 준비가 된 사람들은 계단을 내려간다.
+				// 5-2-1. 도착한 사람이 있다면 하나의 계단을 내려간다.
 				if (p.isReady) {
 
 					// 현재 위치를 증가하여 계단 이동 
@@ -220,12 +229,12 @@ public class Solution {
 
 				}
 
-				// 탈출하지 못했다면 다시 큐로 삽입
+				// 5-2-1-1. 탈출하지 못했다면 다시 큐로 삽입
 				if (!isExit) {
 					stairQ.add(p);
 				}
 
-				// 탈출 했다면 계단큐에 공백이 생겼으므로 대기열에서 가져온다.
+				// 5-2-1-2. 탈출 했다면 계단큐에 공백이 생겼으므로 대기열에서 가져온다.
 				else {
 					
 					if (!watingQ.isEmpty()) {
@@ -237,12 +246,12 @@ public class Solution {
 
 			}
 
-			// 완료 숫자가 도착한 사람들의 숫자와 같다면 모두 탈출 했으므로 종료
+			// 5-3. 완료 숫자가 도착한 사람들의 숫자와 같다면 모두 탈출 했으므로 종료
 			if (completeCount == arrivedPeople.size()) {
 				return totalTime;
 			}
 
-			// 현재 시간에 도착한 사람이 있는지 확인 
+			// 5-4. 현재 시간에 도착한 사람이 있는지 확인 
 			for (Person p : arrivedPeople) {
 
 				// 이미 도착한 사람이라면 패스
