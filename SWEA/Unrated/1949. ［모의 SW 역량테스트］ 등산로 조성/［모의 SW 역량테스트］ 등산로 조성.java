@@ -119,6 +119,7 @@ public class Solution {
 
 				for (int col = 0; col < mapSize; col++) {
 					
+					// 5-1. 현재 봉우리가 최대 높이를 가지는 봉우리라면 등산로 조성 시작
 					if(map[row][col] == maxHeight) {
 						getLength(1, true, map[row][col], row, col);
 					}
