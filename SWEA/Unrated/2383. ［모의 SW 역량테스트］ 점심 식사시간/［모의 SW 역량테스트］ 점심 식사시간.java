@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
@@ -151,7 +150,7 @@ public class Solution {
 					stepBPerson.add(people.get(bit));
 
 				}
-				
+
 				// 5. 생성한 두 집합에 대해서 완료되는 시간을 구한다.
 
 				int aGroupTime = Integer.MIN_VALUE;
@@ -236,12 +235,12 @@ public class Solution {
 
 				// 5-2-1-2. 탈출 했다면 계단큐에 공백이 생겼으므로 대기열에서 가져온다.
 				else {
-					
+
 					if (!watingQ.isEmpty()) {
 						Person wait = watingQ.poll();
 						stairQ.add(wait);
 					}
-					
+
 				}
 
 			}
@@ -269,7 +268,7 @@ public class Solution {
 					}
 
 					else {
-						// 계단에 3명이 존재하면 대키 큐로 이동
+						// 계단에 3명이 존재하면 대기 큐로 이동
 						watingQ.add(p);
 					}
 
