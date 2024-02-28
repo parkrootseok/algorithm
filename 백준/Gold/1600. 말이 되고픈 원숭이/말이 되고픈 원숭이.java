@@ -104,7 +104,7 @@ public class Main {
 		if (gridRow == 1 && gridCol == 1) {
 			totalMoveNumber = 0;
 		} else {
-			totalMoveNumber = move();
+			move();
 		}
 
 		// 5. 도착한 경우 없다면 예외 처리
@@ -149,7 +149,7 @@ public class Main {
 	}
 
 	
-	public static int move() {
+	public static void move() {
 
 		Queue<Monkey> monkeyQ = new ArrayDeque<>();
 
@@ -165,6 +165,12 @@ public class Main {
 			int col = curMonkey.col;
 			int curMoveCount = curMonkey.moveCount;
 			int curChanceCount = curMonkey.useChanceCount;
+			
+			// 도착했다면 종료
+			if (isExitable(row, col)) {
+				totalMoveNumber = Math.min(totalMoveNumber, curMoveCount);
+				return;
+			}
 			
 			int nextRow, nextCol;
 
@@ -193,11 +199,6 @@ public class Main {
 
 					isVisited[curChanceCount + 1][nextRow][nextCol] = true;
 
-					// 도착했다면 이동 횟수를 반환
-					if (isExitable(nextRow, nextCol)) {
-						return curMonkey.moveCount + 1;
-					}
-
 					monkeyQ.add(new Monkey(nextRow, nextCol, curMonkey.moveCount + 1, curChanceCount + 1));
 
 				}
@@ -225,19 +226,11 @@ public class Main {
 				}
 
 				isVisited[curChanceCount][nextRow][nextCol] = true;
-
-				// 도착했다면 이동 횟수를 반환
-				if (isExitable(nextRow, nextCol)) {
-					return curMonkey.moveCount + 1;
-				}
-				
 				monkeyQ.add(new Monkey(nextRow, nextCol, curMonkey.moveCount + 1, curChanceCount));
 
 			}
 
 		}
-		
-		return -1;
 		
 	}
 
