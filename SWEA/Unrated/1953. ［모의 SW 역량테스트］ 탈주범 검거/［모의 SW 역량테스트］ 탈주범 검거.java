@@ -32,7 +32,6 @@ import java.util.Queue;
  *   4-2. 현재 시간이 목표한 시간을 지났으면 종료
  *   4-3. 이동했던 모든 터널을 카운트
  *   4-4. 현재 터널에서 갈 수 있는 곳으로 모두 이동
- *  
  **/
 
 public class Solution {
@@ -101,8 +100,10 @@ public class Solution {
 	static int[][] map;
 	static int rowSize;
 	static int colSize;
+	
 	static int manholeRow;
 	static int manholeCol;
+	
 	static int targetTime;
 	static int positionNumber;
 
@@ -230,7 +231,6 @@ public class Solution {
 					continue;
 				}
 
-				// 위 3조건을 모두 만족하지 않는다면 이동
 				// 이동할 때 현재 위치, 현재 위치에 존재하는 터널, 현재 시간 + 1을 넘겨준다.
 				isVisited[nextRow][nextCol] = true;
 				personQ.add(new Person(nextRow, nextCol, map[nextRow][nextCol], time + 1));
