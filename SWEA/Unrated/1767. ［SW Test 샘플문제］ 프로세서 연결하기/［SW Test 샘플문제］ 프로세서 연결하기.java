@@ -222,7 +222,6 @@ public class Solution {
 		}
 
 		// 4-1. 4가지 방향으로 전선을 내린다.
-		
 		Core core = cores.get(coreNumber);
 		int connectWireCount;
 		for (int dir = 0; dir < dx.length; dir++) {
