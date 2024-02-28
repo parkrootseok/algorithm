@@ -54,7 +54,6 @@ public class Solution {
 	static int[] dy = {0, 0, -1, 1};
 
 	static final int EMPTY = 0;
-	static final int CORE = 1;
 	static final int WIRE = -1;
 
 	static BufferedReader br;
@@ -69,8 +68,6 @@ public class Solution {
 	static int size;
 
 	static List<Core> cores;
-	static boolean[] isUsed;
-	static Core[] permutation;
 	static int maxCoreCount;
 	static int minWireCount;
 
@@ -214,7 +211,7 @@ public class Solution {
 		// 4-4. 코어 개수가 같은 경우 전선의 갯수가 더 작다면 갱신
 		else if (coreCount == maxCoreCount) {
 			minWireCount = Math.min(minWireCount, wireCount);
-					}
+		} 
 		
 		// 4-5. 모든 코어가 전선을 내렸을 경우 종료
 		if (coreNumber == cores.size()) {	
