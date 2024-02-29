@@ -240,15 +240,8 @@ public class Solution {
 				continue;
 			}
 			
-			connectWireCount = connectWire(core.row, core.col, dx[dir], dy[dir]);
-
-			if (connectWireCount == -1) {
-				// 연결할 수 없다면 스킵
-				continue;
-			}
-
 			// 3-1-2. 연결한 상태로 다음 코어로 이동
-			powerOn(coreNumber + 1, wireCount + connectWireCount, coreCount + 1);
+			powerOn(coreNumber + 1, wireCount + connectWire(core.row, core.col, dx[dir], dy[dir]), coreCount + 1);
 
 			/**
 			 * 후처리 로직
