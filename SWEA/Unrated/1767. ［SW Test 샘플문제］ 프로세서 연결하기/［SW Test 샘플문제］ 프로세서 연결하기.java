@@ -36,6 +36,8 @@ import java.util.List;
 
 public class Solution {
 
+	static final int TOTAL_CORE_NUMBER = 12;
+	
 	static class Core {
 
 		int row;
@@ -65,7 +67,8 @@ public class Solution {
 	static int[][] map;
 	static int size;
 
-	static List<Core> cores;
+	static Core[] cores;
+	static int totalCoreNumber;
 	static int maxCoreCount;
 	static int minWireCount;
 
@@ -84,7 +87,8 @@ public class Solution {
 			size = Integer.parseInt(br.readLine().trim());
 
 			map = new int[size][size];
-			cores = new ArrayList<>();
+			totalCoreNumber = 0;
+			cores = new Core[TOTAL_CORE_NUMBER];
 			for (int row = 0; row < size; row++) {
 
 				inputs = br.readLine().trim().split(" ");
@@ -101,7 +105,7 @@ public class Solution {
 							continue;
 						}
 
-						cores.add(new Core(row, col));
+						cores[totalCoreNumber++] = new Core(row, col); 
 
 					}
 
@@ -212,12 +216,12 @@ public class Solution {
 	public static void powerOn(int coreNumber, int wireCount, int coreCount) {
 
 		// 3-3. 앞으로 연결할 코어수를 모두 연결해도 최대 개수를 넘지 않을 경우 종료
-		if ((cores.size() - coreCount + coreCount) < maxCoreCount) {
+		if ((totalCoreNumber - coreCount + coreCount) < maxCoreCount) {
 			return;
 		}
 
 		// 3-4. 모든 코어가 전선을 내렸을 경우 종료
-		if (coreNumber == cores.size()) {
+		if (coreNumber == totalCoreNumber) {
 
 			// 3-4-1. 현재 사용한 코어수가 최대값보다 클 경우 최대 코어 개수와 최소 전선 갯수를 초기화
 			if (maxCoreCount < coreCount) {
@@ -235,7 +239,7 @@ public class Solution {
 		}
 
 		// 3-1. 4가지 방향으로 전선을 내린다.
-		Core core = cores.get(coreNumber);
+		Core core = cores[coreNumber];
 		for (int dir = 0; dir < dx.length; dir++) {
 
 			/**
