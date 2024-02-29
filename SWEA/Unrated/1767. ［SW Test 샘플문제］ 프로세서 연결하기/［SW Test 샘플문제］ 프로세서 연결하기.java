@@ -137,7 +137,7 @@ public class Solution {
 		// 1. 현재 위치에서 전선을 설치할 수 있는지 확인
 		int nextRow = row;
 		int nextCol = col;
-		
+
 		while (true) {
 
 			nextRow += dx;
@@ -153,7 +153,7 @@ public class Solution {
 			}
 
 		}
-		
+
 		return true;
 
 	}
@@ -228,7 +228,6 @@ public class Solution {
 
 		// 3-1. 4가지 방향으로 전선을 내린다.
 		Core core = cores.get(coreNumber);
-		int connectWireCount;
 		for (int dir = 0; dir < dx.length; dir++) {
 
 			/**
@@ -236,10 +235,10 @@ public class Solution {
 			 * 1. 현재 위치에서 특정 방향으로 연결할 수 있는지 확인 후 연결
 			 */
 			// 3-1-1. 현재 방향으로 전선을 확장할 수 있는지 확인
-			if(!isConnectalbe(core.row, core.col, dx[dir], dy[dir])) {
+			if (!isConnectalbe(core.row, core.col, dx[dir], dy[dir])) {
 				continue;
 			}
-			
+
 			// 3-1-2. 연결한 상태로 다음 코어로 이동
 			powerOn(coreNumber + 1, wireCount + connectWire(core.row, core.col, dx[dir], dy[dir]), coreCount + 1);
 
