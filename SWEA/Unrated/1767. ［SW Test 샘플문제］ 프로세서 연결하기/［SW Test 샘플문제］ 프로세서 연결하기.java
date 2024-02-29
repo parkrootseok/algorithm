@@ -28,9 +28,10 @@ import java.util.List;
  *    3-1-2. 연결한 상태로 다음 코어로 이동
  *    3-1-3. 연결했던 전선을 모두 해제
  *  3-2. 코어를 사용하지 않은 경우
- *  3-3. 모든 코어가 전선을 내렸을 경우 종료
- *   3-3-1. 현재 사용한 코어수가 최대값보다 클 경우 최대 코어 개수와 최소 전선 갯수를 초기화
- *   3-3-2. 코어 개수가 같은 경우 전선의 갯수가 더 작다면 갱신
+ *  3-3. 앞으로 연결할 코어수를 모두 연결해도 최대 개수를 넘지 않을 경우 종료
+ *  3-4. 모든 코어가 전선을 내렸을 경우 종료
+ *   3-4-1. 현재 사용한 코어수가 최대값보다 클 경우 최대 코어 개수와 최소 전선 갯수를 초기화
+ *   3-4-2. 코어 개수가 같은 경우 전선의 갯수가 더 작다면 갱신
  **/
 
 public class Solution {
@@ -209,25 +210,26 @@ public class Solution {
 	}
 
 	public static void powerOn(int coreNumber, int wireCount, int coreCount) {
-		
+
+		// 3-3. 앞으로 연결할 코어수를 모두 연결해도 최대 개수를 넘지 않을 경우 종료
 		if ((cores.size() - coreCount + coreCount) < maxCoreCount) {
 			return;
 		}
-		
-		// 3-3. 모든 코어가 전선을 내렸을 경우 종료
+
+		// 3-4. 모든 코어가 전선을 내렸을 경우 종료
 		if (coreNumber == cores.size()) {
-			
-			// 3-3-1. 현재 사용한 코어수가 최대값보다 클 경우 최대 코어 개수와 최소 전선 갯수를 초기화
+
+			// 3-4-1. 현재 사용한 코어수가 최대값보다 클 경우 최대 코어 개수와 최소 전선 갯수를 초기화
 			if (maxCoreCount < coreCount) {
 				maxCoreCount = coreCount;
 				minWireCount = wireCount;
 			}
 
-			// 3-3-2. 코어 개수가 같은 경우 전선의 갯수가 더 작다면 갱신
+			// 3-4-2. 코어 개수가 같은 경우 전선의 갯수가 더 작다면 갱신
 			else if (coreCount == maxCoreCount) {
 				minWireCount = Math.min(minWireCount, wireCount);
 			}
-			
+
 			return;
 		}
 
