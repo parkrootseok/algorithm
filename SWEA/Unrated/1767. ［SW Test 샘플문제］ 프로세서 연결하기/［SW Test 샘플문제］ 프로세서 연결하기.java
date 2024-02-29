@@ -228,7 +228,7 @@ public class Solution {
 			connectWireCount = connectWire(core.row, core.col, dx[dir], dy[dir]);
 			
 			if(connectWireCount == -1) {
-				// 확장할 수 없다면 스킵
+				// 연결할 수 없다면 스킵
 				continue;
 			}
 			
