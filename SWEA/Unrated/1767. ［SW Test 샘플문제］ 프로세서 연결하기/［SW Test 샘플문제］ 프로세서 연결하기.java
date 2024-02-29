@@ -94,15 +94,14 @@ public class Solution {
 
 					// 2-1. 코어라면 리스트에 추가한다.
 					if (map[row][col] != EMPTY) {
-						
+
 						if (row == 0 || col == 0 || row == size - 1 || col == size - 1) {
 							// 가장자리에 있는 코어는 제외한다
 							continue;
 						}
 
-						
 						cores.add(new Core(row, col));
-						
+
 					}
 
 				}
