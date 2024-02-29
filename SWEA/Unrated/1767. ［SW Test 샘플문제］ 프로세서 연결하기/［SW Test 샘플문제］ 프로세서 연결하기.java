@@ -222,7 +222,7 @@ public class Solution {
 
 			/**
 			 * 전처리 로직
-			 * 1. 현재 위치에서 확장 가능한 전선을 모두 연결
+			 * 1. 현재 위치에서 특정 방향으로 연결할 수 있는지 확인 후 연결
 			 */
 			// 3-1-1. 현재 방향으로 전선을 확장할 수 있는지 확인
 			connectWireCount = connectWire(core.row, core.col, dx[dir], dy[dir]);
@@ -237,7 +237,7 @@ public class Solution {
 
 			/**
 			 * 후처리 로직
-			 * 1. 현재 위치에서 전선을 확장한 전선을 모두 연결 해제
+			 * 1. 현재 위치에서 특정 방향으로 연결한 전선 해제
 			 */
 			// 3-1-3. 연결했던 전선을 모두 해제
 			unconnectWire(core.row, core.col, dx[dir], dy[dir]);
