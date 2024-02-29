@@ -22,18 +22,15 @@ import java.util.List;
  * 
  * 1. 테스트 케이스 횟수 입력.
  * 2. 맵 사이즈를 받아 맵 정보를 초기화
- * 3. 보유한 코어에 대한 순열을 생성한다.
- *  3-1. 순열 완성
- *  3-2. 순열 생성
- * 4. 완성된 코어 수열을 가지고 연결을 진행한다.
- *  4-1. 4가지 방향으로 전선을 내린다.
- *    4-1-1. 현재 방향으로 전선을 확장할 수 있는지 확인
- *    4-1-2. 연결한 상태로 다음 코어로 이동
- *    4-1-3. 연결했던 전선을 모두 해제
- *  4-2. 코어를 사용하지 않은 경우
- *  4-3. 현재 사용한 코어수가 최대값보다 클 경우 최대 코어 개수와 최소 전선 갯수를 초기화
- *  4-4. 코어 개수가 같은 경우 전선의 갯수가 더 작다면 갱신
- *  4-5. 모든 코어가 전선을 내렸을 경우 종
+ * 3. 코어 연결을 진행한다.
+ *  3-1. 4가지 방향으로 전선을 내린다.
+ *    3-1-1. 현재 방향으로 전선을 확장할 수 있는지 확인
+ *    3-1-2. 연결한 상태로 다음 코어로 이동
+ *    3-1-3. 연결했던 전선을 모두 해제
+ *  3-2. 코어를 사용하지 않은 경우
+ *  3-3. 현재 사용한 코어수가 최대값보다 클 경우 최대 코어 개수와 최소 전선 갯수를 초기화
+ *  3-4. 코어 개수가 같은 경우 전선의 갯수가 더 작다면 갱신
+ *  3-5. 모든 코어가 전선을 내렸을 경우 종료
  **/
 
 public class Solution {
@@ -109,7 +106,7 @@ public class Solution {
 
 			}
 
-			// 3. 보유한 코어에 대한 순열을 생성한다.
+			// 3. 코어 연결을 진행한다.
 			maxCoreCount = 0;
 			minWireCount = Integer.MAX_VALUE;
 			powerOn(0, 0, 0);
@@ -202,23 +199,23 @@ public class Solution {
 
 	public static void powerOn(int coreNumber, int wireCount, int coreCount) {
 
-		// 4-3. 현재 사용한 코어수가 최대값보다 클 경우 최대 코어 개수와 최소 전선 갯수를 초기화
+		// 3-3. 현재 사용한 코어수가 최대값보다 클 경우 최대 코어 개수와 최소 전선 갯수를 초기화
 		if (coreCount > maxCoreCount) {
 			maxCoreCount = coreCount;
 			minWireCount = wireCount;
 		}
 		
-		// 4-4. 코어 개수가 같은 경우 전선의 갯수가 더 작다면 갱신
+		// 3-4. 코어 개수가 같은 경우 전선의 갯수가 더 작다면 갱신
 		else if (coreCount == maxCoreCount) {
 			minWireCount = Math.min(minWireCount, wireCount);
 		} 
 		
-		// 4-5. 모든 코어가 전선을 내렸을 경우 종료
+		// 3-5. 모든 코어가 전선을 내렸을 경우 종료
 		if (coreNumber == cores.size()) {	
 			return;
 		}
 
-		// 4-1. 4가지 방향으로 전선을 내린다.
+		// 3-1. 4가지 방향으로 전선을 내린다.
 		Core core = cores.get(coreNumber);
 		int connectWireCount;
 		for (int dir = 0; dir < dx.length; dir++) {
@@ -227,7 +224,7 @@ public class Solution {
 			 * 전처리 로직
 			 * 1. 현재 위치에서 확장 가능한 전선을 모두 연결
 			 */
-			// 4-1-1. 현재 방향으로 전선을 확장할 수 있는지 확인
+			// 3-1-1. 현재 방향으로 전선을 확장할 수 있는지 확인
 			connectWireCount = connectWire(core.row, core.col, dx[dir], dy[dir]);
 			
 			if(connectWireCount == -1) {
@@ -235,19 +232,19 @@ public class Solution {
 				continue;
 			}
 			
-			// 4-1-2. 연결한 상태로 다음 코어로 이동
+			// 3-1-2. 연결한 상태로 다음 코어로 이동
 			powerOn(coreNumber + 1, wireCount + connectWireCount, coreCount + 1);
 
 			/**
 			 * 후처리 로직
 			 * 1. 현재 위치에서 전선을 확장한 전선을 모두 연결 해제
 			 */
-			// 4-1-3. 연결했던 전선을 모두 해제
+			// 3-1-3. 연결했던 전선을 모두 해제
 			unconnectWire(core.row, core.col, dx[dir], dy[dir]);
 
 		}
 		
-		// 4-2. 코어를 사용하지 않은 경우
+		// 3-2. 코어를 사용하지 않은 경우
 		powerOn(coreNumber + 1, wireCount, coreCount);
 
 	}
