@@ -132,12 +132,12 @@ public class Solution {
 
 	}
 
-	public static int connectWire(int row, int col, int dx, int dy) {
-
-		int nextRow = row;
-		int nextCol = col;
+	public static boolean isConnectalbe(int row, int col, int dx, int dy) {
 
 		// 1. 현재 위치에서 전선을 설치할 수 있는지 확인
+		int nextRow = row;
+		int nextCol = col;
+		
 		while (true) {
 
 			nextRow += dx;
@@ -149,12 +149,21 @@ public class Solution {
 
 			// 진행 방향에 코어가 있거나 전선이 존재하면 불가
 			if (map[nextRow][nextCol] != EMPTY) {
-				return -1;
+				return false;
 			}
 
 		}
+		
+		return true;
 
-		// 2. 설치할 수 있다면 설치 후 설치된 전선의 수를 리턴
+	}
+
+	public static int connectWire(int row, int col, int dx, int dy) {
+
+		int nextRow = row;
+		int nextCol = col;
+
+		// 1. 설치 후 설치된 전선의 수를 리턴
 		int wireCount = 0;
 
 		nextRow = row;
@@ -227,6 +236,10 @@ public class Solution {
 			 * 1. 현재 위치에서 특정 방향으로 연결할 수 있는지 확인 후 연결
 			 */
 			// 3-1-1. 현재 방향으로 전선을 확장할 수 있는지 확인
+			if(!isConnectalbe(core.row, core.col, dx[dir], dy[dir])) {
+				continue;
+			}
+			
 			connectWireCount = connectWire(core.row, core.col, dx[dir], dy[dir]);
 
 			if (connectWireCount == -1) {
