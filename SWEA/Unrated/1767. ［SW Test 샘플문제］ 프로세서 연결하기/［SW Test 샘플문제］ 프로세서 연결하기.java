@@ -93,13 +93,16 @@ public class Solution {
 					map[row][col] = Integer.parseInt(inputs[col]);
 
 					// 2-1. 코어라면 리스트에 추가한다.
-					if (row == 0 || col == 0 || row == size - 1 || col == size - 1) {
-						// 가장자리에 있는 코어는 제외한다
-						continue;
-					}
+					if (map[row][col] != EMPTY) {
+						
+						if (row == 0 || col == 0 || row == size - 1 || col == size - 1) {
+							// 가장자리에 있는 코어는 제외한다
+							continue;
+						}
 
-					if (map[row][col] != 0) {
+						
 						cores.add(new Core(row, col));
+						
 					}
 
 				}
@@ -110,7 +113,7 @@ public class Solution {
 			maxCoreCount = 0;
 			minWireCount = Integer.MAX_VALUE;
 			powerOn(0, 0, 0);
-			
+
 			sb.append("#").append(curTest).append(" ").append(minWireCount).append("\n");
 
 		}
@@ -129,12 +132,12 @@ public class Solution {
 		return false;
 
 	}
-	
+
 	public static int connectWire(int row, int col, int dx, int dy) {
-		
+
 		int nextRow = row;
 		int nextCol = col;
-		
+
 		// 1. 현재 위치에서 전선을 설치할 수 있는지 확인
 		while (true) {
 
@@ -151,13 +154,13 @@ public class Solution {
 			}
 
 		}
-		
+
 		// 2. 설치할 수 있다면 설치 후 설치된 전선의 수를 리턴
 		int wireCount = 0;
-		
+
 		nextRow = row;
 		nextCol = col;
-		
+
 		while (true) {
 
 			nextRow += dx;
@@ -166,21 +169,21 @@ public class Solution {
 			if (!inRange(nextRow, nextCol)) {
 				break;
 			}
-			
+
 			map[nextRow][nextCol] = WIRE;
 			wireCount++;
-			
+
 		}
-		
+
 		return wireCount;
-		
+
 	}
-	
+
 	public static void unconnectWire(int row, int col, int dx, int dy) {
-		
+
 		int nextRow = row;
 		int nextCol = col;
-		
+
 		// 1. 연결했던 전선들을 다시 복구
 		while (true) {
 
@@ -194,7 +197,7 @@ public class Solution {
 			map[nextRow][nextCol] = EMPTY;
 
 		}
-					
+
 	}
 
 	public static void powerOn(int coreNumber, int wireCount, int coreCount) {
@@ -204,14 +207,14 @@ public class Solution {
 			maxCoreCount = coreCount;
 			minWireCount = wireCount;
 		}
-		
+
 		// 3-4. 코어 개수가 같은 경우 전선의 갯수가 더 작다면 갱신
 		else if (coreCount == maxCoreCount) {
 			minWireCount = Math.min(minWireCount, wireCount);
-		} 
-		
+		}
+
 		// 3-5. 모든 코어가 전선을 내렸을 경우 종료
-		if (coreNumber == cores.size()) {	
+		if (coreNumber == cores.size()) {
 			return;
 		}
 
@@ -226,12 +229,12 @@ public class Solution {
 			 */
 			// 3-1-1. 현재 방향으로 전선을 확장할 수 있는지 확인
 			connectWireCount = connectWire(core.row, core.col, dx[dir], dy[dir]);
-			
-			if(connectWireCount == -1) {
+
+			if (connectWireCount == -1) {
 				// 연결할 수 없다면 스킵
 				continue;
 			}
-			
+
 			// 3-1-2. 연결한 상태로 다음 코어로 이동
 			powerOn(coreNumber + 1, wireCount + connectWireCount, coreCount + 1);
 
@@ -243,7 +246,7 @@ public class Solution {
 			unconnectWire(core.row, core.col, dx[dir], dy[dir]);
 
 		}
-		
+
 		// 3-2. 코어를 사용하지 않은 경우
 		powerOn(coreNumber + 1, wireCount, coreCount);
 
