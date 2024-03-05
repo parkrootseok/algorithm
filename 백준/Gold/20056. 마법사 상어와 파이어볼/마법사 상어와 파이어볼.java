@@ -102,16 +102,18 @@ public class Main {
             this.row = nextRow;
             this.col = nextCol;
 
+            count[nextRow][nextCol]++;
+
         }
 
 
     }
 
-    static int[][] map;
     static int mapSize;
     static int fireBallNumber;
     static int commandNumber;
 
+    static int[][] count;
     static List<FireBall> fireBalls;
 
     public static void input() throws IOException {
@@ -150,6 +152,7 @@ public class Main {
         input();
 
         // 2. 명령을 수행
+        count = new int[mapSize][mapSize];
         for (int command = 0; command < commandNumber; command++) {
 
             // 2-1. 모든 파이어 볼을 이동
@@ -157,19 +160,14 @@ public class Main {
                 fb.move();
             }
 
-            // 2-2. 이동한 파이어 볼의 위치를 확인
-            int[][] count = new int[mapSize][mapSize];
-            for (FireBall fb : fireBalls) {
-                count[fb.row][fb.col]++;
-            }
-
-            // 2-3. 2개 이상 파이어볼이 있는 칸 확인
+            // 2-2. 2개 이상 파이어볼이 있는 칸 확인
             for (int row = 0; row < mapSize; row++) {
 
                 for (int col = 0; col < mapSize; col++) {
 
                     // 2-3-1. 2개 이상이 아니라면 스킵
                     if (count[row][col] < 2) {
+                        count[row][col] = 0;
                         continue;
                     }
 
@@ -208,11 +206,14 @@ public class Main {
         boolean isOdd = false;
         int totalMass = 0;
         int totalSpeed = 0;
-        int totalDirection = 0;
+        int totalDirection;
 
         for(FireBall fb : fireBalls) {
 
             if (fb.row == row && fb.col == col) {
+
+                count[row][col]--;
+
                 curPositionFireBalls.add(fb);
                 totalMass += fb.mass;
                 totalSpeed += fb.speed;
