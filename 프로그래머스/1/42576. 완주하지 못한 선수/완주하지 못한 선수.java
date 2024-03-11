@@ -33,15 +33,17 @@ public class Solution {
 		}
 
 		// 3. 모든 선수들의 카운트를 조회
+		String answer = "";
 		for(String player : participant) {
 
 			// 3-1. 카운트가 여전히 남아있다면 해당 선수의 이름을 리턴
 			if (completionPlayers.get(player) >= 1) {
-				return player;
+				answer = player;
+				break;
 			}
 		}
 
-		return "";
+		return answer;
 
 	}
 
