@@ -10,8 +10,8 @@ import java.util.Comparator;
  * 1. 숫자를 모두 문자열로 변환하여 배열에 삽입
  * 2. 문자열 배열을 정렬 수행
  *  2-1. 정렬 기준을 설정
- * 3. 문자열 완성
- * 4. 00, 000 등등인 경우를 확인 후 예외 처리
+ * 3. 00, 000 등등인 경우 예외 처리
+ * 4. 문자열 완성
  */
 class Solution {
 	
@@ -43,15 +43,15 @@ class Solution {
     		}
     		
 		});
+    	
+    	// 3. 00, 000 등등인 경우 예외 처리
+    	if (result[0].equals("0")) {
+    		return "0";
+    	}
 
-    	// 3. 문자열 완성
+    	// 4. 문자열 완성
     	for (String number : result) {
     		sb.append(number);
-    	}
-    	
-    	// 4. 00, 000 등등인 경우를 확인 후 예외 처리
-    	if (sb.charAt(0) == '0') {
-    		return "0";
     	}
     	
     	return sb.toString();
