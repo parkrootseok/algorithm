@@ -16,17 +16,15 @@ import java.util.TreeSet;
  *
  * 1. 정렬을 수행
  * 2. 정렬을 수행한 인용 횟수를 탐색
- *  2-1. 남은 논문의 수가 현재 인용 횟수보다
+ *  2-1. 현재 논문의 인용횟수 보다 작은 인용 횟수를 가진 논문의 갯수를 계산
+ *  2-2. 더 작은 인용 회수를 가진 논문이 현재 인용 횟수보다 작거나 같다면 종료
  **/
 
 public class Solution {
-
-	public static void main(String[] args) {
-		Solution solution = new Solution();
-		solution.solution(new int[]{1});
-	}
-
+	
 	public int solution(int[] citations) {
+
+		int hIndex = 0;
 
 		// 1. 정렬을 수행
 		Arrays.sort(citations);
@@ -35,16 +33,18 @@ public class Solution {
 		// 2. 정렬을 수행한 인용 횟수를 탐색
 		for (int curThesis = 0; curThesis < citations.length; curThesis++) {
 
-			int moreCitationThesisNumber = citations.length - curThesis;
+			// 2-1. 현재 논문의 인용횟수 보다 작은 인용 횟수를 가진 논문의 갯수를 계산
+			int smallerCitationThesisNumber = citations.length - curThesis;
 
-			if (moreCitationThesisNumber <= citations[curThesis]) {
-				return moreCitationThesisNumber;
+			// 2-2. 더 작은 인용 회수를 가진 논문이 현재 인용 횟수보다 작거나 같다면 종료
+			if (smallerCitationThesisNumber <= citations[curThesis]) {
+				hIndex = smallerCitationThesisNumber;
+				break;
 			}
-			
-			
+
 		}
-		
-		return 0;
+
+		return hIndex;
 
 	}
 
