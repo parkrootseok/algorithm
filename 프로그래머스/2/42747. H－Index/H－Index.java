@@ -1,6 +1,4 @@
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.TreeSet;
 
 /**
  * Programmers_H-index
@@ -9,8 +7,8 @@ import java.util.TreeSet;
  * - h-index
  *  - 과학자의 생산성과 영향력을 나타내는 지표
  *  - 논문 n편 중, h번 이상 인용된 논문이 h편 이상이고 나머지 논문이 h번 이하 인용되었을 때 h의 최대값
- *   -> h랑 같거나 큰 숫자가 h개 이상이고, 나머지 숫자는 h이하를 만족하는 숫자 h를 구해라
- *
+ *   -> h랑 같거나 큰 숫자의 개수가 h개 이상이고, 나머지 숫자의 개수는 h이하를 만족하는 숫자 h를 구해라
+ *   -> 즉, h보다 작은 숫자가 h개 이하이면 이를 만족하는 것
  *
  * - 목적 : 논문 인용 횟수가 주어질 때 h-index를 구해라
  *
@@ -21,7 +19,7 @@ import java.util.TreeSet;
  **/
 
 public class Solution {
-	
+
 	public int solution(int[] citations) {
 
 		int hIndex = 0;
