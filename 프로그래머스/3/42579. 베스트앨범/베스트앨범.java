@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -18,11 +16,6 @@ import java.util.TreeSet;
  *  3. 정렬한 장르를 기준으로 TreeSet에서 우선순위가 가장 높은 음악의 고유번호를 추출
  */
 public class Solution {
-
-	public static void main(String[] args) {
-		Solution s = new Solution();
-		s.solution(new String[]{"classic", "pop", "classic", "classic", "pop"}, new int[]{500, 600, 150, 800, 2500});
-	}
 
 	class Music implements Comparable<Music> {
 
@@ -72,12 +65,9 @@ public class Solution {
 
 		// 2. 장르를 총 재생횟수를 기준으로 내림차순 정렬
 		List<String> SortedTotalPlay = new ArrayList<>(totalPlay.keySet());
-		Collections.sort(SortedTotalPlay, new Comparator<String>() {
-			@Override
-			public int compare(String o1, String o2) {
-				return totalPlay.get(o2) - totalPlay.get(o1);
-			}
-		});
+		Collections.sort(SortedTotalPlay, ((o1, o2) -> {
+			return totalPlay.get(o2).compareTo(totalPlay.get(o1));
+		}));
 
 		// 3. 정렬한 장르를 기준으로 TreeSet에서 우선순위가 가장 높은 음악의 고유번호를 추출
 		List<Integer> idxList = new ArrayList<>();
@@ -94,7 +84,7 @@ public class Solution {
 			}
 
 		}
-		
+
 		int[] answer = new int[idxList.size()];
 		for(int idx = 0; idx < idxList.size(); idx++) {
 			answer[idx] = idxList.get(idx);
