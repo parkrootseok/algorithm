@@ -8,7 +8,7 @@ import java.util.*;
  *  -> 우선 순위가 높은 기능을 배포할 때 우선 순위가 낮은 기능도 같이 배포
  * - 배포가 이루어질 때 마다 몇개의 배포가 이루어지는지 확인
  *
- * 1. 기능을 완수하기 위해 걸리는 시간을 계산
+ * 1. 기능을 완수하기 위해 걸리는 날짜를 미리 계산
  * 2. 큐에 삽입된 예상 완료 기간을 탐색
  *   2-1. 현재 큐에서 가장 우선순위가 높은 원소가 현재 완료 기간보다 짧다면 배포
  *   2-2. 배포된 기능에 대한 개수를 기록
@@ -17,7 +17,7 @@ public class Solution {
 
 	public int[] solution(int[] progresses, int[] speeds) {
 
-		// 1. 기능을 완수하기 위해 걸리는 시간을 계산
+		// 1. 기능을 완수하기 위해 걸리는 날짜를 미리 계산
 		Queue<Integer> workQ = new ArrayDeque<>();
 		for (int idx = 0; idx < progresses.length; idx++) {
 
