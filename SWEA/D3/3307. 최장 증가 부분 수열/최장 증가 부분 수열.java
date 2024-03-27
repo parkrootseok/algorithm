@@ -49,26 +49,28 @@ class Solution {
             }
 
             // 3. 최장 증가 부분 수열 구하기
-            dp = new int[number];
-            Arrays.fill(dp, 1);
-            for (int curIdx = 0; curIdx < number - 1; curIdx++) {
+            dp = new int[number + 1];
+            int len = 0;
+            for (int idx = 0; idx < number; idx++) {
             	
-                for (int compareIdx = curIdx + 1; compareIdx < number; compareIdx++) {
-                	
-                	// 3-1. 현재 위치에 있는 수보다 비교할 위치에 있는 수가 더 클 때
-                    if (sequence[curIdx] < sequence[compareIdx]) {
-                    	
-                    	// 3-1-1. 현재 위치에서 길이를 증가한 값이 비교할 위치에 있는 길이보다 길다면 갱신 
-                        dp[compareIdx] = Math.max(dp[compareIdx], dp[curIdx] + 1);
-                    }
-                    
-                }
+            	// 현재 숫자가 최고 길이의 숫자보다 크다면
+            	if(dp[len] < sequence[idx]) {
+            		
+            		// 길이를 증가시키고 해당 길이에 숫자를 삽입
+            		dp[++len] = sequence[idx];
+            	}
+            	
+            	// 작다면 삽입할 위치를 찾아 삽입한다.
+            	else {
+            		
+            		int insertionIdx = binarySearch(0, len, sequence[idx]);
+            		dp[insertionIdx] = sequence[idx];
+            		
+            	}
                 
             }
 
-            Arrays.sort(dp);
-
-            sb.append("#").append(tc).append(" ").append(dp[number - 1]).append("\n");
+            sb.append("#").append(tc).append(" ").append(len).append("\n");
 
         }
 
@@ -76,6 +78,28 @@ class Solution {
         bw.close();
         return;
 
+    }
+    
+    public static int binarySearch(int left, int right, int target) {
+    
+    	while(left < right) {
+    		
+    		int mid = (left + right) / 2;
+    		
+    		// 중앙값 보다 크다면(중앙값 인덱스 기준 오른쪽에 위치)
+    		if (dp[mid] < target) {
+    			left = mid + 1;
+    		}
+    		
+    		// 중앙값보다 작다면((중앙값 인덱스 기준 왼쪽에 위치)
+    		else if (dp[mid] > target) {
+    			right = mid;
+    		}
+    		
+    	}
+    	
+    	return right;
+    	
     }
 
 }
