@@ -2,8 +2,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.Scanner;
+
 
 /**
  * SWEA_3307_최장증가부분수열
@@ -12,8 +11,8 @@ import java.util.Scanner;
  * 1. 숫자의 갯수 입력
  * 2. 수열 입력
  * 3. 최장 증가 부분 수열 구하기
- *  3-1. 현재 위치에 있는 수보다 비교할 위치에 있는 수가 더 클 때
- *   3-1-1. 현재 위치에서 길이를 증가한 값이 비교할 위치에 있는 길이보다 길다면 갱신
+ *  3-1. 현재 숫자가 최고 길이의 숫자보다 크다면 길이를 증가시키고 해당 길이에 숫자를 삽입
+ *  3-2. 작다면 삽입할 위치를 찾아 삽입한다.
  **/
 class Solution {
 
@@ -53,14 +52,13 @@ class Solution {
             int len = 0;
             for (int idx = 0; idx < number; idx++) {
             	
-            	// 현재 숫자가 최고 길이의 숫자보다 크다면
+            	// 3-1. 현재 숫자가 최고 길이의 숫자보다 크다면 길이를 증가시키고 해당 길이에 숫자를 삽입
             	if(dp[len] < sequence[idx]) {
             		
-            		// 길이를 증가시키고 해당 길이에 숫자를 삽입
             		dp[++len] = sequence[idx];
             	}
             	
-            	// 작다면 삽입할 위치를 찾아 삽입한다.
+            	// 3-2. 작다면 삽입할 위치를 찾아 삽입한다.
             	else {
             		
             		int insertionIdx = binarySearch(0, len, sequence[idx]);
@@ -87,12 +85,16 @@ class Solution {
     		int mid = (left + right) / 2;
     		
     		// 중앙값 보다 크다면(중앙값 인덱스 기준 오른쪽에 위치)
+    		// 즉, 목표보다 작은 수 중 하나 이므로 인덱스 + 1
+    		// 만약, (인덱스 + 1)위치가 right 위치보다 크게 된다면
+    		// right는 목표보다 큰 값 중 첫 값이므로 더이상 작은값이 없다는 것을 알 수 있다.
     		if (dp[mid] < target) {
     			left = mid + 1;
     		}
     		
-    		// 중앙값보다 작다면((중앙값 인덱스 기준 왼쪽에 위치)
-    		else if (dp[mid] > target) {
+    		// 중앙값보다 작다면(중앙값 인덱스 기준 왼쪽에 위치)
+    		// 즉, 현재 상황에서 목표보다 큰 값 중 첫값이므로 인덱스률 유지
+    		else if (target < dp[mid]) {
     			right = mid;
     		}
     		
