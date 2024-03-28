@@ -36,134 +36,135 @@ import java.util.Queue;
  * 4. 시작 지점부터 모든 편의점을 탐색하여 도착 지점으로 갈 수 있는 편의점이 있는지 확인
  **/
 public class Main {
-	
+
 	static class Position {
-		
+
 		int row;
 		int col;
-		
+
 		public Position(int row, int col) {
 			this.row = row;
 			this.col = col;
 		}
-		
+
 	}
-	
+
 	static final int POSSIBLE_DISTANCE = 1000;
-	
+
 	static BufferedReader br;
 	static BufferedWriter bw;
 	static StringBuilder sb;
 	static String[] inputs;
 	static String input;
-	
+
 	static int testCaseNumber;
-	
+
 	static int storeNumber;
 	static Position[] stores;
 	static Position org;
 	static Position dist;
-	
+
 	static int[][] distances;
-	
+
 	public static void main(String[] args) throws IOException {
-		
+
 		br = new BufferedReader(new InputStreamReader(System.in));
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
-		
+
 		// 1. 테스트 케이스 개수 입력
 		testCaseNumber = Integer.parseInt(br.readLine().trim());
-		
+
 		for (int tc = 0; tc < testCaseNumber; tc++) {
-			
+
 			// 2. 맥주를 파는 편의점 개수 받기
 			storeNumber = Integer.parseInt(br.readLine().trim());
-			
+
 			// 3. 출발지, 편의점, 도착지 좌표 입력
 			stores = new Position[storeNumber];
 			for (int idx = 0; idx < storeNumber + 2; idx++) {
-				
+
 				inputs = br.readLine().trim().split(" ");
 				int row = Integer.parseInt(inputs[0]);
 				int col = Integer.parseInt(inputs[1]);
-			
+
 				// 출발지
 				if (idx == 0) {
 					org = new Position(Integer.parseInt(inputs[0]), Integer.parseInt(inputs[1]));
 				}
-				
+
 				// 도착지
 				else if (idx == storeNumber + 1) {
 					dist = new Position(Integer.parseInt(inputs[0]), Integer.parseInt(inputs[1]));
 				}
-				
+
 				// 편의점
 				else {
 					stores[idx - 1] = new Position(row, col);
 				}
-				
+
 			}
-			
-			// 4. 시작 지점부터 모든 편의점을 탐색하여 도착 지점으로 갈 수 있는 편의점이 있는지 확인			
+
+			// 4. 시작 지점부터 모든 편의점을 탐색하여 도착 지점으로 갈 수 있는 편의점이 있는지 확인
 			if (bfs(org)) {
 				sb.append("happy").append("\n");
 			}
-			
+
 			else {
 				sb.append("sad").append("\n");
 			}
-			
+
 		}
-		
+
 		bw.write(sb.toString());
 		bw.close();
 		return;
-		
+
 	}
-	
+
 	public static int getDistance(int x1, int y1, int x2, int y2) {
 		return Math.abs(x1 - x2) + Math.abs(y1 - y2);
 	}
-	
+
 	public static boolean bfs(Position org) {
-		
+
 		boolean[] isVisited = new boolean[storeNumber];
 		Queue<Position> positionQ = new ArrayDeque<>();
 		positionQ.add(org);
-		
-		while(!positionQ.isEmpty()) {
-			
+
+		while (!positionQ.isEmpty()) {
+
 			Position curPosition = positionQ.poll();
-			
+
 			// 현재 위치 ~ 도착 위치 거리가 도달 가능하다면 종료
 			if (getDistance(curPosition.row, curPosition.col, dist.row, dist.col) <= POSSIBLE_DISTANCE) {
 				return true;
 			}
-			
+
 			for (int idx = 0; idx < storeNumber; idx++) {
-				
+
 				Position store = stores[idx];
-				
+
 				// 방문한 편의점이라면 스킵
 				if (isVisited[idx]) {
 					continue;
 				}
-				
+
 				// 현재 위치 ~ 편의점 위치 거리가 도달 불가능하다면 스킵
-				if (getDistance(curPosition.row, curPosition.col, stores[idx].row, stores[idx].col) > POSSIBLE_DISTANCE) {
+				if (getDistance(curPosition.row, curPosition.col, stores[idx].row,
+						stores[idx].col) > POSSIBLE_DISTANCE) {
 					continue;
 				}
-				
+
 				isVisited[idx] = true;
 				positionQ.add(store);
 
 			}
-			
+
 		}
-	
+
 		return false;
-		
+
 	}
-	
+
 }
