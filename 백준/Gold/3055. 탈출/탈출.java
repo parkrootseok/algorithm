@@ -22,6 +22,7 @@ import java.util.Queue;
  * 
  * 1. 숲의 크기를 받는다.
  * 2. 숲에 대한 정보를 받는다.
+ * 3. BFS를 활용하여 제일 빨리 탈출할 수 있는 시간을 찾자
  **/
 public class Main {
 
