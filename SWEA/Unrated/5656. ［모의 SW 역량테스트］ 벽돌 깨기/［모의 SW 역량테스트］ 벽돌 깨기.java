@@ -3,6 +3,7 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Queue;
 
 /**
@@ -18,9 +19,14 @@ import java.util.Queue;
  * 1. 테스트 케이스 횟수 받기
  * 2. 구슬 횟수와 가로, 세로 크기를 받는다.
  * 3. 맵에 대한 정보를 받는다.
- * 4. 순열을 통해 구슬을 쏠 순서를 정한다.
- * 5. 순서가 정해졌다면 게임을 시작
- * 6. 게임 진행 후 남은 벽돌의 개수를 구한 후 최소값 갱신
+ * 4. dfs 탐색 시작
+ * 5. 게임 시작
+ *  5-1. 구슬 쏘기
+ *  5-2. 벽돌 부수기
+ *  5-3. 벽돌 이동하기
+ *  5-4. 현재 상태를 유지하고 다음 구슬 쏘기
+ *  5-5. 상태 복구
+ * 6. 구슬을 모두 사용 후 벽돌의 개수를 구한 후 최소값 갱신
  **/
 class Solution {
 	
@@ -72,10 +78,10 @@ class Solution {
 				
 			}
 			
-			// 4. 순열을 통해 구슬을 쏠 순서를 정한다.
+			// 4. dfs 탐색 시작
 			minCount = Integer.MAX_VALUE;
 			perm = new int[shootingNumber];
-			permutation(0);
+			dfs(0);
 			
 			sb.append("#").append(tc).append(" ").append(minCount).append("\n");
 
@@ -87,7 +93,7 @@ class Solution {
 
 	}
 
-	public static int[][] copy() {
+	public static int[][] copy(int[][] map) {
 		
 		int[][] copyMap = new int[rowSize][colSize];
 		for (int row = 0; row < rowSize; row++) {
@@ -109,7 +115,7 @@ class Solution {
 		
 	}
 	
-	public static int shooting(int col, int[][] map) {
+	public static int shoot(int col) {
 		
 		
 		for (int row = 0; row < rowSize; row++) {
@@ -121,11 +127,11 @@ class Solution {
 			
 		}
 		
-		return -1;
+		return rowSize - 1;
 		
 	}
 	
-	public static void breakBrick(int row, int col, int[][] map) {
+	public static void breakBrick(int row, int col) {
 		
 		Queue<int[]> positionQ = new ArrayDeque<>();
 		positionQ.add(new int[]{row, col, map[row][col]});
@@ -137,6 +143,7 @@ class Solution {
 			int curCol = position[1];
 			int number = position[2];
 
+			// 4가지 방향에 사정거리 범위안에 존재하는 벽돌 부시기
 			for (int dir = 0; dir < dr.length; dir++) {
 
 				for (int range = 0; range < number; range++) {
@@ -144,6 +151,7 @@ class Solution {
 					int nextRow = curRow + dr[dir] * range;
 					int nextCol = curCol + dc[dir] * range;
 
+					// 유효한 범위가 아니라면 스킵
 					if (!isValid(nextRow, nextCol)) {
 						break;
 					}
@@ -165,7 +173,7 @@ class Solution {
 		
 	}
 	
-	public static void moveBrick(int[][] map) {
+	public static void moveBrick() {
 
 		// 모든열을 
 		for (int col = 0; col < colSize; col++) {
@@ -201,29 +209,7 @@ class Solution {
 		
 	}
 	
-	public static void gameStart(int[][] map) {
-		
-		for (int col : perm) {
-		
-			// col에서 구슬을 발사 후 가장 처음으로 만나는 벽돌에 대한 행을 반환
-			int row = shooting(col, map);
-			
-			// 열에 벽돌이 없다면 스킵
-			if (row == -1) {
-				continue;
-			}
-			
-			// 해당 벽돌을 부심
-			breakBrick(row, col, map);
-			
-			// 벽돌을 부신 후 아래에 벽돌이 없는 것들을 아래로 옮겨준다
-			moveBrick(map);	
-			
-		}
-		
-	}
-	
-	public static int getBrickCount(int[][] copyMap) {
+	public static int getBrickCount() {
 		
 		int count = 0;
 		
@@ -231,7 +217,7 @@ class Solution {
 				
 			for (int col = 0; col < colSize; col++) {
 				
-				if(copyMap[row][col] > 0) {
+				if(map[row][col] > 0) {
 					count++;
 				}
 				
@@ -243,25 +229,37 @@ class Solution {
 		
 	}
 	
-	public static void permutation(int level) {
+	public static void dfs(int level) {
 		
 		// 순서 생성 완료
 		if (level == shootingNumber) {
-		
-			// 5. 순서가 정해졌다면 게임을 시작
-			int[][] copyMap = copy(); 
-			gameStart(copyMap);
 			
-			// 6. 게임 진행 후 남은 벽돌의 개수를 구한 후 최소값 갱신
-			minCount = Math.min(minCount, getBrickCount(copyMap));
+			// 6. 구슬을 모두 사용 후 벽돌의 개수를 구한 후 최소값 갱신
+			minCount = Math.min(minCount, getBrickCount());
 			return;
 			
 		}
 
-		// 순서 생성
+		// 5. 게임 시작
+		int[][] copyMap = copy(map); 
+		
 		for (int col = 0; col < colSize; col++) {
-			perm[level] = col;
-			permutation(level + 1);
+			
+			// 5-1. 구슬 쏘기
+			int row = shoot(col);
+			
+			// 5-2. 벽돌 부수기
+			breakBrick(row, col);
+			
+			// 5-3. 벽돌 이동하기
+			moveBrick();
+			
+			// 5-4. 현재 상태를 유지하고 다음 구슬 쏘기
+			dfs(level + 1);
+			
+			// 5-5. 상태 복구
+			map = copy(copyMap);
+			
 		}
 		
 	}
