@@ -23,7 +23,10 @@ import java.util.Queue;
  * 6. 게임 진행 후 남은 벽돌의 개수를 구한 후 최소값 갱신
  **/
 class Solution {
-
+	
+	static int[] dr = new int[] {1, -1, 0, 0};
+	static int[] dc = new int[] {0, 0, -1, 1};
+	
 	static BufferedReader br;
 	static BufferedWriter bw;
 	static StringBuilder sb;
@@ -128,81 +131,36 @@ class Solution {
 		positionQ.add(new int[]{row, col, map[row][col]});
 				
 		while (!positionQ.isEmpty()) {
-			
+
 			int[] position = positionQ.poll();
 			int curRow = position[0];
 			int curCol = position[1];
-			int number = position[2] - 1;
+			int number = position[2];
 
-			// 상
-			for (int nextRow = curRow; curRow - number <= nextRow ; nextRow--) {
-				
-				if (!isValid(nextRow, curCol)) {
-					break;
-				}
-				
-				if (0 < map[nextRow][curCol]) {
-					
-					if (map[nextRow][curCol] > 1) {
-						positionQ.add(new int[] {nextRow, curCol, map[nextRow][curCol]});
+			for (int dir = 0; dir < dr.length; dir++) {
+
+				for (int range = 0; range < number; range++) {
+
+					int nextRow = curRow + dr[dir] * range;
+					int nextCol = curCol + dc[dir] * range;
+
+					if (!isValid(nextRow, nextCol)) {
+						break;
 					}
-					map[nextRow][curCol] = 0;
-					
-				}
-				
-			}
-				
-			// 하
-			for (int nextRow = curRow; nextRow <= curRow + number; nextRow++) {
-				
-				if (!isValid(nextRow, curCol)) {
-					break;
-				}
-				
-				if (0 < map[nextRow][curCol]) {
-					if (map[nextRow][curCol] > 1) {
-						positionQ.add(new int[] {nextRow, curCol, map[nextRow][curCol]});
+
+					if (0 < map[nextRow][nextCol]) {
+
+						if (map[nextRow][nextCol] > 1) {
+							positionQ.add(new int[] {nextRow, nextCol, map[nextRow][nextCol]});
+						}
+						
+						map[nextRow][nextCol] = 0;
+
 					}
-					map[nextRow][curCol] = 0;
 				}
-				
+
 			}
-	
-			// 좌
-			for (int nextCol = curCol; curCol - number <= nextCol ; nextCol--) {
-				
-				if (!isValid(curRow, nextCol)) {
-					break;
-				}
-				
-				if (0 < map[curRow][nextCol]) {
-					if (map[curRow][nextCol] > 1) {
-						positionQ.add(new int[] {curRow, nextCol, map[curRow][nextCol]});
-					}
-					map[curRow][nextCol] = 0;
-				}
-				
-				
-			}
-			
-			// 우
-			for (int nextCol = curCol; nextCol <= curCol + number; nextCol++) {
-				
-				if (!isValid(curRow, nextCol)) {
-					break;
-				}
-				
-				if (0 < map[curRow][nextCol]) {
-					
-					if (map[curRow][nextCol] > 1) {
-						positionQ.add(new int[] {curRow, nextCol, map[curRow][nextCol]});
-					}
-					
-					map[curRow][nextCol] = 0;
-					
-				}
-			}
-				
+
 		}
 		
 	}
