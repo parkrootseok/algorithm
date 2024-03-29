@@ -21,6 +21,7 @@ import java.util.Queue;
  * 3. 맵에 대한 정보를 받는다.
  * 4. 순열을 통해 구슬을 쏠 순서를 정한다.
  * 5. 순서가 정해졌다면 게임을 시작
+ * 6. 게임 진행 후 남은 벽돌의 개수를 구한 후 최소값 갱신
  **/
 class Solution {
 
@@ -111,6 +112,7 @@ class Solution {
 		
 		for (int row = 0; row < rowSize; row++) {
 			
+			// 가장 처음 만나는 벽돌의 행을 반환
 			if (map[row][col] != 0) {
 				return row;
 			}
@@ -128,17 +130,11 @@ class Solution {
 				
 		while (!positionQ.isEmpty()) {
 			
-//			System.out.println();
-//			for (int curRow = 0; curRow < rowSize; curRow++) {
-//				System.out.println(Arrays.toString(map[curRow]));
-//			}
-			
 			int[] position = positionQ.poll();
 			int curRow = position[0];
 			int curCol = position[1];
 			int number = position[2] - 1;
-			
-			
+
 			// 상
 			for (int nextRow = curRow; curRow - number <= nextRow ; nextRow--) {
 				
@@ -225,6 +221,7 @@ class Solution {
 
 					int nextRow = row - 1;
 					while (0 <= nextRow) {
+						
 						// 계속 위로 이동하여 처음에 마주치는 벽돌을 가져온다
 						if (map[nextRow][col] > 0) {
 							map[row][col] = map[nextRow][col];
@@ -232,7 +229,9 @@ class Solution {
 							break;
 						}
 						
+						// 위로 이동
 						nextRow--;
+						
 					}
 
 				}
@@ -252,6 +251,7 @@ class Solution {
 			// col에서 구슬을 발사 후 가장 처음으로 만나는 벽돌에 대한 행을 반환
 			int row = shooting(col, map);
 			
+			// 열에 벽돌이 없다면 스킵
 			if (row == -1) {
 				continue;
 			}
@@ -264,8 +264,6 @@ class Solution {
 			
 		}
 		
-	
-	
 	}
 	
 	public static int getBrickCount(int[][] copyMap) {
@@ -290,20 +288,20 @@ class Solution {
 	
 	public static void permutation(int level) {
 		
+		// 순서 생성 완료
 		if (level == shootingNumber) {
 		
 			// 5. 순서가 정해졌다면 게임을 시작
 			int[][] copyMap = copy(); 
 			gameStart(copyMap);
 			
-			// 6. 게임 진행 후 남은 벽돌의 개수를 구한다.
-			int count = getBrickCount(copyMap);
-			minCount = Math.min(minCount, count);
-			
+			// 6. 게임 진행 후 남은 벽돌의 개수를 구한 후 최소값 갱신
+			minCount = Math.min(minCount, getBrickCount(copyMap));
 			return;
 			
 		}
 
+		// 순서 생성
 		for (int col = 0; col < colSize; col++) {
 			perm[level] = col;
 			permutation(level + 1);
