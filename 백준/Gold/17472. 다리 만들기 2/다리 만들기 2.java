@@ -20,7 +20,9 @@ import java.util.Queue;
  *  - 세로 또는 가로 방향으로만 가능
  * - 모든 섬이 연결되었을 때 최소 다리 길이를 구해라
  *
- * 1. 지도에 대한 크기와 정보를 입력
+ * 1. 입력 받기
+ *  1-1. 지도에 대한 크기 입력
+ *  1-2. 지도에 대한 정보 입력
  * 2. 섬을 구별하기 위해 인덱스 할당
  * 3. 건설할 수 있는 모든 다리 건설
  * 4. 크루스칼 알고리즘을 모든 섬이 연결됐을 때 최소 다리 길이 계산
@@ -102,19 +104,25 @@ public class Main {
             return;
         }
 
-        // 대표가 같지 않고 A 원소가 속한 집합의 랭크가 더 높다면 A 밑으로 B를 이동 후 종료
-        if (rank[findA] > unf[findB]) {
+        // 출발지에서 더 많은 섬을 이동할 수 있다면
+        if (rank[findA] > rank[findB]) {
+
+            // 도착지에서 출발지로 연결되도록 설정
             unf[findB] = findA;
             return;
+
         }
 
-        // 원소가 속한 랭크다 더 크다면 B가 더 높다면 A를 이동
-        unf[findA] = findB;
-        // 두 집합의 랭크가 같다면 밑으로 들어간 집합의 랭크를 증가
+        // 갈 수 있는 섬의 개수가 동일하거나 도착지에서 더 많은 섬으로 갈 수 있다면 출발지에서 도착지로 연결되도록 설정
+        unf[findB] = unf[findA];
+
+        // 섬의 개수가 동일할 때만 랭크 증가
         if (rank[findA] == rank[findB]) {
             rank[findB]++;
         }
 
+        return;
+        
     }
 
     public static int find(int a) {
@@ -127,17 +135,14 @@ public class Main {
 
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void input() throws IOException {
 
-        br = new BufferedReader(new InputStreamReader(System.in));
-        bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        sb = new StringBuilder();
-
-        // 1. 지도에 대한 크기와 정보를 입력
+        // 1-1. 지도에 대한 크기 입력
         inputs = br.readLine().trim().split(" ");
         rowSize = Integer.parseInt(inputs[0]);
         colSize = Integer.parseInt(inputs[1]);
 
+        // 1-2. 지도에 대한 정보 입력
         map = new int[rowSize][colSize];
         for (int row = 0; row < rowSize; row++) {
 
@@ -150,6 +155,17 @@ public class Main {
             }
 
         }
+
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        br = new BufferedReader(new InputStreamReader(System.in));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        sb = new StringBuilder();
+
+        // 1. 입력 받기
+        input();
 
         // 2. 섬을 구별하기 위해 인덱스 할당
         islands = new ArrayList<>();
