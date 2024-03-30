@@ -23,9 +23,16 @@ import java.util.Queue;
  * 1. 입력 받기
  *  1-1. 지도에 대한 크기 입력
  *  1-2. 지도에 대한 정보 입력
- * 2. 섬을 구별하기 위해 인덱스 할당
- * 3. 건설할 수 있는 모든 다리 건설
+ * 2. 섬을 구별하기 위해 인덱싱
+ *  2-1. 인덱스를 가지는 섬을 생성
+ *  2-2. 현재 위치로 부터 4방 탐색을 진행하여 갈 수 있는 위치를 탐색
+ *   2-2-1. 갈 수 있는 위치에 인덱싱 및 섬 영역 리스트에 추가
+ * 3. 섬의 모든 영역을 탐색하여 건설할 수 있는 모든 다리를 건설
  * 4. 크루스칼 알고리즘을 모든 섬이 연결됐을 때 최소 다리 길이 계산
+ *  4-1. 서로소 집합을 사용하기 위한 초기 작업
+ *  4-2. 모든 다리를 우선순위 큐에 삽입
+ *  4-3. 가장 최소 길이를 가지는 다리부터 건설을 시작하여 모든 섬을 연결
+ *  4-4. 연결 완료 확인
  **/
 public class Main {
 
@@ -122,16 +129,16 @@ public class Main {
         }
 
         return;
-        
+
     }
 
-    public static int find(int a) {
+    public static int find(int island) {
 
-        if (a == unf[a]) {
-            return a;
+        if (island == unf[island]) {
+            return island;
         }
 
-        return unf[a] = find(unf[a]);
+        return unf[island] = find(unf[island]);
 
     }
 
@@ -167,22 +174,22 @@ public class Main {
         // 1. 입력 받기
         input();
 
-        // 2. 섬을 구별하기 위해 인덱스 할당
+        // 2. 섬을 구별하기 위해 인덱싱
         islands = new ArrayList<>();
         isVisited = new boolean[rowSize][colSize];
-        int islandIdx = 1;
+        int islandIdx = 0;
         for (int row = 0; row < rowSize; row++) {
 
             for (int col = 0; col < colSize; col++) {
 
-                // 현재 좌표가 섬이고 방문하지 않았다면
+                // 현재 좌표가 섬 영역 후보이고 방문하지 않은 곳이라면
                 if (map[row][col] == ISLAND && !isVisited[row][col]) {
 
-                    // 섬 영역에 대해 인덱스 할당
-                    allocateIndex(row, col, islandIdx);
+                    // 인덱스를 가지는 섬을 생성 후
+                    Island island = new Island(++islandIdx);
 
-                    // 할당이 끝난 후 인덱스 증가
-                    islandIdx++;
+                    // 섬을 이룰 수 있는 영역을 찾아 동일한 인덱스 할당
+                    indexing(island, row, col);
 
                 }
 
@@ -190,7 +197,7 @@ public class Main {
 
         }
 
-        // 3. 각 섬의 모든 영역을 탐색하여 건설할 수 있는 모든 다리를 건설
+        // 3. 섬의 모든 영역을 탐색하여 건설할 수 있는 모든 다리를 건설
         bridges = new ArrayList<>();
         for (Island island : islands) {
             buildBridge(island);
@@ -206,69 +213,9 @@ public class Main {
 
     }
 
-    public static void kruskal() {
+    public static void indexing(Island island, int row, int col) {
 
-        // 3-1. 크루스칼 알고리즘을 위해 UnionFind에 대한 배열을 초기화
-        init();
-
-        // 3-2. 모든 다리를 우선순위 큐에 삽입
-        PriorityQueue<Bridge> bridgeQ = new PriorityQueue<>();
-        for(Bridge bridge : bridges) {
-            bridgeQ.add(bridge);
-        }
-
-        // 연결된 간선 수가 총 섬의 개수보다 하나 작을 때 까지 탐색
-        boolean[] isLinked = new boolean[islands.size() + 1];
-        int connectedBridgeCount = 0;
-        while (!bridgeQ.isEmpty()) {
-
-            Bridge bridge = bridgeQ.poll();
-            int from = bridge.from;
-            int to = bridge.to;
-
-            // 두 섬이 연결되어 있지 않다면
-            if (find(from) != find(to)) {
-
-                // 두 간선을 연결
-                union(from, to);
-
-                // 연결 여부 표시
-                isLinked[from] = true;
-                isLinked[to] = true;
-
-                // 다리 길이를 누적합
-                minBridgeLength += bridge.length;
-
-                // 연결된 다리수를 카운트
-                connectedBridgeCount++;
-
-            }
-
-        }
-
-        // 만약, 방문하지 못한 섬이 하나라도 있다면 실패
-        for (int index = 1; index <= islands.size(); index++) {
-
-            if (!isLinked[index]) {
-                minBridgeLength = -1;
-                return;
-            }
-
-        }
-
-        // 사용한 다리의 개수가 섬보다 1개 적지 않으면 실패
-        if (connectedBridgeCount != islands.size() - 1) {
-            minBridgeLength = -1;
-        }
-
-    }
-
-    public static void allocateIndex(int row, int col, int index) {
-
-        // index를 가지는 섬에 대한 객체를 생성
-        Island island = new Island(index);
-
-        // 섬의 영역을 동일한 index로 관리하기 위해 탐색 시작
+        // 2-1. 현재 위치로 부터 4방 탐색을 진행하여 갈 수 있는 위치를 탐색
         Queue<int[]> areaQ = new ArrayDeque<>();
         isVisited[row][col] = true;
         areaQ.add(new int[] {row, col});
@@ -279,8 +226,8 @@ public class Main {
             int curRow = area[0];
             int curCol = area[1];
 
-            // 현재 지점에서 갈 수 있는 위치에 저장된 값을 섬의 인덱스로 변환 및 섬 영역에 추가
-            map[curRow][curCol] = index;
+            // 2-2-1. 갈 수 있는 위치에 인덱싱 및 섬 영역 리스트에 추가
+            map[curRow][curCol] = island.idx;
             island.areas.add(new int[] {curRow, curCol});
 
             for (int dir = 0; dir < dr.length; dir++) {
@@ -293,7 +240,7 @@ public class Main {
                     continue;
                 }
 
-                // 방문한 적 없는
+                // 방문한 적 없으며
                 if (isVisited[nRow][nCol]) {
                     continue;
                 }
@@ -318,13 +265,12 @@ public class Main {
 
     public static void buildBridge(Island island) {
 
-        // 각 섬의 모든 영역을 탐색하여 건설할 수 있는 모든 다리를 건설
+        // 3-1. 현재 섬의 모든 영역에 대해서 4방 탐색
         for (int[] area : island.areas) {
 
             int row = area[0];
             int col = area[1];
 
-            // 현재 영역에서 4방 탐색 진행
             for (int dir = 0; dir < dr.length; dir++) {
 
                 boolean isLinked = false;
@@ -346,9 +292,16 @@ public class Main {
                         break;
                     }
 
-                    // 다른 섬에 도착한 경우 종료
+                    // 3-2. 다른 섬에 도착했을때
                     if (ISLAND <= map[nRow][nCol]) {
-                        isLinked = true;
+                        
+                        // 3-2-1. 다리 길이가 2미만 이라면 종료
+                        if (bridgeLength < 2) {
+                            break;
+                        }
+                        
+                        // 3-2-2. 2이상이면 다리 건설
+                        bridges.add(new Bridge(island.idx, map[nRow][nCol], bridgeLength));
                         break;
                     }
 
@@ -357,14 +310,50 @@ public class Main {
 
                 }
 
-                // 섬이 연결되었고 이를 연결하는 다리의 길이가 2이상이라면
-                if (isLinked && bridgeLength >= 2) {
-                    // 출발, 도착 지점과 다리의 길이를 기록
-                    bridges.add(new Bridge(island.idx, map[nRow][nCol], bridgeLength));
-                }
+            }
+
+        }
+
+    }
+
+    public static void kruskal() {
+
+        // 4-1. 서로소 집합을 사용하기 위한 초기 작업
+        init();
+
+        // 4-2. 모든 다리를 우선순위 큐에 삽입
+        PriorityQueue<Bridge> bridgeQ = new PriorityQueue<>();
+        for(Bridge bridge : bridges) {
+            bridgeQ.add(bridge);
+        }
+
+        // 4-3. 가장 최소 길이를 가지는 다리부터 건설을 시작하여 모든 섬을 연결
+        int connectedBridgeCount = 0;
+        while (!bridgeQ.isEmpty()) {
+
+            Bridge bridge = bridgeQ.poll();
+            int from = bridge.from;
+            int to = bridge.to;
+
+            // 두 섬이 연결되어 있지 않다면
+            if (find(from) != find(to)) {
+
+                // 두 간선을 연결
+                union(from, to);
+
+                // 다리 길이를 누적합
+                minBridgeLength += bridge.length;
+
+                // 연결된 다리수를 카운트
+                connectedBridgeCount++;
 
             }
 
+        }
+
+        // 4-4. 연결 완료 확인
+        if (connectedBridgeCount != islands.size() - 1) {
+            minBridgeLength = -1;
         }
 
     }
