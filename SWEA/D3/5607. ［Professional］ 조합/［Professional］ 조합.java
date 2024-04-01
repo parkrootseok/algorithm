@@ -63,13 +63,11 @@ class Solution {
 			 *  - (R!(N-R)!)^p-2와 (R!(N-R)!)^-1 mod p은 합동 관계임을 이용하여 (A * B^p-2) mod p 와 같은 곱셈 형태로 변형하여
 			 *  - 최종적으로 (N! mod p * N!(N-R)! mod p) mod p를 도출할 수 있음
 			 */
-			long numerator = factorial[N];
+			long numerator = factorial[N] % P;
 			long denominator = (factorial[R] * factorial[N - R]) % P;
 			long inverseDenominator = getInverse(denominator, P - 2);
 
-			ANSWER = numerator * inverseDenominator % P;
-
-			sb.append("#").append(tc).append(" ").append(ANSWER).append("\n");
+			sb.append("#").append(tc).append(" ").append(numerator * inverseDenominator % P).append("\n");
 
 		}
 
