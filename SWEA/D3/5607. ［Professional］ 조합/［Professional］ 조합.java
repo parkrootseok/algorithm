@@ -83,27 +83,27 @@ class Solution {
 	 public static void factorial() {
 
 		factorial[0] = 1;
-		for (int i = 1; i <= 1000000; i++) {
-			factorial[i] = factorial[i - 1] * i % P;
+		for (int number = 1; number <= 1000000; number++) {
+			factorial[number] = factorial[number - 1] * number % P;
 		}
 	 
 	}
 
-	public static long getInverse(long n, long exp) {
+	public static long getInverse(long number, long exp) {
 
 		// 지수가 1일 경우 n을 반환
 		if (exp == 1) { 
-			return n;
+			return number;
 		}
 
-		// 문제 분할
-		long divide = getInverse(n, exp / 2) % P; // n^exp/2 형태로 변환
+		// 문제를 분할
+		long divisionResult = getInverse(number, exp / 2) % P; // n^exp/2 형태로 변환
 
-		// 문제 정복
+		// 분할된 문제들에 대한 결과를 종합
 		if (exp % 2 == 0) { // exp가 짝수이면 n^exp/2 * n^exp/2 = n^exp
-			return divide * divide % P;
+			return divisionResult * divisionResult % P;
 		} else { // exp가 홀수이면 (n^exp/2 * n^exp/2) * n = n^exp
-			return ((divide * divide) % P * n) % P;
+			return ((divisionResult * divisionResult) % P * number) % P;
 		}
 
 	}
