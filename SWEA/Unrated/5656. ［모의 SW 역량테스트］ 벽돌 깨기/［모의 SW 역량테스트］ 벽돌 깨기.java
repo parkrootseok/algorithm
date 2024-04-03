@@ -165,6 +165,7 @@ class Solution {
 						map[nextRow][nextCol] = 0;
 
 					}
+					
 				}
 
 			}
@@ -187,7 +188,7 @@ class Solution {
 					int nextRow = row - 1;
 					while (0 <= nextRow) {
 						
-						// 계속 위로 이동하여 처음에 마주치는 벽돌을 가져온다
+						// 다음 위치에 벽돌이 존재하면 현재 위치와 자리 교환 후 종료
 						if (map[nextRow][col] > 0) {
 							map[row][col] = map[nextRow][col];
 							map[nextRow][col] = 0;
@@ -217,6 +218,7 @@ class Solution {
 				
 			for (int col = 0; col < colSize; col++) {
 				
+				// 벽돌이 존재한다면 카운트
 				if(map[row][col] > 0) {
 					count++;
 				}
@@ -231,10 +233,10 @@ class Solution {
 	
 	public static void dfs(int level) {
 		
-		// 순서 생성 완료
+		// 6. 구슬을 모두 사용 후 벽돌의 개수를 구한 후 최소값 갱신
 		if (level == shootingNumber) {
 			
-			// 6. 구슬을 모두 사용 후 벽돌의 개수를 구한 후 최소값 갱신
+			// 6-1. 현재 남은 벽돌의 개수와 최소 벽돌의 개수를 비교하여 갱신
 			minCount = Math.min(minCount, getBrickCount());
 			return;
 			
