@@ -22,6 +22,7 @@ import java.util.Queue;
  *  3-2. 자신보다 키 작은 모든 사람을 방문
  *  3-3. 방문하지 않은 학생이 한 명이라도 있다면 실패
  **/
+
 class Main {
 	
 	static class Student {
