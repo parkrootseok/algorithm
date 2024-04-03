@@ -18,7 +18,7 @@ import java.util.Queue;
  * 1. 테스트 케이스 입력 
  *  1-1. 정점과 간선 개수 받기
  *  1-2. 간선 정보 받기
- * 2. DFS를 활용하여 연결 요소 개수 카운팅
+ * 2. BFS를 활용하여 연결 요소 개수 카운팅
  *  2-1. 현재 정점을 방문하지 않았다면 카운팅 후 탐색 시작
  **/
 
@@ -95,7 +95,7 @@ class Main {
 		// 1. 테스트 케이스 입력
 		input();
 
-		// 2. DFS를 활용하여 연결 요소 개수 카운팅
+		// 2. BFS를 활용하여 연결 요소 개수 카운팅
 		isVisited = new boolean[vertexNumber + 1];
 		for (int curVertex = 1; curVertex <= vertexNumber; curVertex++) {
 			
@@ -112,25 +112,6 @@ class Main {
 		bw.close();
 		return;
 
-	}
-	
-	public static void dfs(Vertex curVertex) {
-		
-		// 현재 정점에 대한 방문 처리
-		isVisited[curVertex.index] = true;
-		
-		for (Vertex vertex : curVertex.adjacentVertices) {
-			
-			// 이미 방문한 정점일 때 스킵
-			if (isVisited[vertex.index]) {
-				continue;
-			}
-			
-			// 다음 정점 방문을 위한 재귀 호출
-			dfs(vertex);
-			
-		}
-		
 	}
 	
 	public static void bfs(Vertex curVertex) {
@@ -155,6 +136,25 @@ class Main {
 				isVisited[nextVertex.index] = true;
 				
 			}
+			
+		}
+		
+	}
+
+	public static void dfs(Vertex curVertex) {
+		
+		// 현재 정점에 대한 방문 처리
+		isVisited[curVertex.index] = true;
+		
+		for (Vertex vertex : curVertex.adjacentVertices) {
+			
+			// 이미 방문한 정점일 때 스킵
+			if (isVisited[vertex.index]) {
+				continue;
+			}
+			
+			// 다음 정점 방문을 위한 재귀 호출
+			dfs(vertex);
 			
 		}
 		
