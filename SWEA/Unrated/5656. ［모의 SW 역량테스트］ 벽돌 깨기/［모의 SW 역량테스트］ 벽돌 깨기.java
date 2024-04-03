@@ -20,6 +20,8 @@ import java.util.Queue;
  * 2. 구슬 횟수와 가로, 세로 크기를 받는다.
  * 3. 맵에 대한 정보를 받는다.
  * 4. dfs 탐색 시작
+ *  4-1. 이미 모든 벽돌을 제거한 경우가 있다면 모든 탐색 종료
+ *  4-2. 벽돌을 모두 제거했는지 확인
  * 5. 게임 시작
  *  5-1. 구슬 쏘기
  *  5-2. 벽돌 부수기
@@ -44,7 +46,7 @@ class Solution {
 	
 	static int[][] map;
 	static int minCount;
-
+	static boolean isFinished;
 	
 	public static void main(String args[]) throws Exception {
 
@@ -78,6 +80,7 @@ class Solution {
 			}
 			
 			// 4. dfs 탐색 시작
+			isFinished = false;
 			minCount = Integer.MAX_VALUE;
 			dfs(0);
 			
@@ -231,11 +234,24 @@ class Solution {
 	
 	public static void dfs(int level) {
 		
+		// 4-1. 이미 모든 벽돌을 제거한 경우가 있다면 모든 탐색 종료
+		if (isFinished) {
+			return;
+		}
+
+		// 4-2. 벽돌을 모두 제거했는지 확인
+		int count = getBrickCount();
+		if (count == 0) {
+			minCount = 0;
+			isFinished = true;
+			return;
+		}
+		
 		// 6. 구슬을 모두 사용 후 벽돌의 개수를 구한 후 최소값 갱신
 		if (level == shootingNumber) {
 			
 			// 6-1. 현재 남은 벽돌의 개수와 최소 벽돌의 개수를 비교하여 갱신
-			minCount = Math.min(minCount, getBrickCount());
+			minCount = Math.min(minCount, count);
 			return;
 			
 		}
@@ -251,7 +267,7 @@ class Solution {
 			// 5-2. 벽돌 부수기
 			breakBrick(row, col);
 			
-			// 5-3. 벽돌 이동하기
+			// 5-3.벽돌 이동하기
 			moveBrick();
 			
 			// 5-4. 현재 상태를 유지하고 다음 구슬 쏘기
