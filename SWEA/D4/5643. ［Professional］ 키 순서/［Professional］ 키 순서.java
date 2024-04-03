@@ -110,46 +110,50 @@ public class Solution {
 	
 	}
 	
-	public static boolean check(int startStudentNumber) {
+	public static boolean check(int start) {
 		
+		int count = 0;
 		boolean[] isVisited = new boolean[studentNumber + 1];
 		Queue<Student> studentQ = new ArrayDeque<>();
 		
 		// 3-1. 자신보다 키 큰 모든 사람을 방문
-		studentQ.add(students[startStudentNumber]);
-		isVisited[startStudentNumber] = true;
+		studentQ.add(students[start]);
+		isVisited[start] = true;
 		
 		while(!studentQ.isEmpty()) {
 			
-			Student curStudent = studentQ.poll();
+			Student student = studentQ.poll();
 			
-			for(Student bigger : curStudent.bigger) {
+			for(Student bigger : student.bigger) {
 				
 				if (isVisited[bigger.index]) {
 					continue;
 				}
 				
-				isVisited[bigger.index] = true;
+				
 				studentQ.add(bigger);
+				isVisited[bigger.index] = true;
+				count++;
 				
 			}
 			
 		}
 
 		// 3-2. 자신보다 키 작은 모든 사람을 방문
-		studentQ.add(students[startStudentNumber]);
+		studentQ.add(students[start]);
 		while(!studentQ.isEmpty()) {
 			
-			Student curStudent = studentQ.poll();
+			Student student = studentQ.poll();
 			
-			for(Student smaller : curStudent.smaller) {
+			for(Student smaller : student.smaller) {
 				
 				if (isVisited[smaller.index]) {
 					continue;
 				}
 				
-				isVisited[smaller.index] = true;
 				studentQ.add(smaller);
+				isVisited[smaller.index] = true;
+				count++;
 				
 			}
 			
@@ -157,10 +161,8 @@ public class Solution {
 		
 		
 		// 3-3. 방문하지 않은 학생이 한 명이라도 있다면 실패
-		for (int idx = 1; idx <= studentNumber; idx++) {
-			if (!isVisited[idx]) {
-				return false;
-			}
+		if (count != studentNumber - 1) {
+			return false;
 		}
 		
 		return true;
