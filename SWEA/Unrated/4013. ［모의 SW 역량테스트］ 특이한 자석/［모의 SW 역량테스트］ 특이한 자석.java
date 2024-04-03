@@ -3,7 +3,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +16,7 @@ import java.util.List;
  * 4. 회전시킨 방법 입력(톱니바퀴 번호 / 방향[1 : 시계 / -1 : 반시계])
  *  4-1. 좌, 우 톱니바퀴를 확인하여 추가로 회전이 필요한 톱니바퀴 확인
  *  4-2. 톱니바퀴 회전 진행
+ *  4-3. 추가로 회전이 필요한 좌, 우 톱니에 대하여 회전
  * 5. 톱니바퀴 점수의 합 출력(12시 방향이 N극 : 0점, S극 : 2^n-1점)
  */
 
@@ -24,7 +25,7 @@ public class Solution {
 	static class Gear {
 		
 		int number;
-		List<Integer> directions = new LinkedList<>();
+		List<Integer> directions = new ArrayList<>();
 		
 		Gear(int number, String[] direction) {
 			
@@ -145,66 +146,56 @@ public class Solution {
 				boolean[] needRotation = new boolean[TOTAL_GEAR_NUMBER];
 				needRotation[gNumber] = true;
 
-				// 좌측 탐색
-				int left = gNumber - 1;
-				while(0 <= left) {
+				// 좌측 톱니 확인
+				int leftGearNumber = gNumber - 1;
+				while(0 <= leftGearNumber) {
 					
-					// 오른쪽 톱니바퀴와 맞닿은 면이 다르면서 오른쪽에 존재하는 톱니바퀴가 회전을 진행하는 경우
-					if(gears[left].directions.get(2) != gears[left + 1].directions.get(6)) {
-						needRotation[left] = true;
-					} else {
+					// 오른쪽 톱니바퀴와 맞닿은 면이 같은 경우 종료
+					if(gears[leftGearNumber].directions.get(2) == gears[leftGearNumber + 1].directions.get(6)) {
 						break;
 					}
 					
-					left--;
+					needRotation[leftGearNumber] = true;
+					leftGearNumber--;
 					
 				}
 				
-				// 우측 탐색
-				int right = gNumber + 1;
-				while(right < TOTAL_GEAR_NUMBER) {
+				// 우측 톱니 확인
+				int rightGearNumber = gNumber + 1;
+				while(rightGearNumber < TOTAL_GEAR_NUMBER) {
 					
-					// 왼쪽 톱니바퀴와 맞닿은 면이 다르면서 왼쪽에 존재하는 톱니바퀴가 회전을 진행하는 경우
-					if(gears[right - 1].directions.get(2) != gears[right].directions.get(6)) {
-						needRotation[right] = true;
-					} else {
+					// 왼쪽 톱니바퀴와 맞닿은 면이 같은 경우 종료
+					if(gears[rightGearNumber - 1].directions.get(2) == gears[rightGearNumber].directions.get(6)) {
 						break;
 					}
 					
-					right++;
+					needRotation[rightGearNumber] = true;
+					rightGearNumber++;
 					
 				}
 			
-				// 4-2. 톱니바퀴 회전 진행
+				// 4-2. 톱니바퀴 회전 
 				gears[gNumber].rotation(direction);
 				
-				left = gNumber - 1;
+				
+				// 4-3. 추가로 회전이 필요한 좌, 우 톱니에 대하여 회전
+				leftGearNumber = gNumber - 1;
 				int lDirection = direction * -1;
-				while(0 <= left) {
+				while(0 <= leftGearNumber && needRotation[leftGearNumber]) {
 					
-					if(needRotation[left]) {
-						gears[left].rotation(lDirection);
-						lDirection *= -1;
-						left--;
-					} else {
-						break;
-					}
-					
+					gears[leftGearNumber].rotation(lDirection);
+					lDirection *= -1;
+					leftGearNumber--;
 					
 				}
 				
-				right = gNumber + 1;
+				rightGearNumber = gNumber + 1;
 				int rDirection = direction * -1;
-				while(right < TOTAL_GEAR_NUMBER) {
+				while(rightGearNumber < TOTAL_GEAR_NUMBER && needRotation[rightGearNumber]) {
 					
-					if(needRotation[right]) {
-						gears[right].rotation(rDirection);
-						rDirection *= -1;
-						right++;
-					} else {
-						break;
-					}
-					
+					gears[rightGearNumber].rotation(rDirection);
+					rDirection *= -1;
+					rightGearNumber++;
 					
 				}
 						
