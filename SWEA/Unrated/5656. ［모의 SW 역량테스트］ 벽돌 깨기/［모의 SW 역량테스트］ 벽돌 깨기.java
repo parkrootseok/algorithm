@@ -43,7 +43,6 @@ class Solution {
 	static int rowSize, colSize;
 	
 	static int[][] map;
-	static int[] perm;
 	static int minCount;
 
 	
@@ -80,7 +79,6 @@ class Solution {
 			
 			// 4. dfs 탐색 시작
 			minCount = Integer.MAX_VALUE;
-			perm = new int[shootingNumber];
 			dfs(0);
 			
 			sb.append("#").append(tc).append(" ").append(minCount).append("\n");
@@ -115,7 +113,7 @@ class Solution {
 		
 	}
 	
-	public static int shoot(int col) {
+	public static int shootMarble(int col) {
 		
 		
 		for (int row = 0; row < rowSize; row++) {
@@ -133,23 +131,23 @@ class Solution {
 	
 	public static void breakBrick(int row, int col) {
 		
-		Queue<int[]> positionQ = new ArrayDeque<>();
-		positionQ.add(new int[]{row, col, map[row][col]});
+		Queue<int[]> brickQ = new ArrayDeque<>();
+		brickQ.add(new int[]{row, col, map[row][col]});
 				
-		while (!positionQ.isEmpty()) {
+		while (!brickQ.isEmpty()) {
 
-			int[] position = positionQ.poll();
-			int curRow = position[0];
-			int curCol = position[1];
-			int number = position[2];
+			int[] brick = brickQ.poll();
+			int curRow = brick[0];
+			int curCol = brick[1];
+			int range = brick[2];
 
 			// 4가지 방향에 사정거리 범위안에 존재하는 벽돌 부시기
 			for (int dir = 0; dir < dr.length; dir++) {
 
-				for (int range = 0; range < number; range++) {
+				for (int curRange = 0; curRange < range; curRange++) {
 
-					int nextRow = curRow + dr[dir] * range;
-					int nextCol = curCol + dc[dir] * range;
+					int nextRow = curRow + dr[dir] * curRange;
+					int nextCol = curCol + dc[dir] * curRange;
 
 					// 유효한 범위가 아니라면 스킵
 					if (!isValid(nextRow, nextCol)) {
@@ -159,7 +157,7 @@ class Solution {
 					if (0 < map[nextRow][nextCol]) {
 
 						if (map[nextRow][nextCol] > 1) {
-							positionQ.add(new int[] {nextRow, nextCol, map[nextRow][nextCol]});
+							brickQ.add(new int[] {nextRow, nextCol, map[nextRow][nextCol]});
 						}
 						
 						map[nextRow][nextCol] = 0;
@@ -248,7 +246,7 @@ class Solution {
 		for (int col = 0; col < colSize; col++) {
 			
 			// 5-1. 구슬 쏘기
-			int row = shoot(col);
+			int row = shootMarble(col);
 			
 			// 5-2. 벽돌 부수기
 			breakBrick(row, col);
