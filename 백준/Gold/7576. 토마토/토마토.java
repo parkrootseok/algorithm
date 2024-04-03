@@ -22,7 +22,7 @@ import java.util.Queue;
  * 1. 테스트 케이스 입력 
  *  1-1. 격자 크기 받기
  *  1-2. 격자 정보 입력
- * 2. BFS를 이용하여 모든 토마토가 익을 수 있는 날을 계산 
+ * 2. 안 익은 토마토가 존재할 때 모든 안 익은 토마토가 익은 토마토가 될 수 있는 날짜를 계산
  * 3. 안 익은 토마토가 있는지 확인
  **/
 
@@ -73,16 +73,15 @@ class Main {
 			for (int col = 0; col < colSize; col++) {
 
 				grid[row][col] = Integer.parseInt(inputs[col]);
-				
+
 				if (grid[row][col] == RIPE_TOMATO) {
 					tomatos.add(new Tomato(row, col));
 				}
-				
+
 				if (grid[row][col] == NOT_RIPE_TOMATO) {
 					notRipeTomatoCount++;
 				}
-				
-				
+
 			}
 
 		}
@@ -98,15 +97,15 @@ class Main {
 		// 1. 테스트 케이스 입력
 		input();
 
+		// 2. 안 익은 토마토가 존재할 때 모든 안 익은 토마토가 익은 토마토가 될 수 있는 날짜를 계산
 		int day = 0;
 		if (notRipeTomatoCount > 0) {
-			
-			// 2. BFS를 이용하여 모든 토마토가 익을 수 있는 날을 계산
+
 			day = bfs();
 
 			// 3. 안 익은 토마토가 있는지 확인
 			for (int row = 0; row < rowSize; row++) {
-				
+
 				for (int col = 0; col < colSize; col++) {
 
 					if (grid[row][col] == NOT_RIPE_TOMATO) {
@@ -118,8 +117,7 @@ class Main {
 			}
 
 		}
-		
-		
+
 		sb.append(day);
 		bw.write(sb.toString());
 		bw.close();
