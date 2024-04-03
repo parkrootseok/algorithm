@@ -1,0 +1,170 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+
+/**
+ * SWEA_5654_키순서
+ * @author parkrootseok
+ * 
+ * 1. 테스트 케이스 횟수 입력
+ * 2. 테스트 케이스 입력
+ *  2-1. 학생들의 수 받기
+ *  2-2. 키를 비교환 횟수 받기
+ *  2-3. 비교 정보 받기
+ * 3. 자신의 키 순서가 몇 번째 인지 알 수 학생수의 수를 구한다.
+ *  3-1. 자신보다 키 큰 모든 사람을 방문
+ *  3-2. 자신보다 키 작은 모든 사람을 방문
+ *  3-3. 방문하지 않은 학생이 한 명이라도 있다면 실패
+ **/
+
+public class Solution {
+	
+	static class Student {
+		
+		int index;
+		List<Student> bigger;
+		List<Student> smaller;
+		
+		public Student(int index) {
+			this.index = index;
+			this.bigger = new ArrayList<>();
+			this.smaller = new ArrayList<>();
+		}
+		
+	}
+	
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringBuilder sb;
+	static String[] inputs;
+	
+	static int testCaseNumber;
+	
+	static Student[] students;
+	static int studentNumber;
+	static int compareNumber;
+	static int possibleCount;
+	
+	public static void input() throws NumberFormatException, IOException {
+		
+		// 1-1. 학생들의 수 받기
+		studentNumber = Integer.parseInt(br.readLine().trim());
+		students = new Student[studentNumber + 1];
+		for (int idx = 1; idx <= studentNumber; idx++) {
+			students[idx] = new Student(idx);
+		}
+		
+		// 1-2. 키를 비교환 횟수 받기
+		compareNumber = Integer.parseInt(br.readLine().trim());
+		
+		// 1-3. 비교 정보 받기
+		for (int curCompare = 0; curCompare < compareNumber; curCompare++) {
+			inputs = br.readLine().trim().split(" ");
+			int smaller = Integer.parseInt(inputs[0]);
+			int bigger = Integer.parseInt(inputs[1]);
+			
+			students[smaller].bigger.add(students[bigger]);
+			students[bigger].smaller.add(students[smaller]);
+		}
+		
+	}
+	
+	public static void main(String[] args) throws IOException {
+		
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
+		
+		// 1. 테스트 케이스 횟수 입력
+		testCaseNumber = Integer.parseInt(br.readLine().trim());
+		
+		for (int tc = 1; tc <= testCaseNumber; tc++) {
+			
+			// 2. 테스트 케이스 입력
+			input();
+			
+			// 3. 자신의 키 순서가 몇 번째 인지 알 수 학생수의 수를 구한다.
+			possibleCount = 0;
+			for (int curStudent = 1; curStudent <= studentNumber; curStudent++) {
+				
+				if(check(curStudent)) {
+					possibleCount++;
+				}
+				
+			}
+			
+			sb.append("#").append(tc).append(" ").append(possibleCount).append("\n");
+			
+		}
+	
+		bw.write(sb.toString());
+		bw.close();
+		
+		return;
+	
+	}
+	
+	public static boolean check(int startStudentNumber) {
+		
+		boolean[] isVisited = new boolean[studentNumber + 1];
+		Queue<Student> studentQ = new ArrayDeque<>();
+		
+		// 3-1. 자신보다 키 큰 모든 사람을 방문
+		studentQ.add(students[startStudentNumber]);
+		isVisited[startStudentNumber] = true;
+		
+		while(!studentQ.isEmpty()) {
+			
+			Student curStudent = studentQ.poll();
+			
+			for(Student bigger : curStudent.bigger) {
+				
+				if (isVisited[bigger.index]) {
+					continue;
+				}
+				
+				isVisited[bigger.index] = true;
+				studentQ.add(bigger);
+				
+			}
+			
+		}
+
+		// 3-2. 자신보다 키 작은 모든 사람을 방문
+		studentQ.add(students[startStudentNumber]);
+		while(!studentQ.isEmpty()) {
+			
+			Student curStudent = studentQ.poll();
+			
+			for(Student smaller : curStudent.smaller) {
+				
+				if (isVisited[smaller.index]) {
+					continue;
+				}
+				
+				isVisited[smaller.index] = true;
+				studentQ.add(smaller);
+				
+			}
+			
+		}
+		
+		
+		// 3-3. 방문하지 않은 학생이 한 명이라도 있다면 실패
+		for (int idx = 1; idx <= studentNumber; idx++) {
+			if (!isVisited[idx]) {
+				return false;
+			}
+		}
+		
+		return true;
+		
+	}
+	
+}
