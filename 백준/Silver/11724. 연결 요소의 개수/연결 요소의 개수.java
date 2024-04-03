@@ -3,8 +3,10 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * BOJ_11724_연결요소의개수
@@ -100,7 +102,7 @@ class Main {
 			// 2-1. 현재 정점을 방문하지 않았다면 카운팅 후 탐색 시작
 			if (!isVisited[curVertex]) {
 				connectedComponentCount++;
-				dfs(graph.vertices[curVertex]);
+				bfs(graph.vertices[curVertex]);
 			}
 			
 		}
@@ -131,5 +133,31 @@ class Main {
 		
 	}
 	
+	public static void bfs(Vertex curVertex) {
+		
+		Queue<Vertex> vertexQ = new ArrayDeque<>();
+		vertexQ.add(curVertex);
+		isVisited[curVertex.index] = true; 
+		
+		while (!vertexQ.isEmpty()) {
+			
+			Vertex vertex = vertexQ.poll();
+					
+			for (Vertex nextVertex : vertex.adjacentVertices) {
+				
+				// 이미 방문한 정점일 때 스킵
+				if (isVisited[nextVertex.index]) {
+					continue;
+				}
+				
+				// 다음 정점 방문을 위해 큐에 추가
+				vertexQ.add(nextVertex);
+				isVisited[nextVertex.index] = true;
+				
+			}
+			
+		}
+		
+	}
 
 }
