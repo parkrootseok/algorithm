@@ -53,24 +53,25 @@ public class Solution {
 	
 	public static void input() throws NumberFormatException, IOException {
 		
-		// 1-1. 학생들의 수 받기
+		// 2-1. 학생들의 수 받기
 		studentNumber = Integer.parseInt(br.readLine().trim());
 		students = new Student[studentNumber + 1];
 		for (int idx = 1; idx <= studentNumber; idx++) {
 			students[idx] = new Student(idx);
 		}
 		
-		// 1-2. 키를 비교환 횟수 받기
+		// 2-2. 키를 비교환 횟수 받기
 		compareNumber = Integer.parseInt(br.readLine().trim());
 		
-		// 1-3. 비교 정보 받기
-		for (int curCompare = 0; curCompare < compareNumber; curCompare++) {
+		// 2-3. 비교 정보 받기
+		for (int curCompareNumber = 0; curCompareNumber < compareNumber; curCompareNumber++) {
 			inputs = br.readLine().trim().split(" ");
 			int smaller = Integer.parseInt(inputs[0]);
 			int bigger = Integer.parseInt(inputs[1]);
 			
 			students[smaller].bigger.add(students[bigger]);
 			students[bigger].smaller.add(students[smaller]);
+			
 		}
 		
 	}
@@ -119,7 +120,6 @@ public class Solution {
 		// 3-1. 자신보다 키 큰 모든 사람을 방문
 		studentQ.add(students[start]);
 		isVisited[start] = true;
-		
 		while(!studentQ.isEmpty()) {
 			
 			Student student = studentQ.poll();
