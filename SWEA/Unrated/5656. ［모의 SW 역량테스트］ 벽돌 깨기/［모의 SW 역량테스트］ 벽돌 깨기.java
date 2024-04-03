@@ -239,7 +239,7 @@ class Solution {
 			return;
 		}
 
-		// 4-2. 벽돌을 모두 제거했는지 확인
+		// 4-2. 벽돌을 모두 제거했다면 최소값 갱신 후 상태 변경
 		int count = getBrickCount();
 		if (count == 0) {
 			minCount = 0;
@@ -249,11 +249,9 @@ class Solution {
 		
 		// 6. 구슬을 모두 사용 후 벽돌의 개수를 구한 후 최소값 갱신
 		if (level == shootingNumber) {
-			
 			// 6-1. 현재 남은 벽돌의 개수와 최소 벽돌의 개수를 비교하여 갱신
 			minCount = Math.min(minCount, count);
-			return;
-			
+			return;	
 		}
 
 		// 5. 게임 시작
