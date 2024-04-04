@@ -3,10 +3,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
 
 /**
  * SWEA_5654_키순서
@@ -24,7 +20,7 @@ import java.util.Queue;
  **/
 
 public class Solution {
-    
+	
 	static BufferedReader br;
 	static BufferedWriter bw;
 	static StringBuilder sb;
@@ -49,7 +45,10 @@ public class Solution {
 		
 		// 2-3. 비교 정보 받기
 		adjacentMatrix = new int[studentNumber + 1][studentNumber + 1];
-		rAdjacentMatrix = new int[studentNumber + 1][studentNumber + 1];
+		for (int student = 1; student <= studentNumber; student++) {
+			adjacentMatrix[student][0] = -1;
+		}
+
 		for (int curCompareNumber = 0; curCompareNumber < compareNumber; curCompareNumber++) {
 			
 			inputs = br.readLine().trim().split(" ");
@@ -58,7 +57,6 @@ public class Solution {
 
 			// 자신보다 키 큰 사람을 기록
 			adjacentMatrix[smaller][bigger] = 1;
-			rAdjacentMatrix[bigger][smaller] = 1;
 			
 		}
 		
@@ -80,19 +78,31 @@ public class Solution {
 			
 			// 3. 자신의 키 순서가 몇 번째 인지 알 수 학생수의 수를 구한다.
 			/**
-			 * DFS / BFS
-			 * - 나보다 작은 사람 따라 깊이 우선 탐색
-			 * - 나보다 큰 사람 따라 깊이 우선 탐색
-			 * - 탐색을 진행한 횟수가 [총 학생 수 - 1]이라면 내 순위를 알 수 있음
+			 * DFS + Memoization
 			 **/
 			int possibleCount = 0;
 			for (int curStudent = 1; curStudent <= studentNumber; curStudent++) {
+	
+				// 탐색이 안된 학생이라면 탐색 시작
+				if (adjacentMatrix[curStudent][0] == -1) {
+					dfsMem(curStudent);
+				}
+		
+			}
+			
+			for (int studentA = 1; studentA <= studentNumber; studentA++) {
 				
-				searchCount = 0;
-                
-				bfs(curStudent);
+				for (int studentB = 1; studentB <= studentNumber; studentB++) {
+					
+					adjacentMatrix[0][studentB] += adjacentMatrix[studentA][studentB];
+					
+				}
 				
-				if (searchCount == studentNumber - 1) {
+			}
+			
+			for (int student = 1; student <= studentNumber; student++) {
+				
+				if (adjacentMatrix[student][0] + adjacentMatrix[0][student] == studentNumber - 1) {
 					possibleCount++;
 				}
 				
@@ -109,52 +119,45 @@ public class Solution {
 	
 	}
 	
-	public static void bfs(int start) {
+	public static void dfsMem(int cur) {
 		
-		boolean[] isVisited = new boolean[studentNumber + 1];
-		Queue<Integer> studentQ = new ArrayDeque<>();
+		for (int studentA = 1; studentA <= studentNumber; studentA++) {
 		
-		// 3-1. 자신보다 키 큰 모든 사람을 방문
-		studentQ.add(start);
-		isVisited[start] = true;
-		while(!studentQ.isEmpty()) {
-			
-			int student = studentQ.poll();
-			
-			for (int next = 1; next <= studentNumber; next++) {
+			// 간선이 존재하고 방문하지 않았으면
+			if (adjacentMatrix[cur][studentA] == 1) {
 				
-				if (adjacentMatrix[student][next] == 1 && !isVisited[next]) {
-					
-					// 해당 지점으로 이동하여 탐색 시작
-					isVisited[next] = true;
-					studentQ.add(next);
-					searchCount++;
-					
+				// 탐색이 되지 않은 학생이라면 탐색 O
+				if (adjacentMatrix[studentA][0] == -1) {
+					dfsMem(studentA);
 				}
+				
+				
+				// 탐색이 완료된 힉생 탐색 X(현재 학생보다 큰 학생이 있는 경우)
+				if (adjacentMatrix[studentA][0] > 0) {
+					for (int studentB = 1; studentB <= studentNumber; studentB++) {
+						
+						// 현재 학생보다 큰 학생을 cur과의 관계로 표현
+						if (adjacentMatrix[studentA][studentB] == 1) { 
+							adjacentMatrix[cur][studentB] = 1;
+						}
+						
+					}
+						
+				}
+				
 			}
 			
 		}
-
-		// 3-2. 자신보다 키 작은 모든 사람을 방문
-		studentQ.add(start);
-		while(!studentQ.isEmpty()) {
-			
-			int student = studentQ.poll();
-			
-			for (int next = 1; next <= studentNumber; next++) {
-				
-				if (rAdjacentMatrix[student][next] == 1 && !isVisited[next]) {
-					
-					// 해당 지점으로 이동하여 탐색 시작
-					isVisited[next] = true;
-					studentQ.add(next);
-					searchCount++;
-					
-				}
-			}
-			
+		
+		// 탐색을 모두 진행한 후
+		int count = 0;
+		for (int student = 1; student <= studentNumber; student++) {
+			// 자신보다 큰 학생수 카운팅
+			count += adjacentMatrix[cur][student];
 		}
+		
+		adjacentMatrix[cur][0] = count;
 		
 	}
-	
+    
 }
