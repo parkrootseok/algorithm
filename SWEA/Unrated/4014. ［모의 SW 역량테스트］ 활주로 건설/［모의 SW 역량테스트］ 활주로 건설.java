@@ -3,7 +3,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Stack;
 
 /**
  * SWEA_4014_활주로건설
@@ -24,7 +23,6 @@ import java.util.Stack;
  * 3. 활주로 건설이 가능한 개수를 구한다.
  * 	3-1. 가로 체크
  * 	3-2. 세로 체크
- * 
  **/
 
 public class Solution {
