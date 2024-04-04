@@ -23,6 +23,7 @@ import java.util.PriorityQueue;
  * 3. BFS 탐색
  *  3-1. 도착한 경우 최소 복구 시간을 측정
  *  3-2. 도착하지 않았다면 4방 탐색 진행
+ *   3-2-1. 현재 이동할 위치의 최소 복구 시간보다 작다면 우선순위 큐에 추가
  **/
 
 public class Solution {
@@ -70,10 +71,12 @@ public class Solution {
 	
 		// 2-2. 지도에 대한 정보 받기
 		map = new int[size][size];
+		mem = new int[size][size];
 		for (int row = 0; row < size; row++) {
 			inputs = br.readLine().trim().split("");
 			for (int col = 0; col < size; col++) {				
 				map[row][col] = Integer.parseInt(inputs[col]);
+				mem[row][col] = 10_000_000;
 			}
 			
 		}
@@ -142,8 +145,13 @@ public class Solution {
 					continue;
 				}
 				
-				carQ.add(new Car(nRow, nCol, curCar.repairTime + map[nRow][nCol]));
-				isVisited[nRow][nCol] = true;
+				// 3-2-1. 현재 이동할 위치의 최소 복구 시간보다 작다면 우선순위 큐에 추가
+				int nRepairTime = curCar.repairTime + map[nRow][nCol];
+				if (mem[nRow][nCol] > nRepairTime) {
+					carQ.add(new Car(nRow, nCol, nRepairTime));
+					isVisited[nRow][nCol] = true;
+					mem[nRow][nCol] = nRepairTime;
+				}				
 				
 			}
 			
