@@ -79,6 +79,9 @@ public class Solution {
 			// 3. 자신의 키 순서가 몇 번째 인지 알 수 학생수의 수를 구한다.
 			/**
 			 * DFS + Memoization
+			 * - 현재 학생보다 큰 학생들의 누적 정보를 반영
+			 * - 반영된 정보를 카운팅하여 기록
+			 * - 
 			 **/
 			int possibleCount = 0;
 			for (int curStudent = 1; curStudent <= studentNumber; curStudent++) {
@@ -102,6 +105,7 @@ public class Solution {
 			
 			for (int student = 1; student <= studentNumber; student++) {
 				
+				// 자신보다 큰 학생의 수와 작은 학생의 수가 [총 학생 수 - 1]을 만족하면 가능
 				if (adjacentMatrix[student][0] + adjacentMatrix[0][student] == studentNumber - 1) {
 					possibleCount++;
 				}
@@ -123,20 +127,21 @@ public class Solution {
 		
 		for (int studentA = 1; studentA <= studentNumber; studentA++) {
 		
-			// 간선이 존재하고 방문하지 않았으면
+			// 현재 학생보다 큰 학생이고
 			if (adjacentMatrix[cur][studentA] == 1) {
 				
-				// 탐색이 되지 않은 학생이라면 탐색 O
+				// 큰 학생에 대한 탐색이 이루어지지 않았다면 탐색 시작
 				if (adjacentMatrix[studentA][0] == -1) {
 					dfsMem(studentA);
 				}
 				
 				
-				// 탐색이 완료된 힉생 탐색 X(현재 학생보다 큰 학생이 있는 경우)
+				// 탐색할 학생보다 큰 학생에 대한 정보가 있는 경우
 				if (adjacentMatrix[studentA][0] > 0) {
+					
+					// 탐색할 학생보다 큰 학생들의 정보를 현재 학생보다 큰 학생으로 기록
 					for (int studentB = 1; studentB <= studentNumber; studentB++) {
 						
-						// 현재 학생보다 큰 학생을 cur과의 관계로 표현
 						if (adjacentMatrix[studentA][studentB] == 1) { 
 							adjacentMatrix[cur][studentB] = 1;
 						}
@@ -156,6 +161,7 @@ public class Solution {
 			count += adjacentMatrix[cur][student];
 		}
 		
+		// 자신보다 큰 모든 학생의 수를 0번째 인덱스에 저장
 		adjacentMatrix[cur][0] = count;
 		
 	}
