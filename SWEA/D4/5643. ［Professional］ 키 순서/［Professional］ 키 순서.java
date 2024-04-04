@@ -24,21 +24,7 @@ import java.util.Queue;
  **/
 
 public class Solution {
-	
-	static class Student {
-		
-		int index;
-		List<Student> bigger;
-		List<Student> smaller;
-		
-		public Student(int index) {
-			this.index = index;
-			this.bigger = new ArrayList<>();
-			this.smaller = new ArrayList<>();
-		}
-		
-	}
-	
+    
 	static BufferedReader br;
 	static BufferedWriter bw;
 	static StringBuilder sb;
@@ -46,31 +32,33 @@ public class Solution {
 	
 	static int testCaseNumber;
 	
-	static Student[] students;
+	static int[][] adjacentMatrix;
+	static int[][] rAdjacentMatrix;
+    
 	static int studentNumber;
 	static int compareNumber;
-	static int possibleCount;
+	static int searchCount;
 	
 	public static void input() throws NumberFormatException, IOException {
 		
 		// 2-1. 학생들의 수 받기
 		studentNumber = Integer.parseInt(br.readLine().trim());
-		students = new Student[studentNumber + 1];
-		for (int idx = 1; idx <= studentNumber; idx++) {
-			students[idx] = new Student(idx);
-		}
 		
 		// 2-2. 키를 비교환 횟수 받기
 		compareNumber = Integer.parseInt(br.readLine().trim());
 		
 		// 2-3. 비교 정보 받기
+		adjacentMatrix = new int[studentNumber + 1][studentNumber + 1];
+		rAdjacentMatrix = new int[studentNumber + 1][studentNumber + 1];
 		for (int curCompareNumber = 0; curCompareNumber < compareNumber; curCompareNumber++) {
+			
 			inputs = br.readLine().trim().split(" ");
 			int smaller = Integer.parseInt(inputs[0]);
 			int bigger = Integer.parseInt(inputs[1]);
-			
-			students[smaller].bigger.add(students[bigger]);
-			students[bigger].smaller.add(students[smaller]);
+
+			// 자신보다 키 큰 사람을 기록
+			adjacentMatrix[smaller][bigger] = 1;
+			rAdjacentMatrix[bigger][smaller] = 1;
 			
 		}
 		
@@ -91,10 +79,20 @@ public class Solution {
 			input();
 			
 			// 3. 자신의 키 순서가 몇 번째 인지 알 수 학생수의 수를 구한다.
-			possibleCount = 0;
+			/**
+			 * DFS / BFS
+			 * - 나보다 작은 사람 따라 깊이 우선 탐색
+			 * - 나보다 큰 사람 따라 깊이 우선 탐색
+			 * - 탐색을 진행한 횟수가 [총 학생 수 - 1]이라면 내 순위를 알 수 있음
+			 **/
+			int possibleCount = 0;
 			for (int curStudent = 1; curStudent <= studentNumber; curStudent++) {
 				
-				if(isPossible(curStudent)) {
+				searchCount = 0;
+                
+				bfs(curStudent);
+				
+				if (searchCount == studentNumber - 1) {
 					possibleCount++;
 				}
 				
@@ -111,61 +109,51 @@ public class Solution {
 	
 	}
 	
-	public static boolean isPossible(int start) {
+	public static void bfs(int start) {
 		
-		int count = 0;
 		boolean[] isVisited = new boolean[studentNumber + 1];
-		Queue<Student> studentQ = new ArrayDeque<>();
+		Queue<Integer> studentQ = new ArrayDeque<>();
 		
 		// 3-1. 자신보다 키 큰 모든 사람을 방문
-		studentQ.add(students[start]);
+		studentQ.add(start);
 		isVisited[start] = true;
 		while(!studentQ.isEmpty()) {
 			
-			Student student = studentQ.poll();
+			int student = studentQ.poll();
 			
-			for(Student bigger : student.bigger) {
+			for (int next = 1; next <= studentNumber; next++) {
 				
-				if (isVisited[bigger.index]) {
-					continue;
+				if (adjacentMatrix[student][next] == 1 && !isVisited[next]) {
+					
+					// 해당 지점으로 이동하여 탐색 시작
+					isVisited[next] = true;
+					studentQ.add(next);
+					searchCount++;
+					
 				}
-				
-				
-				studentQ.add(bigger);
-				isVisited[bigger.index] = true;
-				count++;
-				
 			}
 			
 		}
 
 		// 3-2. 자신보다 키 작은 모든 사람을 방문
-		studentQ.add(students[start]);
+		studentQ.add(start);
 		while(!studentQ.isEmpty()) {
 			
-			Student student = studentQ.poll();
+			int student = studentQ.poll();
 			
-			for(Student smaller : student.smaller) {
+			for (int next = 1; next <= studentNumber; next++) {
 				
-				if (isVisited[smaller.index]) {
-					continue;
+				if (rAdjacentMatrix[student][next] == 1 && !isVisited[next]) {
+					
+					// 해당 지점으로 이동하여 탐색 시작
+					isVisited[next] = true;
+					studentQ.add(next);
+					searchCount++;
+					
 				}
-				
-				studentQ.add(smaller);
-				isVisited[smaller.index] = true;
-				count++;
-				
 			}
 			
 		}
-		
-		
-		// 3-3. 방문하지 않은 학생이 한 명이라도 있다면 실패
-		if (count != studentNumber - 1) {
-			return false;
-		}
-		
-		return true;
 		
 	}
 	
