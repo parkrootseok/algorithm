@@ -94,7 +94,7 @@ public class Solution {
 			possibleCount = 0;
 			for (int curStudent = 1; curStudent <= studentNumber; curStudent++) {
 				
-				if(check(curStudent)) {
+				if(isPossible(curStudent)) {
 					possibleCount++;
 				}
 				
@@ -111,7 +111,7 @@ public class Solution {
 	
 	}
 	
-	public static boolean check(int start) {
+	public static boolean isPossible(int start) {
 		
 		int count = 0;
 		boolean[] isVisited = new boolean[studentNumber + 1];
