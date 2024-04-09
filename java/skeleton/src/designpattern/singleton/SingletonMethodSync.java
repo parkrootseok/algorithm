@@ -1,4 +1,4 @@
-package singleton;
+package designpattern.singleton;
 
 /**
  * 단순 메서드 호출 + Synchronized Keyword

@@ -1,4 +1,4 @@
-package singleton;
+package designpattern.singleton;
 /**
  * 이중 확인 잠금(Double Checked Locking)
  * - 인스턴스 생성 여부를 싱글톤 패턴 잠금 전에 한 번 객체 생성 전에 한 번 총 2번 체크하여 존재하지 않을 때만 잠금

@@ -1,4 +1,4 @@
-package singleton;
+package designpattern.singleton;
 
 /**
  * 정적(static) 멤버
