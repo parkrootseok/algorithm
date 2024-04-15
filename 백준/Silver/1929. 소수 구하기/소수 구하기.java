@@ -44,7 +44,6 @@ public class Main {
         isPrime[0] = isPrime[1] = false;
         for (int number = 2; number <= Math.sqrt(LIMIT); number++) {
 
-            // 2-1. 현재 수가 소수일 때 현재 수의 곱으로 만들 수 있는 수라면 소수가 아님
             if (isPrime[number]) {
 
                 for (int checkNumber = number * number; checkNumber <= LIMIT; checkNumber += number) {
