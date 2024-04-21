@@ -1,69 +1,57 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.Arrays;
+import java.util.StringTokenizer;
 
 /**
- * BOJ_14501_퇴사
- * @author parkrootseok
- *
- *  1. 퇴사 일자 입력
- *  2. 퇴사 전까지 일자별 상담 기간과 금액 입력
- *  3. DP
- *   3-1. 현재 날짜에서 완료가 가능한 경우 최적해인지 판단 후 초기화
- *   3-2. 전날이 최적해라면 초기화
- **/
+ * 1. N+1일째 되는 날 퇴사하며, 남은 N일 동안 최대한 많은 상담을 하려고 한다.
+ * 2. 상담 일정표는 일별 상담 일정을 표현하며, 각각 완료하는데 걸리는 기간과 금액이 정해져있다.
+ * 3. 일별 상담 일정은 하나씩만 있다.
+ * 4. 상담 일정을 적절히 골라서, 얻을 수 있는 최대 수익을 구한다.
+ */
 public class Main {
+	static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st;
 
-	static BufferedReader br;
-	static BufferedWriter bw;
-	static StringBuilder sb;
-	static String[] inputs;
+	static int EXIT_DAY;
+	static int[] periods;
+	static int[] rewards;
 
-	static int leaveDay;
-	static int days[];
-	static int cost[];
-	static int dp[];
+	static int solution() {
+		// maxReward[d]는, d일에 얻을 수 있는 최대 보수를 의미한다.
+		// 따라서 maxRewards[EXIT_DAY+1]은, 퇴사 후 얻을 수 있는 최대 보수를 의미한다.
+		int[] maxRewards = new int[EXIT_DAY + 2];
 
-	public static void main(String[] args) throws IOException {
-
-		br = new BufferedReader(new InputStreamReader(System.in));
-		bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		sb = new StringBuilder();
-
-		// 1. 퇴사 일자 입력
-		leaveDay = Integer.parseInt(br.readLine().trim());
-
-		// 2. 퇴사 전까지 일자별 상담 기간과 금액 입력
-		days = new int[leaveDay];
-		cost = new int[leaveDay];
-		dp = new int[leaveDay + 1];
-		for(int curDay = 0; curDay < leaveDay; curDay++) {
-			inputs = br.readLine().trim().split(" ");
-			days[curDay] = Integer.parseInt(inputs[0]);
-			cost[curDay] = Integer.parseInt(inputs[1]);
-		}
-
-		// 3. DP
-		for(int curDay = 0; curDay < leaveDay; curDay++) {
-
-			// 3-1. 현재 날짜에서 완료가 가능한 상담일 때 DP 배열을 최대값으로 초기화
-			if (curDay + days[curDay] <= leaveDay) {
-				dp[curDay + days[curDay]] = Math.max(dp[curDay + days[curDay]], dp[curDay] + cost[curDay]);
+		// 첫 날부터 마지막 날까지 뒤로 가며 얻을 수 있는 최대 누적 이익을 계산함
+		for (int day = 1; day <= EXIT_DAY; day++) {
+			// day까지는 어쨌든 시간이 흐른 것이므로, 이날 상담을 하든 안하든, 할 수 있든 못하든 day-1까지의
+			// 최대 이득은 이미 가져가게 되는 것
+			maxRewards[day + 1] = Math.max(maxRewards[day + 1], maxRewards[day]);
+			// 만약 오늘자의 상담이 가능하다면
+			if (day + periods[day] <= EXIT_DAY + 1) {
+				// 해당 상담을 진행한 후에 얻을 수 있었던 원래의 누적 이득과
+				// 지금 날짜에 상담해서 얻을 수 있는 누적 합을 비교하여 더 큰 쪽으로 갱신해준다.
+				maxRewards[day + periods[day]] = Math.max(maxRewards[day + periods[day]], maxRewards[day] + rewards[day]);
 			}
-
-			// 3-2. 전날에 더 많은 돈을 벌 수 있다면 이전 날 비용으로 초기화
-			dp[curDay + 1] = Math.max(dp[curDay + 1], dp[curDay]);
-
 		}
 
-		sb.append(dp[leaveDay]);
-		bw.write(sb.toString());
-		bw.close();
-		return;
-
+		return maxRewards[EXIT_DAY + 1];
 	}
 
+	public static void main(String[] args) throws Exception {
+		// 퇴사일
+		EXIT_DAY = Integer.parseInt(in.readLine());
+		// 상담 일정표 상의 상담 완료 기간과 금액
+		// 즉, d일에 상담을 시작하면 periods[d]일을 소모하여 rewards[d]원을 받을 수 있음을 의미한다.
+		periods = new int[EXIT_DAY + 1];
+		rewards = new int[EXIT_DAY + 1];
+
+		// 상담 일정표
+		for (int day = 1; day <= EXIT_DAY; day++) {
+			st = new StringTokenizer(in.readLine());
+			periods[day] = Integer.parseInt(st.nextToken());
+			rewards[day] = Integer.parseInt(st.nextToken());
+		}
+
+		System.out.println(solution());
+	}
 }
