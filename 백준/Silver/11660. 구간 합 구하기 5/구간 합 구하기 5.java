@@ -1,76 +1,72 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * BOJ_11660_구간합구하기5
  * @author parkrootseok
- * 
- * - NbyN 크기의 표에서 (x1, y1) 부터 (x2, y2)까지 합을 구해라
- * 
- * 1. N과 M을 받는다.
- * 2. N*N개의 수를 입력 받은 후 행에 대한 누적합을 계산
- * 3. 열에 대한 누적합을 계산
- * 4. 시점(x1, y1)과 종점(x2, y2)을 입력받고 합을 구한다.
- * 		-> x1 ~ x2은 행 범위, y1 ~ y2은 열 범위가 됨
- * 
- */
+ *
+ * 1. 표의 크기와 구해야하는 구간 합의 개수를 받는다.
+ * 2. 표에 대한 정보를 받으면서 동일한 행에 대해 누적합을 구한다.
+ * 3. 동일한 열에 대한 누적합을 구한다.
+ * 4. 구간에 대한 정보를 받는다.
+ * 5. 구간합을 구한다.
+ **/
+public class Main {
 
-class Main {
-
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-	static StringBuffer sb = new StringBuffer();
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringBuilder sb;
 	static String[] inputs;
 
-	static int N;
-	static int M;
-	static int map[][];
+	static int[][] map;
+	static int size;
+	static int number;
 
-	public static void main(String args[]) throws Exception {
+	public static void main(String[] args) throws IOException {
 
-		// 1. N과 M을 받는다.
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
+
+		// 1. 표의 크기와 구해야하는 구간 합의 개수를 받는다.
 		inputs = br.readLine().trim().split(" ");
-		N = Integer.parseInt(inputs[0]);
-		M = Integer.parseInt(inputs[1]);
+		size = Integer.parseInt(inputs[0]);
+		number = Integer.parseInt(inputs[1]);
 
-		// 2. N*N개의 수를 입력 받은 후 행에 대한 누적합을 계산
-		map = new int[N+1][N+1];
-		for(int row = 1; row <= N; row++) {
-			
+		// 2. 표에 대한 정보를 받으면서 동일한 행에 대해 누적합을 구한다.
+		map = new int[size + 1][size + 1];
+		for (int row = 1; row <= size; row++) {
+
 			inputs = br.readLine().trim().split(" ");
-			for(int cols = 1; cols <= N; cols++) {
-				map[row][cols] = Integer.parseInt(inputs[cols - 1]) + map[row][cols - 1];	
+			for (int col = 1; col <= size; col++) {
+				map[row][col] = Integer.parseInt(inputs[col - 1]) + map[row][col - 1];
 			}
-		
+
 		}
-		
-		// 3. 열에 대한 누적합을 계산
-		for(int row = 1; row <= N; row++) {
-			for(int cols = 1; cols <= N; cols++) {
-				map[row][cols] += map[row-1][cols]; 	
-			}		
+
+		// 3. 동일한 열에 대한 누적합을 구한다.
+		for (int col = 1; col <= size; col++) {
+			for (int row = 1; row <= size; row++) {
+				map[row][col] += map[row - 1][col];
+			}
 		}
-		
-		// 4. 시점(x1, y1)과 종점(x2, y2)을 입력받고 합을 구한다.
-		int x1, y1, x2, y2;
-		for(int curM = 0; curM < M; curM++) {
-			
-			// 두 개의 시작과 끝 범위를 입력
+
+
+		for (int curNumber = 0; curNumber < number; curNumber++) {
+
+			// 4. 구간에 대한 정보를 받는다.
 			inputs = br.readLine().trim().split(" ");
-			x1 = Integer.parseInt(inputs[0]);
-			y1 = Integer.parseInt(inputs[1]);
-			x2 = Integer.parseInt(inputs[2]);
-			y2 = Integer.parseInt(inputs[3]);
-			
-			// (x2, y2) : x2, y2까지 모든 누적합
-			// 시작 좌표부터 (x2,y2)영역에서 범위를 벗어난 열, 행 누적합 제외 
-			sb.append(map[x2][y2] - map[x2][y1 - 1] - map[x1 - 1][y2] + map[x1 - 1][y1 - 1]).append("\n");
-			
+			int x1 = Integer.parseInt(inputs[0]);
+			int y1 = Integer.parseInt(inputs[1]);
+			int x2 = Integer.parseInt(inputs[2]);
+			int y2 = Integer.parseInt(inputs[3]);
+
+			// 5. 구간합을 구한다.
+			sb.append(map[x2][y2] - map[x2][y1 - 1] - map[x1 -1][y2] + map[x1 - 1][y1 - 1]).append("\n");
+
 		}
 
 		bw.write(sb.toString());
