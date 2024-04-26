@@ -99,7 +99,7 @@ public class Main {
 
 		}
 
-		// 5. 최대 높이에 대하여 역추적을 통해 쌓인 벽돌을 찾는다.
+		// 5. 가장 아래 쌓인 벽돌부터 찾는다.
 		Stack<Integer> stack = new Stack<>();
 		for (int curBrick = brickNumber; curBrick >= 1; curBrick--) {
 
