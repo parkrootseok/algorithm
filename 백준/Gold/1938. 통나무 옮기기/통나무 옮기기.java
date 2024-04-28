@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
-import java.util.PriorityQueue;
 import java.util.Queue;
 
 /**
@@ -14,7 +13,7 @@ import java.util.Queue;
  * - 통나무
  *   - 상, 하, 좌, 우, 회전 가능
  *   - 단, 회전은 통나무를 둘러싸는 구역에 나무가 없어야함
- *
+ *   
  * - 시작 지점에 있는 통나무를 끝으로 옮길 수 있는 최소 이동 횟수를 구해라
  *
  * 1. 맵의 크기를 받는다.
@@ -25,7 +24,6 @@ import java.util.Queue;
  *  5-1. 통나무가 끝에 도달했는지 확인 후 종료
  *  5-2. 4방향으로 이동(상, 하, 좌, 우)
  *  5-3. 방향 회전
- *
  **/
 public class Main {
 
@@ -148,8 +146,8 @@ public class Main {
 					return false;
 				}
 
-                break;
-                
+				break;
+
 			case HORIZONTAL:
 
 				if(col - 1 < 0 || col + 1 >= size) {
@@ -159,8 +157,9 @@ public class Main {
 				if (map[row][col] == TREE || map[row][col - 1] == TREE || map[row][col + 1] == TREE) {
 					return false;
 				}
-                
-                break;
+
+				break;
+
 		}
 
 		return true;
