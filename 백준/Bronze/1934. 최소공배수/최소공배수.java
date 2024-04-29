@@ -12,10 +12,10 @@ import java.io.OutputStreamWriter;
  *
  * 1. 두 수에 대한 테스트 케이스 횟수를 입력
  * 2. 두 수를 입력
- * 3. 두 수에 대한 최대 공약수를 구한다.
+ * 3. 두 수에 대한 최대 공약수를 구하기
+ * 4. A * B / GCD = LCM를 활용하여 최소 공배수를 구하기
  **/
 public class Main {
-
 
 	static BufferedReader br;
 	static BufferedWriter bw;
@@ -41,10 +41,10 @@ public class Main {
 			int A = Integer.parseInt(inputs[0]);
 			int B = Integer.parseInt(inputs[1]);
 
-			// 3. 두 수에 대한 최대 공약수를 구한다.
+			// 3. 두 수에 대한 최대 공약수 구하기
 			int gcd = gcd(B, A);
 
-			// 4. A * B = GCD * LCM를 활용하여 최소 공배수를 구한다
+			// 4. A * B / GCD = LCM를 활용하여 최소 공배수 구하기
 			sb.append( (A * B) / gcd).append("\n");
 
 		}
