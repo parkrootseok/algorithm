@@ -15,7 +15,14 @@ import java.util.Deque;
  *
  *
  * 1. 카드의 개수를 받는다.
- *
+ * 2. 카드가 1개인 경우 예외처리
+ * 3. 카드가 1개가 아니라면 마지막 과정부터 거꾸로 진행한다.
+ *  3-1. N-1, N 순서로 초기화(N-1, N 순서로 존재할 때 홀수번 뒤집으면 무조건 N이 먼저 나옴)
+ *  3-2. 시뮬레이션 진행
+ *  3-2-1. N번 뒤에 있는 카드를 앞으로 옮긴다.
+ *  3-2-2. 1번 카드일 경우 종료
+ *  3-2-3. N - 1번 카드를 첫 카드로 가져온다.
+ * 4. 순서 출력
  **/
 public class Main {
 
@@ -43,26 +50,29 @@ public class Main {
 			// 3. 카드가 1개가 아니라면 마지막 과정부터 거꾸로 진행한다.
 			Deque<Integer> cardQ = new ArrayDeque<>();
 
-			cardQ.addFirst(cardNumber);
-			cardQ.addFirst(cardNumber - 1);
+			// 3-1. N-1, N 순서로 초기화(N-1, N 순서로 존재할 때 홀수번 뒤집으면 무조건 N이 먼저 나옴)
+			cardQ.add(cardNumber - 1);
+			cardQ.add(cardNumber);
 
+			// 3-2. 시뮬레이션 진행
 			for (int order = cardNumber - 1; ; order--) {
 
-				// 3-1. N번 뒤에 있는 카드를 앞으로 옮긴다.
+				// 3-2-1. N번 뒤에 있는 카드를 앞으로 옮긴다.
 				for (int curOrder = order; 1 <= curOrder; curOrder--)  {
 					cardQ.addFirst(cardQ.pollLast());
 				}
 
-				// 3-2. 마지막 순번이면 종료한다.
+				// 3-2-2. 1번 카드일 경우 종료
 				if (order == 1) {
 					break;
 				}
 
-				// 3-3. 가장 앞에 있는 카드를 책상으로 옮긴다.
+				// 3-2-3.  N - 1번 카드를 첫 카드로 가져온다.
 				cardQ.addFirst(order - 1);
 
 			}
 
+			// 4. 순서 출력
 			for (int card : cardQ) {
 				sb.append(card).append(" ");
 			}
