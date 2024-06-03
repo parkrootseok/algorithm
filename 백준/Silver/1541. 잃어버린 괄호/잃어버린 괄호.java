@@ -3,10 +3,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.HashSet;
-import java.util.Queue;
-import java.util.Set;
-import java.util.Stack;
 
 /**
  * BOJ_1541_잃어버린괄호
