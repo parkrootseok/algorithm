@@ -53,14 +53,15 @@ public class Main {
 
 	public static void mergeSort(int left, int right) {
 
-		if (left < right)  {
-			int mid = (left + right) / 2;
-			mergeSort(left, mid);
-			mergeSort(mid + 1, right);
-			merge(left, mid, right);
-
+		if (left >= right)  {
+			return;
 		}
-		
+
+		int mid = (left + right) / 2;
+		mergeSort(left, mid);
+		mergeSort(mid + 1, right);
+		merge(left, mid, right);
+
 	}
 
 	public static void merge(int left, int mid, int right) {
