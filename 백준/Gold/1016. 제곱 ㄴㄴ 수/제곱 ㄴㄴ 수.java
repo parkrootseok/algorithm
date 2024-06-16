@@ -48,7 +48,6 @@ public class Main {
 
 			// 2-2. 현재 제곱수로 나눌 수 있는 가장 첫 시작점을 계산
 			long start;
-
 			if (min % pow != 0) {
 				// 나누어 떨어지지 않는 경우 min보다 큰 수 부터 시작
 				start = min / pow + 1;
@@ -57,11 +56,10 @@ public class Main {
 				start = min / pow;
 			}
 
-
 			// 2-3. 시작 지점부터 인덱스를 증가하여 제곱수로 나누어 떨어지는 수를 체크
-			for (long quotient = start; quotient * pow <= max; quotient++) {
-				if (!isPow[(int) (quotient * pow - min)]) {
-					isPow[(int) (quotient * pow - min)] = true;
+			for (long mulNumber = start; mulNumber * pow <= max; mulNumber++) {
+				if (!isPow[(int) (mulNumber * pow - min)]) {
+					isPow[(int) (mulNumber * pow - min)] = true;
 				}
 			}
 
@@ -77,7 +75,7 @@ public class Main {
 
 		}
 
-		sb.append(totalCount++);
+		sb.append(totalCount);
 		bw.write(sb.toString());
 		bw.close();
 
