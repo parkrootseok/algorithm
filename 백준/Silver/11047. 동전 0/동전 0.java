@@ -3,52 +3,69 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.*;
 
 /**
- * 동전 0
+ * BOJ_11047_동전0
+ * @author parkrootseok
+ *
+ * 가지고 있는 동전으로 K를 만들 수 있을 때 사용할 수 있는 최소 갯수
+ *
+ * 1. 동전 개수와 목표 합계를 입력
+ * 2. 동전 종류 입력
+ * 3. 가장 큰 금액부터 필요한 개수를 구하여 누적합
+ *  3-1. 현재 동전이 몇개 사용될 수 있는지 구하기
+ *  3-2. 사용한 개수를 더하고 사용한 금액을 제외
  */
-
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+	public static BufferedReader br;
+	public static BufferedWriter bw;
+	public static StringBuilder sb;
+	public static String[] inputs;;
 
-        Main main = new Main();
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	public static int coinNumber;
+	public static int[] coins;
+	public static int target;
 
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        int N = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
 
-        int[] coins = new int[N];
-        int[] log = new int[N];
-        for (int i = 0; i < N; i++) {
-            coins[i] = Integer.parseInt(br.readLine());
-        }
+	public static void main(String[] args) throws IOException {
 
-        int money = K;
-        for (int i = N - 1; 0 <= i; i--) {  // 가장 금액이 큰 금액의 동전부터 사용하여
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-            int coin = money / coins[i];    // 해당하는 금액의 동전으로 몇 개를 교환 가능한지 보고
-            
-            if (coin > 0) { // 만약 0개를 초과하면 (즉, 해당 동전의 금액으로 교환할 수 있다면) 
-                log[i] = coin;  // 바꾼 동전의 갯수를 기록하고 
-                money = money % coins[i];   // 현재 금액에서 차감
-            }
-            
-        }
+		// 1. 동전 개수와 목표 합계를 입력
+		inputs = br.readLine().trim().split(" ");
+		coinNumber = Integer.parseInt(inputs[0]);
+		target = Integer.parseInt(inputs[1]);
 
-        int answer = 0;
-        for (int l : log) {
-            if (l != 0) {
-                answer += l;
-            }
-        }
+		// 2. 동전 종류 입력
+		coins = new int[coinNumber];
+		for (int index = 0 ; index < coinNumber; index++) {
+			coins[index] = Integer.parseInt(br.readLine().trim());
+		}
 
-        bw.write(answer + "\n");
-        bw.close();
+		// 3. 가장 큰 금액부터 필요한 개수를 구하여 누적합
+		int totalCount = 0;
+		for (int index = coinNumber - 1; 0 <= index; index--) {
 
-    }
+			// 3-1. 현재 동전이 몇개 사용될 수 있는지 구하기
+			int count = target / coins[index];
+
+			if (count == 0) {
+				continue;
+			}
+
+			// 3-2. 사용한 개수를 더하고 사용한 금액을 제외
+			target -= count * coins[index];
+			totalCount += count;
+
+		}
+
+		sb.append(totalCount);
+		bw.write(sb.toString());
+		bw.close();
+
+	}
 
 }
