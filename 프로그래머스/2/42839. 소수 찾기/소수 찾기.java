@@ -50,6 +50,7 @@ class Solution {
 				}
 
 				bruteforce(curLength + 1, number + papers[idx]);
+
 				isUsed[idx] = false;
 			}
 
