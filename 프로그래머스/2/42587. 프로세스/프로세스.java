@@ -1,5 +1,4 @@
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * PG_프로세스
@@ -36,36 +35,22 @@ class Solution {
 			waitingQ.add(new Process(index, priorities[index]));
 		}
 
+		Arrays.sort(priorities);
+
 		int order = 0;
-		boolean isPossible;
 		boolean[] isFinished = new boolean[priorities.length];
 		while (true) {
-
-			isPossible = true;
 
 			// 1. 대키큐에서 프로세스를 가져온다.
 			Process process = waitingQ.poll();
 
 			// 2. 본인보다 우선순위가 높은 큐가 있다면 다시 큐에 삽입한다.
-			for (int index = 0; index < priorities.length; index++) {
-
-				if (isFinished[index]) {
-					continue;
-				}
-
-				if (process.priority < priorities[index]) {
-					waitingQ.offer(process);
-					isPossible = false;
-					break;
-				}
-
-			}
-
-			// 3. 없다면 실행한다
-			if (!isPossible) {
+			if (priorities[(priorities.length - 1) - order] != process.priority) {
+				waitingQ.offer(process);
 				continue;
 			}
 
+			// 3. 없다면 실행한다
 			isFinished[process.index] = true;
 			order++;
 
@@ -78,4 +63,5 @@ class Solution {
 		return order;
 
 	}
+    
 }
