@@ -25,10 +25,13 @@ class Solution {
 			this.curLength = curLength;
 		}
 
+		public void move() {
+			this.curLength++;
+		}
+
 	}
 
-    
-    public int solution(int bridge_length, int weight, int[] truck_weights) {
+	public int solution(int bridge_length, int weight, int[] truck_weights) {
 
 		int time = 0;
 		int index = 0;
@@ -43,14 +46,17 @@ class Solution {
 			// 2. 트럭 이동
 			int size = trucks.size();
 			for (int curSize = 0; curSize < size; curSize++) {
+
 				Truck truck = trucks.poll();
-				truck.curLength++;
+				truck.move();
 
 				if (truck.curLength == bridge_length) {
 					totalWeight -= truck.weight;
 					continue;
 				}
+
 				trucks.add(truck);
+				
 			}
 
 			// 3. 트럭 다리로 이동
