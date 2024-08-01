@@ -8,8 +8,8 @@ import java.util.*;
  *   - 단, 한 번에 한 개의 알파벳만 바꿀 수 있으며, 주어진 단어 안에서만 변환이 가능
  *
  * 1. 변환할 수 있는 모든 단어에 대하여 큐에 삽입
- *  1-1. 현재 단어와 바꿀 단어와 똑같은 알파벳의 개수를 구하고
- *  1-2. 똑같은 알파벳의 갯수가 총 2개라면 변환 가능
+ *  1-1. 현재 단어와 바꿀 단어와 다른 알파벳 갯수를 구하고
+ *  1-2. 1-2. 다른 알파벳 개수가 1개 라면 변환 가능
  */
 public class Solution {
 
@@ -25,7 +25,7 @@ public class Solution {
 	}
 
 	public static Set<String> isVisited;
-    
+
 	public int solution(String begin, String target, String[] words) {
 
 		boolean isPossible = false;
@@ -70,7 +70,7 @@ public class Solution {
 					continue;
 				}
 
-				// 1-1. 현재 단어와 바꿀 단어와 똑같은 알파벳의 개수를 구하고
+				// 1-1. 현재 단어와 바꿀 단어와 다른 알파벳 갯수를 구하고
 				int number = 0;
 				for (int pos = 0; pos < words[index].length(); pos++) {
 
@@ -80,7 +80,7 @@ public class Solution {
 
 				}
 
-				// 1-2. 똑같은 알파벳의 갯수가 총 2개라면 변환 가능
+				// 1-2. 다른 알파벳 개수가 1개 라면 변환 가능
 				if (number == 1) {
 					isVisited.add(words[index]);
 					nodeQ.offer(new Node(words[index], depth + 1));
