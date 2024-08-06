@@ -1,9 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * PG_여행경로
@@ -12,8 +7,6 @@ import java.util.PriorityQueue;
  * - 항공권 정보
  *  - 2차원 배열 : {0 : 출발} = {1 : 도착}
  * - 주어진 모든 항공권을 사용해야 하고, 경로가 2개 이상일 경우 알파벳 순서가 앞서는 경로를 리턴
- *
- * 1.
  */
 public class Solution {
 
