@@ -17,7 +17,7 @@ public class Solution {
 	public int[] solution(int brown, int yellow) {
 
 		answer = new int[2];
-		isVisited = new boolean[10000][10000];
+		isVisited = new boolean[2450][2450];
 		isFinished = false;
 		bruteforce(brown, yellow, 3, 3);
 		return answer;
