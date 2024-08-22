@@ -25,7 +25,7 @@ public class Main {
 		sb = new StringBuilder();
 
 		N = Integer.parseInt(br.readLine().trim());
-		stars = new char[N][N * 2 - 1];
+		stars = new char[N][N * 2];
 
 		for (int row = 0; row < N ; row++) {
 			Arrays.fill(stars[row], ' ');
@@ -35,7 +35,7 @@ public class Main {
 
 		for (int row = 0; row < N; row++) {
 
-			for (int col = 0; col < N * 2 - 1; col++) {
+			for (int col = 0; col < N * 2; col++) {
 
 				sb.append(stars[row][col]);
 
@@ -55,16 +55,19 @@ public class Main {
 		if (size == 3) {
 
 			stars[curRow][curCenter] = '*';
+
 			stars[curRow + 1][curCenter - 1] = stars[curRow + 1][curCenter + 1] = '*';
+
+			stars[curRow + 2][curCenter] = '*';
 			stars[curRow + 2][curCenter - 2] = stars[curRow + 2][curCenter - 1] = '*';
 			stars[curRow + 2][curCenter + 1] = stars[curRow + 2][curCenter + 2] = '*';
-			stars[curRow + 2][curCenter] = '*';
-			return;
 
 		} else {
+
 			printStar(curRow, curCenter, size / 2);
 			printStar(curRow + (size / 2), curCenter - (size / 2), size / 2);
 			printStar(curRow + (size / 2), curCenter + (size / 2), size / 2);
+
 		}
 
 	}
