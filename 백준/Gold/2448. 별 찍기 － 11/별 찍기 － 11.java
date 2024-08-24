@@ -6,7 +6,7 @@ import java.io.OutputStreamWriter;
 import java.util.Arrays;
 
 /**
- * BOJ_별찍기10
+ * BOJ_별찍기11
  * @author parkrootseok
  */
 public class Main {
@@ -61,7 +61,7 @@ public class Main {
 			stars[curRow + 2][curEdge] = '*';
 			stars[curRow + 2][curEdge + 1] = stars[curRow + 2][curEdge - 1] = '*';
 			stars[curRow + 2][curEdge + 2] = stars[curRow + 2][curEdge - 2] = '*';
-			
+
 		}
 
 		else {
