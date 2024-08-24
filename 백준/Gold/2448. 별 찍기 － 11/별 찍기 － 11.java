@@ -6,7 +6,7 @@ import java.io.OutputStreamWriter;
 import java.util.Arrays;
 
 /**
- * BOJ_별찍기11
+ * BOJ_별찍기10
  * @author parkrootseok
  */
 public class Main {
@@ -14,9 +14,10 @@ public class Main {
 	public static BufferedReader br;
 	public static BufferedWriter bw;
 	public static StringBuilder sb;
+	public static String[] inputs;
+	public static char[][] stars;
 
 	public static int N;
-	public static char[][] stars;
 
 	public static void main(String[] args) throws IOException {
 
@@ -26,8 +27,7 @@ public class Main {
 
 		N = Integer.parseInt(br.readLine().trim());
 		stars = new char[N][N * 2];
-
-		for (int row = 0; row < N ; row++) {
+		for (int row = 0; row < N; row++) {
 			Arrays.fill(stars[row], ' ');
 		}
 
@@ -50,24 +50,24 @@ public class Main {
 
 	}
 
-	public static void printStar(int curRow, int curCenter, int size) {
+	public static void printStar(int curRow, int curEdge, int size) {
 
 		if (size == 3) {
 
-			stars[curRow][curCenter] = '*';
+			stars[curRow][curEdge] = '*';
 
-			stars[curRow + 1][curCenter - 1] = stars[curRow + 1][curCenter + 1] = '*';
+			stars[curRow + 1][curEdge - 1] = stars[curRow + 1][curEdge + 1] = '*';
 
-			stars[curRow + 2][curCenter] = '*';
-			stars[curRow + 2][curCenter - 2] = stars[curRow + 2][curCenter - 1] = '*';
-			stars[curRow + 2][curCenter + 1] = stars[curRow + 2][curCenter + 2] = '*';
+			stars[curRow + 2][curEdge] = '*';
+			stars[curRow + 2][curEdge + 1] = stars[curRow + 2][curEdge - 1] = '*';
+			stars[curRow + 2][curEdge + 2] = stars[curRow + 2][curEdge - 2] = '*';
+			
+		}
 
-		} else {
-
-			printStar(curRow, curCenter, size / 2);
-			printStar(curRow + (size / 2), curCenter - (size / 2), size / 2);
-			printStar(curRow + (size / 2), curCenter + (size / 2), size / 2);
-
+		else {
+			printStar(curRow, curEdge, size / 2);
+			printStar(curRow + (size / 2), curEdge + (size / 2), size / 2);
+			printStar(curRow + (size / 2), curEdge - (size / 2), size / 2);
 		}
 
 	}
