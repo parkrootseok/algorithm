@@ -42,36 +42,35 @@ public class Main {
 			waters[index] = Integer.parseInt(inputs[index]);
 		}
 
-		Arrays.sort(waters);
-		int lt, rt;
-		lt = 0;
-		rt = size - 1;
-
 		min = Integer.MAX_VALUE;
+		Arrays.sort(waters);
+		
 		int[] result = new int[2];
-		while (lt < rt) {
+		int left = 0;
+		int right = size - 1;
+		while (left < right) {
 
-			int curSum = waters[lt] + waters[rt];
-			int diff = Math.abs(0 - curSum);
+			int sum = waters[left] + waters[right];
+			int diff = Math.abs(0 - sum);
 
 			if (min > diff) {
 				min = diff;
-				result[0] = waters[lt];
-				result[1] = waters[rt];
+				result[0] = waters[left];
+				result[1] = waters[right];
 			}
 
-			if (curSum == 0) {
-				result[0] = waters[lt];
-				result[1] = waters[rt];
+			if (sum == 0) {
+				result[0] = waters[left];
+				result[1] = waters[right];
 				break;
 			}
 
-			else if (curSum < 0) {
-				lt++;
+			else if (sum < 0) {
+				left++;
 			}
 
 			else {
-				rt--;
+				right--;
 			}
 
 		}
