@@ -17,7 +17,7 @@ public class Main {
 		int row;
 		int col;
 		int count;
-		int isBreakable = 1;
+		int isBreakable;
 
 		public Node(int row, int col, int count, int isBreakable) {
 			this.row = row;
@@ -68,38 +68,24 @@ public class Main {
 		answer = Integer.MAX_VALUE;
 		isVisited = new boolean[2][N][M];
 
-		N--;
-		M--;
-		bfs();
-
-		if (answer == Integer.MAX_VALUE) {
-			answer = -1;
-		}
-
-		sb.append(answer);
+		sb.append(bfs());
 		bw.write(sb.toString());
 		bw.close();
 
 	}
 
-	public static void bfs() {
+	public static int bfs() {
 
 		Queue<Node> queue = new ArrayDeque<>();
-		queue.offer(new Node(0, 0, 1, 1));
+		queue.offer(new Node(0, 0, 1, 0));
 
 		while (!queue.isEmpty()) {
 
 			Node node = queue.poll();
 
-			if (node.row == N && node.col == M) {
-				answer = Math.min(answer, node.count);
+			if (node.row == N - 1 && node.col == M - 1) {
+				return node.count;
 			}
-
-			if (isVisited[node.isBreakable][node.row][node.col]) {
-				continue;
-			}
-
-			isVisited[node.isBreakable][node.row][node.col] = true;
 
 			int nextRow, nextCol;
 			for (int dir = 0; dir < dr.length; dir++) {
@@ -111,29 +97,31 @@ public class Main {
 					continue;
 				}
 
-				// 이동할 수 없는 곳이면서 벽을 부술수 없는 상태라면 스킵
-				if (map[nextRow][nextCol] == FALSE && node.isBreakable != 1) {
+				if (isVisited[node.isBreakable][nextRow][nextCol]) {
 					continue;
 				}
 
-				// 이동 불가능한 곳 이지만 벽을 부술 수 있는 기회가 남아있다면 이동
-				if (map[nextRow][nextCol] == FALSE && node.isBreakable == 1) {
-					queue.offer(new Node(nextRow, nextCol, node.count + 1, 0));
+				if (map[nextRow][nextCol] == TRUE) {
+					isVisited[node.isBreakable][nextRow][nextCol] = true;
+					queue.offer(new Node(nextRow, nextCol, node.count + 1, node.isBreakable));
 				}
 
-				else {
-					queue.offer(new Node(nextRow, nextCol, node.count + 1, node.isBreakable));
+				else if (map[nextRow][nextCol] == FALSE && node.isBreakable == 0) {
+					isVisited[1][nextRow][nextCol] = true;
+					queue.offer(new Node(nextRow, nextCol, node.count + 1, 1));
 				}
 
 			}
 
 		}
 
+		return -1;
+
 	}
 
 	private static boolean isPossible(int nextRow, int nextCol) {
 
-		if (0 > nextRow || nextRow > N || 0 > nextCol || nextCol > M) {
+		if (0 > nextRow || nextRow >= N || 0 > nextCol || nextCol >= M) {
 			return false;
 		}
 
