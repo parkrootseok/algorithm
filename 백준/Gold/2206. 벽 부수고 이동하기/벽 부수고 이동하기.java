@@ -75,7 +75,7 @@ public class Main {
 		if (answer == Integer.MAX_VALUE) {
 			answer = -1;
 		}
-		
+
 		sb.append(answer);
 		bw.write(sb.toString());
 		bw.close();
@@ -140,4 +140,5 @@ public class Main {
 		return true;
 
 	}
+
 }
