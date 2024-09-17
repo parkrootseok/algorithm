@@ -60,25 +60,29 @@ public class Main {
 
 		}
 
-		int blue = 0;
-		int white = 0;
+		boolean isBlue = false;
+		boolean isWhite = false;
 		for (int row = curRow; row < curRow + size; row++) {
 
 			for (int col = curCol; col < curCol + size; col++) {
 
 				if (map[row][col] == BLUE) {
-					blue++;
+					isBlue = true;
 				} else {
-					white++;
+					isWhite = true;
 				}
 
 			}
 
+			if (isBlue && isWhite) {
+				break;
+			}
+
 		}
 
-		if (white != 0 && blue == 0) {
+		if (isWhite && !isBlue) {
 			whiteCount++;
-		} else if (white == 0 && blue != 0) {
+		} else if (!isWhite && isBlue) {
 			blueCount++;
 		} else {
 			recursive(curRow, curCol, size / 2);
