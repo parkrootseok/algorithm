@@ -63,6 +63,7 @@ public class Main {
 		int blue = 0;
 		int white = 0;
 		for (int row = curRow; row < curRow + size; row++) {
+
 			for (int col = curCol; col < curCol + size; col++) {
 
 				if (map[row][col] == BLUE) {
@@ -70,6 +71,7 @@ public class Main {
 				} else {
 					white++;
 				}
+
 			}
 
 		}
