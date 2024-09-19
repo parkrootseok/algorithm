@@ -103,8 +103,8 @@ public class Main {
 		v2v1 += dijkstra(V1, N);
 
 		int minCost = Math.min(v1v2, v2v1);
-
-		if (minCost >= 200_000_000) {
+		
+		if (minCost >= MAX) {
 			System.out.println("-1");
 			return;
 		}
