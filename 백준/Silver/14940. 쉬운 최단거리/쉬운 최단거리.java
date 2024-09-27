@@ -79,8 +79,7 @@ public class Main {
 			for (int col = 0; col < M; col++) {
 				if (!isVisited[row][col]) {
 					sb.append("-1").append(" ");
-				}
-				else {
+				}  else {
 					sb.append(distance[row][col]).append(" ");
 				}
 			}
@@ -114,11 +113,13 @@ public class Main {
 					continue;
 				}
 
-				if (!isVisited[nRow][nCol] && map[nRow][nCol] == 1) {
-					isVisited[nRow][nCol] = true;
-					distance[nRow][nCol] = distance[cRow][cCol] + 1;
-					queue.add(new Node(nRow, nCol, cCnt + 1));
+				if (isVisited[nRow][nCol] || map[nRow][nCol] != POSSIBLE) {
+					continue;
 				}
+
+				isVisited[nRow][nCol] = true;
+				distance[nRow][nCol] = cCnt + 1;
+				queue.add(new Node(nRow, nCol, cCnt + 1));
 
 			}
 
