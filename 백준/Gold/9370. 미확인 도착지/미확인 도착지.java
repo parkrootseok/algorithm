@@ -53,6 +53,8 @@ public class Main {
 
 	}
 
+	public static final int INF = 100_000_000;
+
 	public static BufferedReader br;
 	public static BufferedWriter bw;
 	public static StringBuilder sb;
@@ -65,9 +67,6 @@ public class Main {
 
 	public static int origin;
 	public static int g, h;
-	public static int gh;
-
-	public static int[] targets;
 
 	public static void main(String[] args) throws IOException {
 
@@ -104,60 +103,46 @@ public class Main {
 
 				int from = Integer.parseInt(inputs[0]);
 				int to = Integer.parseInt(inputs[1]);
-				int weight = Integer.parseInt(inputs[2]);
-
-				// 양방향 도로
-				cities[from].nodes.add(new Node(to, weight));
-				cities[to].nodes.add(new Node(from, weight));
+				int weight = Integer.parseInt(inputs[2]) * 2;
 
 				if ((from == g && to == h) || (from == h && to == g)) {
-					gh = weight;
+					weight--;
 				}
+
+				cities[from].nodes.add(new Node(to, weight));
+				cities[to].nodes.add(new Node(from, weight));
 
 			}
 
 			// 5. 목적지 후보들 입력
-			targets = new int[T];
+			List<Integer> targets = new ArrayList<>();
 			for (int count = 0; count < T; count++) {
-				targets[count] = Integer.parseInt(br.readLine().trim());
+				targets.add(Integer.parseInt(br.readLine().trim()));
 			}
 
-			// 7. '시작점 -> v1(v2) -> v2(v1) -> 후보'의 결과값과 최단 경로가 동일한지 확인
-			List<Integer> result = new ArrayList<>();
-			int og = dijkstra(origin, g);
-			int oh = dijkstra(origin, h);
-			for (int count = 0; count < T; count++) {
-
-				// 시작 -> 목적지 최단 거리
-				int target = targets[count];
-				int oght = og + gh + dijkstra(h, target);
-				int ohgt = oh + gh + dijkstra(g, target);
-				int ot = dijkstra(origin, target);
-
-				if (ot == Math.min(oght, ohgt)) {
-					result.add(target);
-				}
-
-			}
+			dijkstra(origin);
 
 			// 8. 결과 오름차순 정렬 후 출력
-			Collections.sort(result);
-			for (int r : result) {
-				bw.write(r + " ");
+			Collections.sort(targets);
+			for (int t : targets) {
+				if (distance[t] % 2 == 1) {
+					sb.append(t).append(" ");
+				}
 			}
 
-			bw.newLine();
+			sb.append("\n");
 
 		}
 
+		bw.write(sb.toString());
 		bw.close();
 
 	}
 
-	public static int dijkstra(int start, int end) {
+	public static void dijkstra(int start) {
 
 		distance = new int[vertexCount + 1];
-		Arrays.fill(distance, Integer.MAX_VALUE);
+		Arrays.fill(distance, INF);
 
 		PriorityQueue<Node> queue = new PriorityQueue<>();
 		distance[start] = 0;
@@ -184,8 +169,6 @@ public class Main {
 			}
 
 		}
-
-		return distance[end];
 
 	}
 
