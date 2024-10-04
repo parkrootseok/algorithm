@@ -34,18 +34,17 @@ public class Main {
 
         // 보석은 M가지 서로 다른 색상 중 한 색상
         M = Integer.parseInt(inputs[1]);
-
-        int total = 0;
+        
         int max = Integer.MIN_VALUE;
         numbers = new int[M];
         for (int idx = 0; idx < M; idx++) {
+            
             // K번 색상 보석의 개수
             numbers[idx] = Integer.parseInt(br.readLine().trim());
 
-            total += numbers[idx];
-
             // 한번에 가져갈 수 있는 최대 보석수
             max = Math.max(max, numbers[idx]);
+            
         }
 
         sb.append(binarySearch(1, max));
