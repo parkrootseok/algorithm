@@ -15,7 +15,7 @@ public class Main {
 
     static int N;
     static int M;
-    static String str;
+    static char[] chars;
 
     public static void main(String[] args) throws IOException {
 
@@ -25,34 +25,29 @@ public class Main {
 
         N = Integer.parseInt(br.readLine().trim());
         M = Integer.parseInt(br.readLine().trim());
-        str = br.readLine().trim();
-
-        StringBuilder target = new StringBuilder();
-        for (int pos = 0; pos < N + (N + 1); pos++) {
-            if (pos % 2 == 0) {
-                target.append("I");
-            } else {
-                target.append("O");
-            }
-        }
+        chars = br.readLine().trim().toCharArray();
 
         int count = 0;
-        int left = 0;
-        int right = target.length();
-        while (right <= M) {
+        int result = 0;
+        for (int pos = 1; pos < M - 1; pos++) {
 
-            String cur = str.substring(left, right);
-
-            if (cur.equals(target.toString())) {
+            if (chars[pos - 1] == 'I' && chars[pos] == 'O' && chars[pos + 1] == 'I') {
                 count++;
-            }
 
-            left++;
-            right++;
+                if (count == N) {
+                    count--;
+                    result++;
+                }
+
+                pos++;
+
+            } else {
+                count = 0;
+            }
 
         }
 
-        sb.append(count);
+        sb.append(result);
         bw.write(sb.toString());
         bw.close();
 
