@@ -62,8 +62,8 @@ public class Main {
     static int rowSize;
     static int colSize;
     static int[][] map;
-    static List<Ice> ices;
 
+    static int[][] meltCount;
     static boolean[][] isVisited;
     static boolean isFinished;
 
@@ -78,14 +78,11 @@ public class Main {
         colSize = Integer.parseInt(inputs[1]);
 
         map = new int[rowSize][colSize];
-        ices = new ArrayList<>();
+        meltCount = new int[rowSize][colSize];
         for (int row = 0; row < rowSize; row++) {
             inputs = br.readLine().trim().split(" ");
             for (int col = 0; col < colSize; col++) {
                 map[row][col] = Integer.parseInt(inputs[col]);
-                if (map[row][col] != SEA) {
-                    ices.add(new Ice(row, col, map[row][col]));
-                }
             }
         }
 
@@ -104,59 +101,33 @@ public class Main {
     public static int simulation() {
 
         int depth = 0;
+
         while (isPossible()) {
-
-            if (ices.isEmpty()) {
-                break;
-            }
-
-            for (int size = 0; size < ices.size(); size++) {
-
-                Ice ice = ices.get(size);
-                ice.height -= melt(ice.row, ice.col);
-                if (ice.height < 0) {
-                    ice.height = 0;
-                }
-
-            }
-
+            melting();
             depth++;
-
-            for (int size = 0; size < ices.size(); size++) {
-                Ice ice = ices.get(size);
-                map[ice.row][ice.col] = ice.height;
-
-                if (ice.height == 0) {
-                    ices.remove(size);
-                    size--;
-                }
-            }
-
         }
 
         return depth;
 
     }
 
-    public static int melt(int row, int col) {
+    public static void melting() {
 
-        int count = 0;
-        for (int dir = 0; dir < dr.length; dir++) {
+        for (int row = 0; row < rowSize; row++) {
 
-            int nRow = row + dr[dir];
-            int nCol = col + dc[dir];
+            for (int col = 0; col < colSize; col++) {
 
-            if (!inRange(nRow, nCol)) {
-                continue;
-            }
+                map[row][col] -= meltCount[row][col];
 
-            if (map[nRow][nCol] == SEA) {
-                count++;
+                if (map[row][col] < 0) {
+                    map[row][col] = 0;
+                }
+
+                meltCount[row][col] = 0;
+
             }
 
         }
-
-        return count;
 
     }
 
@@ -165,22 +136,21 @@ public class Main {
         isVisited = new boolean[rowSize][colSize];
         int count = 0;
         for (int row = 0; row < rowSize; row++) {
-
             for (int col = 0; col < colSize; col++) {
-
                 if (isVisited[row][col] || map[row][col] == SEA) {
                     continue;
                 }
-
                 count++;
                 bfs(row, col);
-
             }
-
         }
 
         if (count >= 2) {
             isFinished = true;
+            return false;
+        }
+
+        if (count == 0) {
             return false;
         }
 
@@ -209,7 +179,12 @@ public class Main {
                     continue;
                 }
 
-                if (isVisited[nRow][nCol] || map[nRow][nCol] == SEA) {
+                if (map[nRow][nCol] == SEA) {
+                    meltCount[cRow][cCol]++;
+                    continue;
+                }
+
+                if (isVisited[nRow][nCol]) {
                     continue;
                 }
 
