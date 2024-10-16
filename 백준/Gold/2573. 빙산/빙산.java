@@ -1,7 +1,5 @@
 import java.io.*;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
 
 /**
@@ -62,7 +60,6 @@ public class Main {
     static int rowSize;
     static int colSize;
     static int[][] map;
-
     static int[][] meltCount;
     static boolean[][] isVisited;
     static boolean isFinished;
@@ -137,11 +134,14 @@ public class Main {
         int count = 0;
         for (int row = 0; row < rowSize; row++) {
             for (int col = 0; col < colSize; col++) {
+
                 if (isVisited[row][col] || map[row][col] == SEA) {
                     continue;
                 }
+
+                dfs(row, col);
                 count++;
-                bfs(row, col);
+
             }
         }
 
@@ -158,40 +158,29 @@ public class Main {
 
     }
 
-    public static void bfs(int row, int col) {
+    public static void dfs(int row, int col) {
 
-        Queue<Node> nodes = new ArrayDeque<>();
-        nodes.add(new Node(row, col));
         isVisited[row][col] = true;
 
-        while (!nodes.isEmpty()) {
+        for (int dir = 0; dir < dr.length; dir++) {
 
-            Node node = nodes.poll();
-            int cRow = node.row;
-            int cCol = node.col;
+            int nRow = row + dr[dir];
+            int nCol = col + dc[dir];
 
-            for (int dir = 0; dir < dr.length; dir++) {
-
-                int nRow = cRow + dr[dir];
-                int nCol = cCol + dc[dir];
-
-                if (!inRange(nRow, nCol)) {
-                    continue;
-                }
-
-                if (map[nRow][nCol] == SEA) {
-                    meltCount[cRow][cCol]++;
-                    continue;
-                }
-
-                if (isVisited[nRow][nCol]) {
-                    continue;
-                }
-
-                isVisited[nRow][nCol] = true;
-                nodes.offer(new Node(nRow, nCol));
-
+            if (!inRange(nRow, nCol)) {
+                continue;
             }
+
+            if (map[nRow][nCol] == SEA) {
+                meltCount[row][col]++;
+                continue;
+            }
+
+            if (isVisited[nRow][nCol]) {
+                continue;
+            }
+
+            dfs(nRow, nCol);
 
         }
 
