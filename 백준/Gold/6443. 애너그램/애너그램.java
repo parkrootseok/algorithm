@@ -27,40 +27,65 @@ public class Main {
 			letters = br.readLine().trim().toCharArray();
 			isUsed = new boolean[letters.length];
 
+			// 입력받은 문자를 오름차순 정렬
 			Arrays.sort(letters);
-			permutation(new StringBuilder(), 0);
+
+			do {
+				sb.append(letters).append("\n");
+			} while (nextPermutation());
 
 		}
 
+		bw.write(sb.toString());
 		bw.close();
 
 	}
 
-	public static void permutation(StringBuilder cur, int depth) throws IOException {
+	public static boolean nextPermutation() {
 
-		if (depth == letters.length) {
+		int i = letters.length - 1;
 
-			bw.write(cur.toString());
-			bw.write('\n');
-			return;
-
+		// 가장 오른쪽에 존재하는 증가하는 구간을 탐색
+		while (0 < i && letters[i - 1] >= letters[i]) {
+			i--;
 		}
 
-		for (int index = 0; index < letters.length; index++) {
-
-			// 만약, 이전 문자와 동일하다면 이전 문자가 사용되지 않은 경우 패스
-			if (isUsed[index] || (0 < index && letters[index] == letters[index - 1] && !isUsed[index - 1])) {
-				continue;
-			}
-
-			isUsed[index] = true;
-			cur.append(letters[index]);
-			permutation(cur, depth + 1);
-			cur.deleteCharAt(cur.length() - 1);
-			isUsed[index] = false;
-
+		// 다음 순열이 존재하지 않음
+		if (i == 0) {
+			return false;
 		}
 
+		// 기준점보다 크면서 가장 작은값을 탐색
+		int j = letters.length - 1;
+		while (letters[i - 1] >= letters[j]) {
+				j--;
+		}
+
+		// 기준점과 가장 큰 값중 작은값을 교환
+		swap(i - 1, j);
+
+		// 기준점을 기준으로 오름차순 정렬 수행
+		revers(i, letters.length - 1);
+
+		return true;
+
+	}
+
+	public static void swap(int i, int j) {
+		char tmp = letters[i];
+		letters[i] = letters[j];
+		letters[j] = tmp;
+	}
+
+	public static void revers(int i, int j) {
+
+		int start = i;
+		int end = j;
+		while (start < end) {
+			swap(start, end);
+			start++;
+			end--;
+		}
 	}
 
 }
