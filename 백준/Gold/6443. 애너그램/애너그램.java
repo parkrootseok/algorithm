@@ -1,82 +1,49 @@
 import java.io.*;
-import java.util.Set;
-import java.util.Stack;
-import java.util.TreeSet;
+import java.util.*;
 
-/**
- * BOJ_에너그램
- * @author parkrootseok
- */
 public class Main {
 
-	static final int SIZE = 26;
-
-	public static BufferedReader br;
-	public static BufferedWriter bw;
-	public static StringBuilder sb;
-
-	static int N;
-	static char[] inputs;
-	static int[] alphabets;
-	static Stack<Character> combi;
-	static Set<String> result;
-
+	static char[] arr;
+	static int[] check;
+	static StringBuilder sb;
+	static Stack<Character> s;
+	static Set<String> set;
 	public static void main(String[] args) throws IOException {
-
-		br = new BufferedReader(new InputStreamReader(System.in));
-		bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-		N = Integer.parseInt(br.readLine().trim());
-		for (int count = 0; count < N; count++) {
-
-			inputs = br.readLine().trim().toCharArray();
-
-			alphabets = new int[SIZE];
-			for (char input : inputs) {
-				alphabets[input - 'a']++;
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		StringBuilder result = new StringBuilder();
+		int n = Integer.parseInt(br.readLine());
+		while(n-- > 0) {
+			set = new TreeSet<>();
+			arr = br.readLine().toCharArray();
+			check = new int[26];
+			for(char c : arr) {
+				check[c-'a']++;
 			}
-
-			result = new TreeSet<>();
-			combi = new Stack<>();
-			backTracking();
-
-			result.forEach(System.out::println);
-
+			s = new Stack<>();
+			comb(arr.length);
+			set.stream().forEach(s -> result.append(s).append("\n"));
 		}
-
-		bw.close();
-
+		System.out.println(result.toString());
 	}
-
-	public static void backTracking() throws IOException {
-
-		if (combi.size() == inputs.length) {
-
-			sb = new StringBuilder();
-
-			for (char c : combi) {
+	
+	static void comb(int r) {
+		if(r == s.size()) {
+			StringBuilder sb = new StringBuilder();
+			for(char c : s) {
 				sb.append(c);
 			}
-
-			result.add(sb.toString());
-			return;
-
+			set.add(sb.toString());
 		}
-
-		for (int index = 0; index < SIZE; index++) {
-
-			if (alphabets[index] > 0) {
-
-				alphabets[index]--;
-				combi.push((char)('a' + index));
-				backTracking();
-				combi.pop();
-				alphabets[index]++;
-
+		
+		for(int i=0; i<26; i++){
+			if(check[i] > 0) {
+				check[i]--;
+				s.push((char)(i+'a'));
+				comb(r);
+				s.pop();
+				check[i]++;
 			}
-
 		}
-
 	}
-
 }
