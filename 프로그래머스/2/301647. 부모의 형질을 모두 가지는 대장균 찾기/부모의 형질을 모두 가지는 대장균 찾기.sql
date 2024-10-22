@@ -1,0 +1,12 @@
+-- 코드를 작성해주세요
+SELECT  
+    c.ID, c.GENOTYPE, p.GENOTYPE PARENT_GENOTYPE 
+
+FROM
+    ECOLI_DATA c, ECOLI_DATA p
+    
+WHERE 
+    c.PARENT_ID = p.ID AND
+    c.GENOTYPE & p.GENOTYPE = p.GENOTYPE
+    
+ORDER BY c.ID
