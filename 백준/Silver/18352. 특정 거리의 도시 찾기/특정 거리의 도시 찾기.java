@@ -71,7 +71,9 @@ public class Main {
             sb.append("-1");
         } else {
             Collections.sort(result);
-            result.forEach(r -> sb.append(r).append("\n"));
+            for(Integer r : result) {
+                sb.append(r).append("\n");
+            }
         }
         bw.write(sb.toString());
         bw.close();
