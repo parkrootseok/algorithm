@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 
@@ -34,7 +35,7 @@ public class Main {
     static int start;
 
     static City[] cities;
-    static int[] distance;
+    static List<Integer> result;
 
     public static void main(String[] args) throws IOException {
 
@@ -63,58 +64,47 @@ public class Main {
 
         }
 
-        List<Integer> result = new ArrayList<>();
-        dijkstra();
-
-        for (int city = 1; city <= cityNumber; city++) {
-
-            if (distance[city] == limit) {
-                result.add(city);
-            }
-
-        }
+        result = new ArrayList<>();
+        bfs();
 
         if (result.isEmpty()) {
             sb.append("-1");
         } else {
-            for (Integer r : result) {
-                sb.append(r).append("\n");
-            }
+            Collections.sort(result);
+            result.forEach(r -> sb.append(r).append("\n"));
         }
-
         bw.write(sb.toString());
         bw.close();
 
     }
 
-    public static void dijkstra() {
-
-        distance = new int[cityNumber + 1];
-        Arrays.fill(distance, Integer.MAX_VALUE);
+    public static void bfs() {
 
         boolean[] isVisited = new boolean[cityNumber + 1];
-        Queue<City> cityQ = new ArrayDeque<>();
-        cityQ.add(cities[start]);
-        distance[start] = 0;
+        Queue<int[]> nodeQ = new ArrayDeque<>();
+        nodeQ.add(new int[] {start, 0});
+        isVisited[start] = true;
 
-        while (!cityQ.isEmpty()) {
+        while (!nodeQ.isEmpty()) {
 
-            City cur = cityQ.poll();
+            int[] node = nodeQ.poll();
 
-            if (isVisited[cur.name]) {
+            if (node[1] > limit) {
                 continue;
             }
 
-            isVisited[cur.name] = true;
+            if (node[1] == limit) {
+                result.add(node[0]);
+            }
 
-            for (Integer adjacentCity : cur.adjacentCities) {
+            for (Integer adjacentCity : cities[node[0]].adjacentCities) {
 
-                City next = cities[adjacentCity];
-
-                if (!isVisited[next.name] && distance[adjacentCity] > distance[cur.name] + 1) {
-                    distance[adjacentCity] = distance[cur.name] + 1;
-                    cityQ.offer(next);
+                if (isVisited[adjacentCity]) {
+                    continue;
                 }
+
+                isVisited[adjacentCity] = true;
+                nodeQ.offer(new int[] {adjacentCity, node[1] + 1});
 
             }
 
