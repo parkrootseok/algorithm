@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Arrays;
 
 /**
  * BOJ_부분합
@@ -25,30 +24,45 @@ public class Main {
         String[] inputs = br.readLine().trim().split(" ");
         size = Integer.parseInt(inputs[0]);
         target = Integer.parseInt(inputs[1]);
-        numbers = new int[size + 1];
+        numbers = new int[size];
 
         inputs = br.readLine().trim().split(" ");
         for (int s = 0; s < size; s++) {
             numbers[s] = Integer.parseInt(inputs[s]);
         }
 
-        int start = 0;
-        int end = 0;
-        int sum = 0;
         int minLen = Integer.MAX_VALUE;
-        while (start <= end && end <= size) {
+        int len = 0;
+        int sum = 0;
+        for (int start = 0, end = 0; end < size; end++) {
 
-            // 목표하는 값보다 크거나 같다면
-           if (target <= sum) {
-               minLen = Math.min(minLen, end - start);
-               sum -= numbers[start++];
-           }
+            // 종료 포인터를 이동하면서 누적합
+            sum += numbers[end];
+            len++;
 
-           // 목표하는 값보다 작다면
-           else {
-               sum += numbers[end++];
-           }
+            // 누적합이 목표 이상이면
+            if (target <= sum) {
 
+                // 시작 포인터를 이동
+                while (start <= end) {
+
+                    // 시작 포인터 옮긴 값이 여전히 목표치 이상이면 계속 이동
+                    if (target <= sum - numbers[start]) {
+                        sum -= numbers[start];
+                        start++;
+                        len--;
+                    }
+
+                    // 그렇지 않으면 종료
+                    else {
+                        break;
+                    }
+                }
+
+                // 최솟값 초기화
+                minLen = Math.min(minLen, len);
+                
+            }
         }
 
         if (minLen == Integer.MAX_VALUE) {
