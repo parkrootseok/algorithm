@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.PriorityQueue;
+
 /**
  * BOJ_아기상어
  * @author parkrootseok
@@ -53,14 +54,7 @@ public class Main {
                 size++;
             }
         }
-
-        @Override
-        public String toString() {
-            return "Shark{" +
-                    "size=" + size +
-                    ", eat=" + eatCount +
-                    '}';
-        }
+        
     }
 
     public static class Fish {
@@ -169,7 +163,7 @@ public class Main {
             int cCol = cShark[1];
             int cDis = cShark[2];
 
-            if (map[cRow][cCol] != SHARK_POSITION && 0 < map[cRow][cCol] && map[cRow][cCol] < shark.size) {
+            if (0 < map[cRow][cCol] && map[cRow][cCol] < shark.size) {
                 return new Fish(cRow, cCol, cDis);
             }
 
