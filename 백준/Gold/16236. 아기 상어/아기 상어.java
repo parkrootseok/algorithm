@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.PriorityQueue;
@@ -39,12 +38,8 @@ public class Main {
         }
 
         public void move(int row, int col) {
-
-            map[this.row][this.col] = 0;
             this.row = row;
             this.col = col;
-            map[this.row][this.col] = SHARK_POSITION;
-
         }
 
         public void eat(int row, int col) {
@@ -119,10 +114,6 @@ public class Main {
         int time = 0;
         while (true) {
 
-//            System.out.println("-------------시작---------------");
-//            System.out.println("-------------" + time + "---------------");
-//            System.out.println(shark.toString());
-
             // 먹을 수 있는 생선
             Fish find = bfs();
 
@@ -142,18 +133,6 @@ public class Main {
 
             // 상어 크기 증가
             shark.upgrade();
-
-
-//            System.out.println("-------------종료---------------");
-//            for (int row = 0; row < size; row++) {
-//                for (int col = 0; col < size; col++) {
-//                    System.out.print(map[row][col] + " ");
-//                }
-//                System.out.println();
-//            }
-//            System.out.println("-------------" + time + "---------------");
-//            System.out.println(shark.toString());
-
 
         }
 
