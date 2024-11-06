@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * BOJ_스도쿠
@@ -32,26 +32,28 @@ public class Main {
             for (int col = 0; col < SIZE; col++){
                 map[row][col] = Integer.parseInt(inputs[col]);
 
+                if (map[row][col] == 0) {
+                    candidates.add(new int[]{row, col});
+                }
+
             }
         }
 
         isFinished = false;
-        sudoku();
+        permutation(0);
 
         bw.write(sb.toString());
         bw.close();
 
     }
 
-    public static void sudoku() {
+    public static void permutation(int depth) {
 
         if (isFinished) {
             return;
         }
 
-        int[] pos = getCandidate();
-
-        if (Objects.isNull(pos)) {
+        if (depth == candidates.size()) {
             for (int row = 0; row < SIZE; row++) {
                 for (int col = 0; col < SIZE; col++) {
                     sb.append(map[row][col]).append(" ");
@@ -63,25 +65,16 @@ public class Main {
         }
 
         for (int number = 1; number <= SIZE; number++) {
+            int[] pos = candidates.get(depth);
+
             if (isPossible(pos[0], pos[1], number)) {
                 map[pos[0]][pos[1]] = number;
-                sudoku();
+                permutation(depth + 1);
                 map[pos[0]][pos[1]] = 0;
             }
+
         }
 
-    }
-
-    public static int[] getCandidate() {
-        for (int row = 0; row < SIZE; row++) {
-            for (int col = 0; col < SIZE; col++) {
-                if (map[row][col] == 0) {
-                    return new int[]{row, col};
-                }
-            }
-        }
-
-        return null;
     }
 
     public static boolean isPossible(int cRow, int cCol, int number) {
