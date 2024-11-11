@@ -1,7 +1,6 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.PriorityQueue;
+import javax.management.openmbean.CompositeType;
 
 /**
  * BOJ_네트워크연결
@@ -10,30 +9,20 @@ import java.util.PriorityQueue;
 
 public class Main {
 
-    static class Computer {
+    static class Link implements Comparable<Link> {
 
-        int name;
-        ArrayList<Node> adjacent;
-
-        public Computer(int name) {
-            this.name = name;
-            this.adjacent = new ArrayList<>();
-        }
-
-    }
-
-    static class Node implements Comparable<Node> {
-
+        int org;
         int dest;
         int cost;
 
-        public Node(int dest, int cost) {
+        public Link(int org, int dest, int cost) {
+            this.org = org;
             this.dest = dest;
             this.cost = cost;
         }
 
         @Override
-        public int compareTo(Node n) {
+        public int compareTo(Link n) {
             return Integer.compare(this.cost, n.cost);
         }
 
@@ -47,10 +36,11 @@ public class Main {
 
     static int computerCount;
     static int linkCount;
-
-    static int[] minCost;
-    static Computer[] computers;
+    static PriorityQueue<Link> links;
     static int result;
+
+    static int[] unf;
+    static int[] rank;
 
     public static void main(String[] args) throws IOException {
 
@@ -59,27 +49,18 @@ public class Main {
         sb = new StringBuilder();
 
         computerCount = Integer.parseInt(br.readLine().trim());
-        minCost = new int[computerCount + 1];
-        computers = new Computer[computerCount + 1];
-        for (int count = 1; count <= computerCount; count++) {
-            computers[count] = new Computer(count);
-        }
-
         linkCount = Integer.parseInt(br.readLine().trim());
+        links = new PriorityQueue<>();
         for (int count = 0; count < linkCount; count++) {
             String[] inputs = br.readLine().trim().split(" ");
             int org = Integer.parseInt(inputs[0]);
             int dest = Integer.parseInt(inputs[1]);
             int cost = Integer.parseInt(inputs[2]);
-            computers[org].adjacent.add(new Node(dest, cost));
-            computers[dest].adjacent.add(new Node(org, cost));
+            links.offer(new Link(org, dest, cost));
         }
 
         result = 0;
-        prim();
-        for (int idx = 1; idx <= computerCount; idx++) {
-            result += minCost[idx];
-        }
+        kruskal();
 
         sb.append(result);
         bw.write(sb.toString());
@@ -87,36 +68,60 @@ public class Main {
 
     }
 
-    public static void prim() {
+    public static void kruskal() {
 
-        boolean[] isVisited = new boolean[computerCount + 1];
-        PriorityQueue<Node> nodes = new PriorityQueue<>();
+        init();
 
-        Arrays.fill(minCost, INF);
-        nodes.offer(new Node(1, 0));
-        minCost[1] = 0;
+        int connectedCount = 0;
+        while (!links.isEmpty() && connectedCount < computerCount - 1) {
 
-        while (!nodes.isEmpty()) {
+            Link link = links.poll();
+            int org = link.org;
+            int dest = link.dest;
+            int cost = link.cost;
 
-            Node cNode = nodes.poll();
-            Computer cCom = computers[cNode.dest];
-
-            if (isVisited[cCom.name]) {
+            if (find(org) == find(dest)) {
                 continue;
             }
 
-            isVisited[cCom.name] = true;
-
-            for (Node nNode : cCom.adjacent) {
-
-                if (!isVisited[nNode.dest] && minCost[nNode.dest] > nNode.cost) {
-                    minCost[nNode.dest] = nNode.cost;
-                    nodes.offer(new Node(nNode.dest, minCost[nNode.dest]));
-                }
-
-            }
+            union(org, dest);
+            result += cost;
+            connectedCount++;
 
         }
+
+    }
+
+    public static void init() {
+        unf = new int[computerCount + 1];
+        rank = new int[computerCount + 1];
+
+        for (int idx = 0; idx < computerCount; idx++) {
+            unf[idx] = idx;
+        }
+
+    }
+
+    public static void union(int a, int b) {
+
+        int findA = find(a);
+        int findB = find(b);
+
+        if (findA == findB) {
+            return;
+        }
+
+        unf[findA] = findB;
+
+    }
+
+    public static int find(int a) {
+
+        if (a == unf[a]) {
+            return a;
+        }
+
+        return unf[a] = find(unf[a]);
 
     }
 
