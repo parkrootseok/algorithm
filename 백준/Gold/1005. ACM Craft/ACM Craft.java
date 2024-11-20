@@ -85,6 +85,7 @@ public class Main {
 
         Queue<Integer> nodeQ = new ArrayDeque<>();
 
+        // 위상 정렬을 수행하기 위해 이미 건설 가능한 건물들을 찾아 큐에 삽입
         for (int vCount = 1; vCount <= vertexCount; vCount++) {
 
             minTime[vCount] = vertices[vCount].buildTime;
@@ -97,13 +98,19 @@ public class Main {
 
         while (!nodeQ.isEmpty()) {
 
+            // 건설 가능한 건물을 추출
             int cNode = nodeQ.poll();
 
+            // 해당 건물이 선수 조건인 건물들을 탐색
             for (int nNode : vertices[cNode].adjVertices) {
 
+                // 다음 건물에 대하여 현재 건물을 완료한 시간을 더하여 소요 시간을 초기화
                 minTime[nNode] = Math.max(minTime[nNode], minTime[cNode] + vertices[nNode].buildTime);
+
+                // 다음 건물에 대한 선수 조건 완료 체크
                 vertices[nNode].inDegree--;
 
+                // 모든 선수 조건을 만족했을 때 큐에 삽입
                 if (vertices[nNode].inDegree == 0) {
                     nodeQ.offer(nNode);
                 }
