@@ -22,11 +22,8 @@ public class Main {
 
 		N = Integer.parseInt(br.readLine().trim());
 
-		if (N < 2) {
-			System.out.println("0");
-			return;
-		} else if (N == 2) {
-			System.out.println("1");
+		if (N <= 2) {
+			System.out.println(N - 1);
 			return;
 		}
 
