@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,9 +16,9 @@ class Main {
 	static int N;
 	static int[] T;
 	static int[] P;
-	static int max;
+	static int[] DP;
 
- 	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
 
 		br = new BufferedReader(new InputStreamReader(System.in));
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -25,34 +26,40 @@ class Main {
 
 		N = Integer.parseInt(br.readLine().trim());
 
-		T = new int[N + 1];
-		P = new int[N + 1];
-		for (int idx = 1; idx <= N; idx++) {
+		T = new int[N];
+		P = new int[N];
+		for (int idx = 0; idx < N; idx++) {
 			String[] inputs = br.readLine().trim().split(" ");
 			T[idx] = Integer.parseInt(inputs[0]);
 			P[idx] = Integer.parseInt(inputs[1]);
 		}
 
-		max = Integer.MIN_VALUE;
-		recur(1, 0);
+		DP = new int[N];
+		Arrays.fill(DP, -1);
+		recur(0);
 
-		sb.append(max);
+		sb.append(DP[0]);
 		bw.write(sb.toString());
 		bw.close();
 
 	}
 
-	public static void recur(int day, int profit) {
+	public static int recur(int day) {
 
-		 if (day == N + 1) {
-			 max = Math.max(max, profit);
-			 return;
-		 } else if (day > N + 1){
-			 return;
-		 }
+		if (day == N) {
+			return 0;
+		}
 
-		 recur(day + T[day], profit + P[day]);
-		 recur(day + 1, profit);
+		if (day > N){
+			return Integer.MIN_VALUE;
+		}
+
+		if (DP[day] != -1) {
+			return DP[day];
+		}
+
+		DP[day] =  Math.max(recur(day + T[day]) + P[day], recur(day + 1));
+		return DP[day];
 
 	}
 
