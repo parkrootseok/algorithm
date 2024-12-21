@@ -1,85 +1,95 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.OutputStreamWriter;
 
 /**
- * goal: k무게를 담을 수 있는 배낭에 넣을 수 있는 물건들의 최대가치 구하기
+ * BOJ_12865_평범한배낭
+ * @author parkrootseok
  * 
- * 1. 입력
- * 2. 물건 1~n을 고려할 때 특정 무게의 배낭에 담을 수 있는 최대가치를 담을 2차원 배열
- * 	- arr[n+1][k+1] 생성
- * 3. 점화식
- * 	- n번째까지 물건들을 w용량 배낭에 담는 최적해
- * 	-- n번째 물건을 배낭의 용량 w에 담을 수 있다면, 둘 중 더 큰 값 선정
- * 		--- n-1번째까지 물건들을 w배낭에 담는 최적해
- * 		--- n-1번째까지 물건들을 w-n번째물건무게 배낭에 담는 최적해 + n번째물건가치
- *  -- n번째 물건을 배낭의 용량 w에 담을 수 없다면
- *  	--- n-1번째까지 물건들을 w배낭에 담는 최적해
+ * - 배낭
+ *  - 최대 K만큼 담을 수 있음
  * 
+ * - 물건
+ *  - 무게(W)와 가치(V)를 가짐
+ * 
+ * - 목표 가치가 최대이고 무게가 K를 넘치지 않게 담아야 함
+ * 
+ * 1. 물건의 개수와 배낭의 제한 무게를 받는다.
+ * 2. 물건에 대한 정보를 받는다
+ * 3. DP 알고리즘을 사용하여 상향식 접근을 통해 제한 무게에 대한 최대 가치를 도출
+ *  3-1. 현재 무게의 가치의 최적값과 현재 물건을 담았을 때의 최적값을 비교하여 최대값으로 갱신
  */
-
-
 public class Main {
-	static BufferedReader br;
-	static StringBuilder sb;
-	static StringTokenizer st;
-
-	static int n, k;
-	static int[] weight;
-	static int[] value;
 	
-	static int[][] arr;
-	
-	
-	static void inputTestcase() throws IOException {
-		br = new BufferedReader(new InputStreamReader(System.in));
-		sb = new StringBuilder();
+	static class Thing {
 		
-		st = new StringTokenizer(br.readLine().trim());
-		//물건의 개수
-		n = Integer.parseInt(st.nextToken());
-		//배낭의 용량
-		k = Integer.parseInt(st.nextToken());
-		//각 물건의 무게와 가치
-		weight = new int[n+1];
-		value = new int[n+1];
+		int weight;
+		int value;
 		
-		for(int idx=1; idx<=n; idx++) {
-			st = new StringTokenizer(br.readLine().trim());
-			weight[idx]=Integer.parseInt(st.nextToken());
-			value[idx]=Integer.parseInt(st.nextToken());
+		public Thing(int weight, int value) {
+			this.weight = weight;
+			this.value = value;
 		}
+		
 	}
+	
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringBuilder sb;
+	static String[] inputs;
+	
+	static int number;
+	static int limit;
+	
+	static Thing[] things;
+	static int[] dp;
 	
 	public static void main(String[] args) throws IOException {
-		//입력
-		inputTestcase();
 		
-		//최적해들을 담을 2차원 배열 생성
-		arr = new int[n+1][k+1];
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 		
-		//0번째 물건 초기화
-		for(int idx=0; idx<=k; idx++) {
-			arr[0][idx]=0;
+		// 1. 물건의 개수와 배낭의 제한 무게를 받는다.
+		inputs = br.readLine().trim().split(" ");
+		number = Integer.parseInt(inputs[0]);
+		limit = Integer.parseInt(inputs[1]);
+		
+		// 2. 물건에 대한 정보를 받는다
+		things = new Thing[number];
+		for (int idx = 0; idx < number; idx++) {
+			
+			inputs = br.readLine().trim().split(" ");
+			int w = Integer.parseInt(inputs[0]);
+			int v = Integer.parseInt(inputs[1]);
+			
+			things[idx] = new Thing(w, v);
+			
 		}
-		//배낭의 용량이 0인 경우 초기화
-		for(int idx=0; idx<=n; idx++) {
-			arr[idx][0]=0;
-		}
 		
-		//최적해 구하기
-		for(int item=1; item<=n; item++) {
-			for(int w=1; w<=k; w++) {
-				if(weight[item]>w) {
-					arr[item][w]=arr[item-1][w];
-				}else {
-					arr[item][w]=Integer.max(arr[item-1][w-weight[item]]+value[item],arr[item-1][w]);
-				}
+		// 3. DP 알고리즘을 사용하여 상향식 접근을 통해 제한 무게에 대한 최대 가치를 도출
+		dp = new int[limit + 1];
+		for (int curThing = 0; curThing < number; curThing++) {
+			
+			
+			for (int curWeight = limit; things[curThing].weight <= curWeight; curWeight--) {
+				
+				// 3-1. 현재 무게의 가치의 최적값과 현재 물건을 담았을 때의 최적값을 비교하여 최대값으로 갱신
+				dp[curWeight] 
+						= Math.max(dp[curWeight], dp[curWeight - things[curThing].weight] + things[curThing].value);
+				
+				
 			}
+			
 		}
 		
-		//출력
-		System.out.println(arr[n][k]);
+		sb.append(dp[limit]);
+		bw.write(sb.toString());
+		bw.close();
+		return;
+		
 	}
+ 
 }
