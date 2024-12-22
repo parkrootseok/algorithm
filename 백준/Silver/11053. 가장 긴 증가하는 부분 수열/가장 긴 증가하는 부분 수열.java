@@ -1,24 +1,21 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.util.Arrays;
 
 /**
- * BOJ_가장긴증가하는부분수열
+ * BOJ_LIS
  * @author parkrootseok
  */
-public class Main {
+class Main {
 
-	public static BufferedReader br;
-	public static BufferedWriter bw;
-	public static StringBuilder sb;
-	public static String[] inputs;
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringBuilder sb;
+	static String[] inputs;
 
-	public static int N;
-	public static int[] numbers;
-	public static int[] dp;
-	public static int max;
+	static int N;
+	static int[] numbers;
+	static int[] dp;
+	static int max;
 
 	public static void main(String[] args) throws IOException {
 
@@ -26,13 +23,7 @@ public class Main {
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
 
-		N = Integer.parseInt(br.readLine().trim());
-
-		numbers = new int[N];
-		inputs = br.readLine().trim().split(" ");
-		for (int idx = 0; idx < N; idx++) {
-			numbers[idx] = Integer.parseInt(inputs[idx]);
-		}
+		input();
 
 		dp = new int[N];
 		for (int row = 0; row < N; row++) {
@@ -41,7 +32,7 @@ public class Main {
 
 			for (int col = 0; col < row; col++) {
 
-				if (numbers[row] > numbers[col]) {
+				if (numbers[col] < numbers[row]) {
 					dp[row] = Math.max(dp[row], dp[col] + 1);
 				}
 
@@ -54,6 +45,18 @@ public class Main {
 		sb.append(max);
 		bw.write(sb.toString());
 		bw.close();
+
+	}
+
+	public static void input() throws IOException {
+
+		N = Integer.parseInt(br.readLine().trim());
+		numbers = new int[N];
+
+		inputs = br.readLine().trim().split(" ");
+		for (int index = 0; index < N; index++) {
+			numbers[index] = Integer.parseInt(inputs[index]);
+		}
 
 	}
 
