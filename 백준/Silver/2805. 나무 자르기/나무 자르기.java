@@ -25,7 +25,7 @@ class Main {
 
 		input();
 
-		sb.append(binarySearch(0, max));
+		sb.append(binarySearch(max, 0) - 1);
 		bw.write(sb.toString());
 		bw.close();
 
@@ -33,30 +33,32 @@ class Main {
 
 	public static int binarySearch(int left, int right) {
 
-		while (left < right) {
+		while (right < left) {
 
 			int sawHeight = (left + right) >> 1;
 			long hasTreeLength = cut(sawHeight);
 
 			if (hasTreeLength < goal) {
-				right = sawHeight;
-			} else {
-				left = sawHeight + 1;
+				left = sawHeight;
+			}
+
+			else {
+				right = sawHeight + 1;
 			}
 
 		}
 
-		return right - 1;
+		return right;
 
 	}
 
-	public static long cut(int mid) {
+	public static long cut(int sawHeight) {
 
 		long totalLength = 0;
 
 		for (int treeHeight : treeHeights) {
-			if (mid < treeHeight) {
-				totalLength += (treeHeight - mid);
+			if (sawHeight < treeHeight) {
+				totalLength += (treeHeight - sawHeight);
 			}
 		}
 
