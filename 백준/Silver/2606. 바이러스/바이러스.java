@@ -1,76 +1,89 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
- * 바이러스
+ * BOJ_바이러스
+ * @author parkrootseok
  */
+class Main {
 
-public class Main {
+	public static class Computer {
 
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		List<Integer> adjacentComputer;
 
-    static int N, M, CNT = 0;
-    static List<List<Integer>> computers = new ArrayList<>();
-    static boolean visited[];
+		public Computer() {
+			this.adjacentComputer = new ArrayList<>();
+		}
 
-    public void solution() {
+	}
 
-        Queue<List<Integer>> queue = new LinkedList<>();
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringBuilder sb;
+	static StringTokenizer st;
 
-        queue.offer(computers.get(1));
-        visited[1] = true;
+	static int computerCount;
+	static Computer[] computers;
+	static int linkCount;
 
-        while (!queue.isEmpty()) {
+	static int count;
+	static boolean[] isVisited;
 
-            List<Integer> cur = queue.poll();
+	public static void main(String[] args) throws IOException {
 
-            for (int to : cur) {
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-                if (!visited[to]) {
-                    visited[to] = true;
-                    queue.add(computers.get(to));
-                    CNT++;
-                }
+		input();
 
-            }
+		isVisited = new boolean[computerCount + 1];
 
-        }
+		dfs(1);
 
-    }
+		sb.append(count);
+		bw.write(sb.toString());
+		bw.close();
 
-    public static void main(String[] args) throws IOException {
+	}
 
-        Main main = new Main();
+	public static void dfs(int curComputer) {
 
-        N = Integer.parseInt(br.readLine());
-        M =  Integer.parseInt(br.readLine());
+		isVisited[curComputer] = true;
 
-        for (int i = 0; i <= N; i++) {
-            computers.add(new ArrayList<>());
-        }
-        visited = new boolean[N + 1];
+		for (int nextComputer : computers[curComputer].adjacentComputer) {
 
-        for (int i = 0; i < M; i++) {
+			if (!isVisited[nextComputer]) {
+				count++;
+				dfs(nextComputer);
+			}
 
-            StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-            int to = Integer.parseInt(st.nextToken());
-            int from = Integer.parseInt(st.nextToken());
+		}
 
-            computers.get(to).add(from);
-            computers.get(from).add(to);
+	}
 
-        }
+	public static void input() throws IOException {
 
-        main.solution();
+		computerCount = Integer.parseInt(new StringTokenizer(br.readLine(), " ").nextToken());
+		computers = new Computer[computerCount + 1];
+		for (int index = 1; index <= computerCount; index++) {
+			computers[index] = new Computer();
+		}
 
-        bw.write(CNT + "\n");
-        bw.close();
+		linkCount = Integer.parseInt(new StringTokenizer(br.readLine(), " ").nextToken());
+		for (int lCount = 0; lCount < linkCount; lCount++) {
 
-    }
+			st = new StringTokenizer(br.readLine(), " ");
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
+
+			computers[from].adjacentComputer.add(to);
+			computers[to].adjacentComputer.add(from);
+
+		}
+
+	}
 
 }
