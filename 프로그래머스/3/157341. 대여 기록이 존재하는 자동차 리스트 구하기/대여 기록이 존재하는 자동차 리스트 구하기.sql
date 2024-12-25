@@ -1,0 +1,12 @@
+SELECT DISTINCT crcc.CAR_ID 
+
+FROM 
+    CAR_RENTAL_COMPANY_CAR crcc
+        JOIN CAR_RENTAL_COMPANY_RENTAL_HISTORY ccrh 
+        ON crcc.CAR_ID = ccrh.CAR_ID AND MONTH(ccrh.START_DATE) = 10
+
+WHERE
+    crcc.CAR_TYPE = '세단'
+
+ORDER BY
+    1 DESC
