@@ -1,45 +1,35 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.StringTokenizer;
 
 /**
- * BOJ_11725_트리의부모찾기
+ * BOJ_최단경로
  * @author parkrootseok
- *
- * 1. 정점의 개수를 받기
- * 2. 정점들의 연결 정보를 받기
- * 3. dfs를 활용하여 각 정점들의 부모 노드를 탐색
- * 4. 정점들의 부모 노드를 출력
- **/
-public class Main {
+ */
+class Main {
 
-	static class Vertex {
+	public static class Node {
 
-		int name;
-		List<Integer> adjacentVertices;
+		int value;
+		List<Integer> children;
 
-		public Vertex(int name, List<Integer> adjacentVertices) {
-			this.name = name;
-			this.adjacentVertices = adjacentVertices;
+		public Node(int value) {
+			this.value = value;
+			children = new ArrayList<>();
 		}
 
 	}
 
-	static final int ROOT_VERTEX = 1;
-
 	static BufferedReader br;
 	static BufferedWriter bw;
 	static StringBuilder sb;
-	static String[] inputs;
+	static StringTokenizer st;
 
-	static int vertexNumber;
-	static Vertex[] vertices;
-	static int[] parents;
-	static boolean isVisited[];
+	static int N;
+	static Node[] tree;
+	static int[] parent;
 
 	public static void main(String[] args) throws IOException {
 
@@ -47,58 +37,46 @@ public class Main {
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
 
-		// 1. 정점의 개수를 받기
-		vertexNumber = Integer.parseInt(br.readLine().trim());
+		input();
+		traverse(tree[1]);
 
-		parents = new int[vertexNumber + 1];
-		vertices = new Vertex[vertexNumber + 1];
-		for (int vertex = 0; vertex <= vertexNumber; vertex++) {
-			vertices[vertex] = new Vertex(vertex, new ArrayList<>());
+		for (int index = 2; index <= N; index++) {
+			sb.append(parent[index]).append("\n");
 		}
-
-		// 2. 정점들의 연결 정보를 받기
-		for (int index = 1; index < vertexNumber; index++) {
-
-			inputs = br.readLine().trim().split(" ");
-
-			int from = Integer.parseInt(inputs[0]);
-			int to = Integer.parseInt(inputs[1]);
-
-			vertices[from].adjacentVertices.add(to);
-			vertices[to].adjacentVertices.add(from);
-		}
-
-		// 3. dfs를 활용하여 각 정점들의 부모 노드를 탐색
-		isVisited = new boolean[vertexNumber + 1];
-		dfs(ROOT_VERTEX);
-
-		// 4. 정점들의 부모 노드를 출력
-		for (int vertex = 2; vertex <= vertexNumber; vertex++) {
-			sb.append(parents[vertex]).append("\n");
-		}
-
 		bw.write(sb.toString());
 		bw.close();
 
 	}
 
-	public static void dfs(int curVertex) {
+	public static void traverse(Node root) {
 
-		// 전처리 : 방문 체크
-		isVisited[curVertex] = true;
-
-		for (int adjacentVertex : vertices[curVertex].adjacentVertices) {
-
-			// 이미 방문한 정점이라면 스킵
-			if (isVisited[adjacentVertex]) {
-				continue;
+		for (int child : root.children) {
+			if (parent[child] == 0) {
+				parent[child] = root.value;
+				traverse(tree[child]);
 			}
 
-			// 전처리 : 방문할 정점의 부모를 현재 방문한 노드로 설정
-			parents[adjacentVertex] = curVertex;
+		}
 
-			// 재귀 호출
-			dfs(adjacentVertex);
+	}
+
+	public static void input() throws IOException {
+
+		N = Integer.parseInt(new StringTokenizer(br.readLine()).nextToken());
+		tree = new Node[N + 1];
+		parent = new int[N + 1];
+		for (int n = 1; n <= N; n++) {
+			tree[n] = new Node(n);
+		}
+
+		for (int n = 0; n < N - 1; n++) {
+
+			st = new StringTokenizer(br.readLine(), " ");
+			int A = Integer.parseInt(st.nextToken());
+			int B = Integer.parseInt(st.nextToken());
+
+			tree[A].children.add(B);
+			tree[B].children.add(A);
 
 		}
 
