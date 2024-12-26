@@ -53,7 +53,7 @@ class Main {
 			return;
 		}
 
-		unf[A] = B;
+		unf[B] = A;
 
 	}
 
