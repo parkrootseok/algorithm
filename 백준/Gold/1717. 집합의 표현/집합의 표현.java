@@ -1,122 +1,98 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.util.StringTokenizer;
 
 /**
- * BOJ_1717_집합의표현
+ * BOJ_집합의표현
  * @author parkrootseok
- *
- *  1. 집합 원소 개수와 연산의 개수를 받는다.
- *  2. Union & Find를 수행하기 위해 배열을 초기화
- *  3. 연산에 대한 정보를 받아 연산을 수행한다.
- **/
-public class Main {
+ */
+class Main {
 
-    static final int UNION = 0;
-    static final int FIND = 1;
+	public static final int UNION = 0;
+	public static final int FIND = 1;
+
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringBuilder sb;
+	static StringTokenizer st;
+
+	static int N;
+	static int M;
+
+	static int[] unf;
+
+	public static void main(String[] args) throws IOException {
+
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
+
+		input();
+
+		bw.write(sb.toString());
+		bw.close();
+
+	}
+
+	public static int find(int element) {
+
+		if (element == unf[element]) {
+			return unf[element];
+		}
+
+		return unf[element] = find(unf[element]);
+
+	}
 
 
-    static BufferedReader br;
-    static BufferedWriter bw;
-    static StringBuilder sb;
-    static String[] inputs;
+	public static void union(int parent, int child) {
 
-    static int[] set;
-    static int[] rank;
-    static int setSize;
-    static int compareNumber;
+		int A = find(parent);
+		int B = find(child);
 
-    public static void main(String[] args) throws IOException {
+		if (A == B) {
+			return;
+		}
 
-        br = new BufferedReader(new InputStreamReader(System.in));
-        bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        sb = new StringBuilder();
+		unf[A] = B;
 
-        // 1. 집합 원소 개수와 연산의 개수를 받는다.
-        inputs = br.readLine().trim().split(" ");
-        setSize = Integer.parseInt(inputs[0]);
-        compareNumber = Integer.parseInt(inputs[1]);
+	}
 
-        // 2. Union & Find를 수행하기 위해 배열을 초기화
-        init();
+	public static void input() throws IOException {
 
-        // 3. 연산에 대한 정보를 받아 연산을 수행한다.
-        for (int curCompareNumber = 0; curCompareNumber < compareNumber; curCompareNumber++) {
+		st = new StringTokenizer(br.readLine(), " ");
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 
-            inputs = br.readLine().trim().split(" ");
+		unf = new int[N + 1];
+		for (int index = 1; index <= N; index++) {
+			unf[index] = index;
+		}
 
-            int cmd = Integer.parseInt(inputs[0]);
-            int a = Integer.parseInt(inputs[1]);
-            int b = Integer.parseInt(inputs[2]);
+		for (int count = 0; count < M; count++) {
 
-            switch (cmd) {
+			st = new StringTokenizer(br.readLine(), " ");
 
-                case UNION:
-                    union(a, b);
-                    break;
+			int cmd = Integer.parseInt(st.nextToken());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
 
-                case FIND:
+			switch (cmd) {
 
-                    if (find(a) == find(b)) {
-                            sb.append("YES").append("\n");
-                    } else {
-                        sb.append("NO").append("\n");
-                    }
+				case UNION:
+					union(a, b);
+					break;
+				case FIND:
+					if (find(a) == find(b)) {
+						sb.append("YES").append("\n");
+					} else {
+						sb.append("NO").append("\n");
+					}
+					break;
 
-                    break;
+			}
 
-            }
+		}
 
-        }
-
-        bw.write(sb.toString());
-        bw.close();
-        return;
-
-    }
-
-    public static void init() {
-        set = new int[setSize + 1];
-        rank = new int[setSize + 1];
-
-        for (int element = 0; element <= setSize; element++) {
-            set[element] = element;
-            rank[element] = 0;
-        }
-
-    }
-
-    public static int find(int a) {
-
-        if (a == set[a]) {
-            return a;
-        }
-
-        return set[a] = find(set[a]);
-
-    }
-
-    public static void union(int a, int b) {
-
-        int findA = find(a);
-        int findB = find(b);
-
-        if (findA == findB) {
-            return;
-        }
-
-        if (rank[findA] > rank[findB]) {
-            set[findB] = findB;
-        }
-
-        set[findA] = findB;
-
-        if (rank[findA] == rank[findB]) {
-            rank[findB]++;
-        }
-
-    }
+	}
 
 }
