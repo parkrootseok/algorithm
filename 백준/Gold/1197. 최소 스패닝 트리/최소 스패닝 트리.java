@@ -1,97 +1,130 @@
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
-public class Main {
+/**
+ * BOJ_최소스패닝트리
+ * @author parkrootseok
+ */
+class Main {
 
-    static int v;
-    static int e;
+	public static class Vertex {
 
-    static int[] parent;
-    static int[] rank;
+		int index;
+		List<Node> adjacentVertices;
 
-    static PriorityQueue<Edge> edges;
+		public Vertex(int index) {
+			this.index = index;
+			adjacentVertices = new ArrayList<>();
+		}
 
-    static int find(int x) {
-        if (parent[x] == x) {
-            return x;
-        }
-        return parent[x] = find(parent[x]);
-    }
+	}
 
-    static void union(int x, int y) {
-        x = find(x);
-        y = find(y);
+	public static class Node implements Comparable<Node> {
 
-        if (x == y) {
-            return;
-        }
+		int index;
+		int weight;
 
-        if (rank[x] < rank[y]) {
-            parent[x] = y;
-        } else {
-            parent[y] = x;
+		public Node(int index, int weight) {
+			this.index = index;
+			this.weight = weight;
+		}
 
-            if (rank[x] == rank[y]) {
-                rank[x]++;
-            }
-        }
-    }
+		@Override
+		public int compareTo(Node n) {
+			return Integer.compare(this.weight, n.weight);
+		}
 
+	}
 
-    static class Edge implements Comparable<Edge> {
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringBuilder sb;
+	static StringTokenizer st;
 
-        int from;
-        int to;
-        int weight;
+	static int vertexCount;
+	static int edgeCount;
 
-        public Edge(int from, int to, int weight) {
-            this.from = from;
-            this.to = to;
-            this.weight = weight;
-        }
+	static Vertex[] vertices;
+	static int[] cost;
 
-        @Override
-        public int compareTo(Edge o) {
-            return this.weight - o.weight;
-        }
-    }
+	public static void main(String[] args) throws IOException {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        v = Integer.parseInt(st.nextToken());
-        e = Integer.parseInt(st.nextToken());
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-        parent = new int[v + 1];
-        rank = new int[v + 1];
-        edges = new PriorityQueue<>();
+		input();
+		sb.append(prim());
+		
+		bw.write(sb.toString());
+		bw.close();
 
-        for (int i = 1; i <= v; i++) {
-            parent[i] = i;
-        }
+	}
 
-        for (int i = 0; i < e; i++) {
-            st = new StringTokenizer(br.readLine());
-            int from = Integer.parseInt(st.nextToken());
-            int to = Integer.parseInt(st.nextToken());
-            int weight = Integer.parseInt(st.nextToken());
+	public static long prim() {
 
-            edges.add(new Edge(from, to, weight));
-        }
+		long sum = 0;
+		boolean[] isVisited = new boolean[vertexCount + 1];
+		Queue<Node> queue = new PriorityQueue<>();
 
-        int sum = 0;
+		cost[1] = 0;
+		queue.offer(new Node(1, cost[1]));
 
-        while (!edges.isEmpty()) {
-            Edge edge = edges.poll();
+		while(!queue.isEmpty()) {
 
-            if (find(edge.from) == find(edge.to)) {
-                continue;
-            }
+			Node cVertex = queue.poll();
 
-            union(edge.from, edge.to);
-            sum += edge.weight;
-        }
+			if (isVisited[cVertex.index]) {
+				continue;
+			}
 
-        System.out.println(sum);
-    }
+			sum += cVertex.weight;
+			isVisited[cVertex.index] = true;
+
+			for (Node adjVertex : vertices[cVertex.index].adjacentVertices) {
+
+				if (!isVisited[adjVertex.index] && cost[adjVertex.index] > adjVertex.weight) {
+					cost[adjVertex.index] = adjVertex.weight;
+					queue.offer(new Node(adjVertex.index, cost[adjVertex.index]));
+				}
+
+			}
+
+		}
+		
+		return sum;
+
+	}
+
+	public static void input() throws IOException {
+
+		st = new StringTokenizer(br.readLine(), " ");
+		vertexCount = Integer.parseInt(st.nextToken());
+		edgeCount = Integer.parseInt(st.nextToken());
+
+		vertices = new Vertex[vertexCount + 1];
+		cost = new int[vertexCount + 1];
+		for (int index = 1; index <= vertexCount; index++) {
+			vertices[index] = new Vertex(index);
+			cost[index] = Integer.MAX_VALUE;
+		}
+
+		for (int eCount = 0; eCount < edgeCount; eCount++) {
+			st = new StringTokenizer(br.readLine(), " ");
+
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
+			int weight = Integer.parseInt(st.nextToken());
+
+			vertices[from].adjacentVertices.add(new Node(to, weight));
+			vertices[to].adjacentVertices.add(new Node(from, weight));
+
+		}
+
+	}
+
 }
