@@ -1,5 +1,4 @@
 import java.io.*;
-import java.nio.file.NotLinkException;
 import java.util.*;
 
 /**
@@ -8,103 +7,101 @@ import java.util.*;
  */
 public class Main {
 
-    public static class Node {
+	public static class Node implements Comparable<Node> {
 
-        int row;
-        int col;
-        int count;
+		int row;
+		int col;
+		int count;
 
-        public Node(int row, int col, int count) {
-            this.row = row;
-            this.col = col;
-            this.count = count;
-        }
+		public Node(int row, int col, int count) {
+			this.row = row;
+			this.col = col;
+			this.count = count;
+		}
 
-    }
+		public int compareTo(Node n) {
+			return Integer.compare(this.count, n.count);
+		}
 
-    public static final int[] dr = {-1,1,0,0};
-    public static final int[] dc = {0,0,-1,1};
-    public static final int WALL = 1;
+	}
 
-    public static BufferedReader br;
-    public static BufferedWriter bw;
-    public static StringBuilder sb;
+	public static final int[] dr = {-1,1,0,0};
+	public static final int[] dc = {0,0,-1,1};
+	public static final int WALL = 1;
 
-    public static int N;
-    public static int M;
-    public static int[][] map;
-    public static int[][] isVisited;
-    public static int min;
+	public static BufferedReader br;
+	public static BufferedWriter bw;
+	public static StringBuilder sb;
 
-    public static void main(String[] args) throws IOException {
+	public static int N;
+	public static int M;
+	public static int[][] map;
+	public static int[][] counts;
 
-        br = new BufferedReader(new InputStreamReader(System.in));
-        bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        sb = new StringBuilder();
+	public static void main(String[] args) throws IOException {
 
-        String[] inputs = br.readLine().trim().split(" ");
-        N = Integer.parseInt(inputs[0]);
-        M = Integer.parseInt(inputs[1]);
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-        map = new int[M][N];
-        for (int row = 0; row < M; row++) {
-            inputs = br.readLine().trim().split("");
-            for (int col = 0; col < N; col++) {
-                map[row][col] = Integer.parseInt(inputs[col]);
-            }
-        }
+		String[] inputs = br.readLine().trim().split(" ");
+		N = Integer.parseInt(inputs[0]);
+		M = Integer.parseInt(inputs[1]);
 
-        min = Integer.MAX_VALUE;
-        isVisited = new int[M][N];
-        for (int row = 0; row < M; row++) {
-            Arrays.fill(isVisited[row], Integer.MAX_VALUE);
-        }
-        bfs();
+		map = new int[M][N];
+		for (int row = 0; row < M; row++) {
+			inputs = br.readLine().trim().split("");
+			for (int col = 0; col < N; col++) {
+				map[row][col] = Integer.parseInt(inputs[col]);
+			}
+		}
 
-        sb.append(min);
-        bw.write(sb.toString());
-        bw.close();
+		counts = new int[M][N];
+		for (int row = 0; row < M; row++) {
+			Arrays.fill(counts[row], Integer.MAX_VALUE);
+		}
+		dijkstra();
 
-    }
+		sb.append(counts[M - 1][N - 1]);
+		bw.write(sb.toString());
+		bw.close();
 
-    public static void bfs() {
+	}
 
-        Queue<Node> queue = new ArrayDeque<>();
-        queue.add(new Node(0,0, 0));
+	public static void dijkstra() {
 
-        while (!queue.isEmpty()) {
+		Queue<Node> queue = new ArrayDeque<>();
+		queue.add(new Node(0,0, 0));
+		counts[0][0] = 0;
 
-            Node node = queue.poll();
-            int curRow = node.row;
-            int curCol = node.col;
-            int curCount = node.count;
+		while (!queue.isEmpty()) {
 
-            if (curRow == M - 1 && curCol == N - 1) {
-                min = Math.min(min, curCount);
-            }
+			Node node = queue.poll();
+			int cRow = node.row;
+			int cCol = node.col;
+			int cCount = node.count;
 
-            for (int dir = 0; dir < dr.length; dir++) {
+			if (cCount > counts[cRow][cCol]) {
+				continue;
+			}
 
-                int nRow = curRow + dr[dir];
-                int nCol = curCol + dc[dir];
+			for (int dir = 0; dir < dr.length; dir++) {
 
-                if (nRow < 0 || M <= nRow || nCol < 0 || N <= nCol) {
-                    continue;
-                }
+				int nRow = cRow + dr[dir];
+				int nCol = cCol + dc[dir];
 
-                if (curCount + 1 < isVisited[nRow][nCol] && map[nRow][nCol] == WALL) {
-                    isVisited[nRow][nCol] = curCount + 1;
-                    queue.add(new Node(nRow, nCol, curCount + 1));
-                }
+				if (nRow < 0 || M <= nRow || nCol < 0 || N <= nCol) {
+					continue;
+				}
 
-                else if (curCount < isVisited[nRow][nCol] && map[nRow][nCol] == 0) {
-                    isVisited[nRow][nCol] = curCount;
-                    queue.add(new Node(nRow, nCol, curCount));
-                }
+				if (counts[nRow][nCol] > cCount + map[nRow][nCol]) {
+					counts[nRow][nCol] = cCount + map[nRow][nCol];
+					queue.add(new Node(nRow, nCol, counts[nRow][nCol]));
+				}
 
-            }
+			}
 
-        }
-    }
+		}
+	}
 
 }
