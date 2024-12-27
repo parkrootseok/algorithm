@@ -2,56 +2,57 @@ import java.util.*;
 
 class Solution {
     
-    public static List<Set<Integer>> numbers;
-        
+    static Set<Integer>[] dp;
+    
     public int solution(int N, int number) {
-
+        
         if (N == number) {
             return 1;
         }
         
-        numbers = new ArrayList<>();
-        for (int count = 0; count <= 8; count++) {
-            numbers.add(new HashSet<>());
-        }
-        
-        numbers.get(1).add(N);
-		
-        for (int prev = 2; prev <= 8; prev++) {
-         
-            Set<Integer> curNumbers = numbers.get(prev);
-            curNumbers.add(Integer.parseInt(String.valueOf(N).repeat(prev)));
+        int base = 0;
+        dp = new Set[9];
+        for (int index = 1; index <= 8; index++) {
             
-            for (int post = 1; post <= prev; post++) {
-                Set<Integer> prevNumbers = numbers.get(post);
-                Set<Integer> nextNumbers = numbers.get(prev - post);    
-                
-                for (int prevNumber : prevNumbers) {
-                    for (int nextNumber : nextNumbers) {
-                            
-                        curNumbers.add(prevNumber + nextNumber);
-                        curNumbers.add(prevNumber - nextNumber);
-                        curNumbers.add(prevNumber * nextNumber);
-                        if (prevNumber != 0 && nextNumber != 0) {
-                            curNumbers.add(prevNumber / nextNumber);
+            dp[index] = new HashSet<>();
+            
+            base += N;
+            dp[index].add(base);
+            base *= 10;
+            
+        }
+     
+        for (int index = 2; index <= 8; index++) {
+            
+            for (int useCount = 1; useCount < index; useCount++) {
+            
+                for (int prev : dp[useCount]) {
+                    
+                    for (int post : dp[index - useCount]) {
+                        
+                        dp[index].add(prev + post);
+                        dp[index].add(prev - post);
+                        dp[index].add(prev * post);
+                        
+                        if (post != 0) {
+                            dp[index].add(prev / post);
                         }
-
+                       
                     }
+                    
                 }
                 
-            }                    
-            
-        }
-        
-        for (Set<Integer> s : numbers) {
-            if (s.contains(number)) {
-                return numbers.indexOf(s);
             }
-                
+            
+            if (dp[index].contains(number)) {
+                return index;
+            }
+            
         }
         
         return -1;
         
     }
+    
     
 }
