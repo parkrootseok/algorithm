@@ -19,7 +19,7 @@ public class Main {
 
 	}
 
-	public static class Node implements Comparable<Node> {
+	public static class Node {
 
 		int index;
 		int limit;
@@ -27,11 +27,6 @@ public class Main {
 		public Node(int index, int limit) {
 			this.index = index;
 			this.limit = limit;
-		}
-
-		@Override
-		public int compareTo(Node n) {
-			return Integer.compare(this.limit, n.limit);
 		}
 
 	}
@@ -46,7 +41,6 @@ public class Main {
 	static Vertex[] vertices;
 	static int origin;
 	static int dest;
-	static boolean[] isVisited;
 	static int max;
 	static int result;
 
@@ -62,7 +56,6 @@ public class Main {
 		sb.append(result);
 		bw.write(sb.toString());
 		bw.close();
-
 
 	}
 
@@ -88,8 +81,9 @@ public class Main {
 
 	public static boolean bfs(int start, int limit) {
 
-		isVisited = new boolean[N + 1];
+		boolean[] isVisited = new boolean[N + 1];
 		Queue<Integer> queue = new ArrayDeque<>();
+		
 		queue.offer(start);
 		isVisited[start] = true;
 
