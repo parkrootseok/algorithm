@@ -1,19 +1,18 @@
 SELECT
-    ugu.USER_ID, 
-    ugu.NICKNAME, 
-    CONCAT(ugu.CITY, ' ', ugu.STREET_ADDRESS1, ' ', ugu.STREET_ADDRESS2) 전체주소,
-    CONCAT(SUBSTRING(TLNO, 1, 3), '-', SUBSTRING(TLNO, 4, 4), '-', SUBSTRING(TLNO, 8)) 전화번호
+    USER_ID, 
+    NICKNAME, 
+    CONCAT(CITY, ' ', STREET_ADDRESS1, ' ', STREET_ADDRESS2) 전체주소, 
+    CONCAT(SUBSTRING(TLNO, 1, 3), '-', SUBSTRING(TLNO, 4, 4), '-', SUBSTRING(TLNO, 8, 4)) 전화번호
+    
+FROM
+    USED_GOODS_USER u
+        JOIN USED_GOODS_BOARD b ON u.USER_ID = b.WRITER_ID
 
-FROM 
-    USED_GOODS_USER ugu
-        JOIN USED_GOODS_BOARD ugb ON ugu.USER_ID = ugb.WRITER_ID
-        
 GROUP BY
-    ugu.USER_ID
+    u.USER_ID
 
 HAVING
-     3 <= COUNT(BOARD_ID)
-
-ORDER BY 
-    1 DESC
+    3 <= COUNT(u.USER_ID)
     
+ORDER BY
+    1 DESC
