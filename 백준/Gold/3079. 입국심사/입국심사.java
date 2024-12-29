@@ -6,7 +6,7 @@ import java.util.*;
  * @author parkrootseok
  */
 public class Main {
-
+	
 	static BufferedReader br;
 	static BufferedWriter bw;
 	static StringBuilder sb;
@@ -14,7 +14,7 @@ public class Main {
 
 	static int N;
 	static int M;
-	static int limit;
+	static long limit;
 	static int[] runningTimes;
 
 	public static void main(String[] args) throws IOException {
@@ -24,8 +24,8 @@ public class Main {
 		sb = new StringBuilder();
 
 		input();
-
-		sb.append(binarySearch(0, (long) (Math.pow(10, 9) * Math.pow(10, 9))));
+		
+		sb.append(binarySearch(0, limit));
 		bw.write(sb.toString());
 		bw.close();
 
@@ -73,7 +73,9 @@ public class Main {
 		for (int n = 0; n < N; n++) {
 			runningTimes[n] = Integer.parseInt(new StringTokenizer(br.readLine()).nextToken());
 		}
-
+		
+		limit = (long) (Math.pow(10, 9) * Math.pow(10, 9));
+		
 	}
 
 }
