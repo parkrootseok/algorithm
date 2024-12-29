@@ -6,7 +6,7 @@ import java.util.*;
  * @author parkrootseok
  */
 public class Main {
-	
+
 	static BufferedReader br;
 	static BufferedWriter bw;
 	static StringBuilder sb;
@@ -24,7 +24,7 @@ public class Main {
 		sb = new StringBuilder();
 
 		input();
-		
+
 		sb.append(binarySearch(0, limit));
 		bw.write(sb.toString());
 		bw.close();
@@ -37,7 +37,7 @@ public class Main {
 
 			long mid = (left + right) >> 1;
 
-			if (M <= getCompletedPersonCount(mid)) {
+			if (getCompletedPersonCount(mid)) {
 				right = mid;
 			} else {
 				left = mid + 1;
@@ -49,17 +49,17 @@ public class Main {
 
 	}
 
-	public static long getCompletedPersonCount(long mid) {
+	public static boolean getCompletedPersonCount(long mid) {
 
 		long sum = 0;
 		for (int n = 0; n < N; n++) {
 			sum += (mid / runningTimes[n]);
-			if (M < sum) {
-				break;
+			if (M <= sum) {
+				return true;
 			}
 		}
 
-		return sum;
+		return false;
 
 	}
 
@@ -73,9 +73,9 @@ public class Main {
 		for (int n = 0; n < N; n++) {
 			runningTimes[n] = Integer.parseInt(new StringTokenizer(br.readLine()).nextToken());
 		}
-		
+
 		limit = (long) (Math.pow(10, 9) * Math.pow(10, 9));
-		
+
 	}
 
 }
