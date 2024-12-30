@@ -1,33 +1,33 @@
-WITH DISCOUNT AS (
+WITH CAR AS (
     
     SELECT 
-        history_id, c.CAR_TYPE, c.DAILY_FEE * (DATEDIFF(end_date, start_date) + 1) FEE,
+        HISTORY_ID, c.CAR_ID, c.CAR_TYPE, 
+        c.DAILY_FEE * (DATEDIFF(END_DATE, START_DATE) + 1) TOTAL_FEE,
         CASE
-            WHEN 90 <= (DATEDIFF(end_date, start_date) + 1) THEN '90일 이상'
-            WHEN 30 <= (DATEDIFF(end_date, start_date) + 1) THEN '30일 이상'
-            WHEN 7 <= (DATEDIFF(end_date, start_date) + 1) THEN '7일 이상'
-            ELSE '7일 이하'
+            WHEN 90 <= (DATEDIFF(END_DATE, START_DATE) + 1) THEN '90일 이상'
+            WHEN 30 <= (DATEDIFF(END_DATE, START_DATE) + 1) THEN '30일 이상'
+            WHEN 7 <= (DATEDIFF(END_DATE, START_DATE) + 1) THEN '7일 이상'
+            ELSE '7일 미만'
         END DURATION_TYPE
+
     
     FROM
         CAR_RENTAL_COMPANY_RENTAL_HISTORY h
-            JOIN CAR_RENTAL_COMPANY_CAR c ON h.CAR_ID = c.CAR_ID
-            
+        JOIN CAR_RENTAL_COMPANY_CAR c ON h.CAR_ID = c.CAR_ID
     
     WHERE
-        c.CAR_TYPE = '트럭'
+        CAR_TYPE = '트럭'
     
 )
 
-
 SELECT
-    HISTORY_ID, ROUND(FEE * (100 - IFNULL(DISCOUNT_RATE, 0)) / 100, 0) FEE
+    HISTORY_ID, 
+    ROUND(TOTAL_FEE * (100 - IFNULL(p.DISCOUNT_RATE, 0)) / 100, 0) FEE
 
 FROM
-    DISCOUNT d
-        LEFT JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN p
-        ON d.DURATION_TYPE = p.DURATION_TYPE AND d.CAR_TYPE = p.CAR_TYPE
- 
+    CAR c
+    LEFT JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN p
+    ON c.CAR_TYPE = p.CAR_TYPE AND c.DURATION_TYPE = p.DURATION_TYPE
+    
 ORDER BY
     2 DESC, 1 DESC
-        
