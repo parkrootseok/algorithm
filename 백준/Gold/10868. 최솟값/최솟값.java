@@ -1,59 +1,65 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.util.*;
 
 /**
- * BOJ_10868_최솟값
+ * BOJ_최솟값
  * @author parkrootseok
- *
- * N개의 정수들 중 A번 부터 B번 정수 사이에 최솟값을 구해라
- *
- * 1. 정수의 개수와 구간이 주어지는 횟수 입력
- * 2. 정수 입력
- * 3. 세그먼트 트리 초기화
  */
 public class Main {
 
-	public static class SegmentTree {
+	static class SegmentTree {
 
-		int size;
+		int[] numbers;
 		int[] element;
 
-		public SegmentTree() {
-			this.size = (int) Math.pow(2, (int) Math.ceil(Math.log(numberSize) / Math.log(2)) + 1);
-			this.element = new int[size];
+		public SegmentTree(int size) {
+			numbers = new int[size + 1];
+			element = new int[(int) Math.pow(2, Math.ceil(Math.log(size) / Math.log(2)) + 1)];
 		}
 
-		public int init(int curNode, int start, int end) {
+		public int init(int parent, int start, int end) {
 
-			// 리프 노드라면 자기 자신을 저장
 			if (start == end) {
-				return element[curNode] = numbers[start];
+				return element[parent] = numbers[start];
 			}
 
-			// 리프 노드가 아니라면 좌, 우 노드를 탐색
-			int mid = (start + end) / 2;
-			return element[curNode] = Math.min(
-				init(curNode * 2, start, mid),
-				init(curNode * 2 + 1, mid + 1, end)
+			int mid = (start + end) >> 1;
+			return element[parent] = Math.min(
+				init(parent * 2, start, mid),
+				init(parent * 2 + 1, mid + 1, end)
+			);
+
+		}
+
+		public int min(int parent, int start, int end, int tStart, int tEnd) {
+
+			if (end < tStart || tEnd < start) {
+				return Integer.MAX_VALUE;
+			}
+
+			if (tStart <= start && end <= tEnd) {
+				return element[parent];
+			}
+
+			int mid = (start + end) >> 1;
+			return Math.min(
+				min(parent * 2, start, mid, tStart, tEnd),
+				min(parent * 2 + 1, mid + 1, end, tStart, tEnd)
 			);
 
 		}
 
 	}
 
-	public static BufferedReader br;
-	public static BufferedWriter bw;
-	public static StringBuilder sb;
-	public static String[] inputs;;
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringTokenizer st;
+	static StringBuilder sb;
 
-	public static SegmentTree segmentTree;
-	public static int numberSize;
-	public static int rangeNumber;
-	public static int[] numbers;
-	public static int minValue;
+	static int N;
+	static int M;
+
+	static SegmentTree segmentTree;
 
 	public static void main(String[] args) throws IOException {
 
@@ -61,65 +67,30 @@ public class Main {
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
 
-		// 1. 정수의 개수와 구간이 주어지는 횟수 입력
-		inputs = br.readLine().trim().split(" ");
-		numberSize = Integer.parseInt(inputs[0]);
-		rangeNumber = Integer.parseInt(inputs[1]);
+		st = new StringTokenizer(br.readLine(), " ");
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 
-		// 2. 정수 입력
-		numbers = new int[numberSize + 1];
-		for (int index = 1; index <= numberSize; index++) {
-			numbers[index] = Integer.parseInt(br.readLine().trim());
+		segmentTree = new SegmentTree(N);
+		for (int n = 1; n <= N; ++n) {
+			segmentTree.numbers[n] = Integer.parseInt(br.readLine().trim());
 		}
 
-		// 3. 세그먼트 트리 초기화
-		segmentTree = new SegmentTree();
-		segmentTree.init(1, 1, numberSize);
+		segmentTree.init(1, 1, N);
 
-		// 3. 구간을 받고 최솟값 구하기
-		for (int curRangeNumber = 0 ; curRangeNumber < rangeNumber; curRangeNumber++) {
+		for (int m = 0; m < M; ++m) {
 
-			inputs = br.readLine().trim().split(" ");
-			int a = Integer.parseInt(inputs[0]);
-			int b = Integer.parseInt(inputs[1]);
+			st = new StringTokenizer(br.readLine(), " ");
 
-			minValue = Integer.MAX_VALUE;
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
 
-			if (a == 1 && b == numberSize) {
-				minValue = segmentTree.element[1];
-			}
-
-			else {
-				getMinValue(1, 1, numberSize, a, b);
-			}
-
-			sb.append(minValue).append("\n");
+			sb.append(segmentTree.min(1, 1, N, a, b)).append("\n");
 
 		}
 
 		bw.write(sb.toString());
 		bw.close();
-
-	}
-
-	public static int getMinValue(int curNode, int start, int end, int targetStart, int targetEnd) {
-
-		// 범위를 벗어난 경우 종료
-		if (targetStart > end || targetEnd < start) {
-			return Integer.MAX_VALUE;
-		}
-
-		// 범위 안에 들어올 경우 최솟값을 갱신 후 종료
-		if (targetStart <= start && end <= targetEnd) {
-			return segmentTree.element[curNode];
-		}
-
-		int mid = (start + end) / 2;
-		return minValue = Math.min(
-			getMinValue(curNode * 2, start, mid, targetStart, targetEnd),
-			getMinValue(curNode * 2 + 1, mid + 1, end, targetStart, targetEnd)
-		);
-
 	}
 
 }
