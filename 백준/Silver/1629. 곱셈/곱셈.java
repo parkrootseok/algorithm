@@ -41,6 +41,7 @@ public class Main {
 		if(exponent == 1) {
 			return A % C;
 		}
+		
 		long temp = divideConquer(A, exponent >> 1);
 
 		if(exponent % 2 == 1) {
