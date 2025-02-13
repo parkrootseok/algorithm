@@ -57,9 +57,7 @@ public class Main {
 				stack.push(e);
 
 			}
-
-	
-
+			
 		}
 
 		while (!stack.isEmpty()) {
@@ -70,9 +68,9 @@ public class Main {
 		bw.close();
 
 	}
-	
+
 	public static int getPriority(char operation) {
-		
+
 		if (operation == '*' || operation == '/') {
 			return 2;
 		}
@@ -80,10 +78,9 @@ public class Main {
 		if (operation == '+' || operation == '-') {
 			return 1;
 		}
-		
+
 		return 0;
-		
+
 	}
-	
 
 }
