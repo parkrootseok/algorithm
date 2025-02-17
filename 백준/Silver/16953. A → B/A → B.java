@@ -14,7 +14,6 @@ public class Main {
 
 	static int A;
 	static int B;
-	static int answer;
 
 	public static void main(String[] args) throws IOException {
 
@@ -26,28 +25,42 @@ public class Main {
 		A = Integer.parseInt(st.nextToken());
 		B = Integer.parseInt(st.nextToken());
 
-		answer = Integer.MAX_VALUE;
-		bruteforce(A, 0);
-
-		sb.append(answer == Integer.MAX_VALUE ? -1 : answer + 1);
+		sb.append(bfs());
 		bw.write(sb.toString());
 		bw.close();
 
 	}
 
-	public static void bruteforce(long number, int count) {
+	public static int bfs() {
 
-		if (B < number) {
-			return;
+		Queue<int[]> queue = new ArrayDeque<>();
+		queue.add(new int[]{B, 0});
+
+		while (!queue.isEmpty()) {
+
+			int[] node = queue.poll();
+			int number = node[0];
+			int cnt = node[1];
+
+			if (number == A) {
+				return cnt + 1;
+			}
+
+			if (number < A) {
+				break;
+			}
+
+			if (number % 2 == 0) {
+				queue.offer(new int[] {number / 2, cnt + 1});
+			}
+
+			if (number % 10 == 1) {
+				queue.offer(new int[] {number / 10, cnt + 1});
+			}
+
 		}
 
-		if (number == B) {
-			answer = Math.min(answer, count);
-			return;
-		}
-
-		bruteforce(number * 2, count + 1);
-		bruteforce(number * 10 + 1, count + 1);
+		return -1;
 
 	}
 
