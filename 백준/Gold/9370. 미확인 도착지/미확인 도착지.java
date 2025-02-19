@@ -1,35 +1,20 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * BOJ_미확인도착지
  * @author parkrootseok
- *
- * - 알고 있는 정보
- *  - 출발지
- *  - 최단 거리로 이동함
- *  - g, h의 교차로 사이에 있는 도로를 지나갔음
- * - 양방향 도로
- * - 목적지를 예측
- *  - 주어진 후보 중 가능한 경우만 오름차순 출력
- *
- * 1. T 입력
- * 2. 교차로, 도로, 목적지 후보 개수 입력
- * 3. 예술가들의 출발지, 교차로 시점과 종점
- * 4. 목적지 후보들 입력
  */
 public class Main {
 
-	static class City {
+	static final int INF = 10_000_000;
+
+	static class Vertex {
 
 		int name;
-		ArrayList<Node> nodes;
+		List<Node> nodes;
 
-		public City(int name) {
+		public Vertex(int name) {
 			this.name = name;
 			this.nodes = new ArrayList<>();
 		}
@@ -38,35 +23,39 @@ public class Main {
 
 	static class Node implements Comparable<Node> {
 
-		int to;
-		int weight;
+		int name;
+		int distance;
 
-		public Node(int to, int weight) {
-			this.to = to;
-			this.weight = weight;
+		public Node(int name, int distance) {
+			this.name = name;
+			this.distance = distance;
 		}
 
 		@Override
-		public int compareTo(Node o) {
-			return Integer.compare(this.weight, o.weight);
+		public int compareTo(Node n) {
+			return Integer.compare(this.distance, n.distance);
 		}
 
 	}
 
-	public static final int INF = 100_000_000;
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringTokenizer st;
+	static StringBuilder sb;
+	
+	static int T;
 
-	public static BufferedReader br;
-	public static BufferedWriter bw;
-	public static StringBuilder sb;
+	static int vertexCount;
+	static Vertex[] vertices;
+	static int[] distances;
 
-	public static int testCount;
+	static int edgeCount;
+	static int targetCount;
+	static int[] targets;
 
-	public static int edgeCount, vertexCount, T;
-	public static City[] cities;
-	public static int[] distance;
-
-	public static int origin;
-	public static int g, h;
+	static int start;
+	static int visitedFrom;
+	static int visitedTo;
 
 	public static void main(String[] args) throws IOException {
 
@@ -74,101 +63,118 @@ public class Main {
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
 
-		// 1. T 입력
-		testCount = Integer.parseInt(br.readLine().trim());
+		T = Integer.parseInt(br.readLine().trim());
 
-		for (int tCount = 0; tCount < testCount; tCount++){
-
-			// 2. 교차로, 도로, 목적지 후보 개수 입력
-			String[] inputs = br.readLine().trim().split(" ");
-			vertexCount = Integer.parseInt(inputs[0]);
-			edgeCount = Integer.parseInt(inputs[1]);
-			T = Integer.parseInt(inputs[2]);
-
-			cities = new City[vertexCount + 1];
-			for (int idx = 1; idx <= vertexCount; idx++) {
-				cities[idx] = new City(idx);
-			}
-
-			// 3. 예술가들의 출발지, 지나간 교차로
-			inputs = br.readLine().trim().split(" ");
-			origin = Integer.parseInt(inputs[0]);
-			g = Integer.parseInt(inputs[1]);
-			h = Integer.parseInt(inputs[2]);
-
-			// 4. 도로 정보
-			for (int eCount = 0; eCount < edgeCount; eCount++) {
-
-				inputs = br.readLine().trim().split(" ");
-
-				int from = Integer.parseInt(inputs[0]);
-				int to = Integer.parseInt(inputs[1]);
-				int weight = Integer.parseInt(inputs[2]) * 2;
-
-				if ((from == g && to == h) || (from == h && to == g)) {
-					weight--;
-				}
-
-				cities[from].nodes.add(new Node(to, weight));
-				cities[to].nodes.add(new Node(from, weight));
-
-			}
-
-			// 5. 목적지 후보들 입력
-			List<Integer> targets = new ArrayList<>();
-			for (int count = 0; count < T; count++) {
-				targets.add(Integer.parseInt(br.readLine().trim()));
-			}
-
-			dijkstra(origin);
-
-			// 8. 결과 오름차순 정렬 후 출력
-			Collections.sort(targets);
-			for (int t : targets) {
-				if (distance[t] % 2 == 1) {
-					sb.append(t).append(" ");
-				}
-			}
-
-			sb.append("\n");
-
+		for (int t = 0; t < T; ++t) {
+			input();
+			dijkstra();
+			print();
 		}
 
+		
 		bw.write(sb.toString());
 		bw.close();
 
 	}
 
-	public static void dijkstra(int start) {
+	public static void input() throws IOException {
 
-		distance = new int[vertexCount + 1];
-		Arrays.fill(distance, INF);
+		// 1. 교차로, 도로, 목적지 후보 갯수 입력
+		st = new StringTokenizer(br.readLine(), " ");
 
-		PriorityQueue<Node> queue = new PriorityQueue<>();
-		distance[start] = 0;
-		queue.add(new Node(start, 0));
+		vertexCount = Integer.parseInt(st.nextToken());
+		edgeCount = Integer.parseInt(st.nextToken());
+		targetCount = Integer.parseInt(st.nextToken());
+
+		// 2. 출발지, 지나간 교차로 정보 입력
+		st = new StringTokenizer(br.readLine(), " ");
+
+		start = Integer.parseInt(st.nextToken());
+		visitedFrom = Integer.parseInt(st.nextToken());
+		visitedTo = Integer.parseInt(st.nextToken());
+
+		// 3. 도로 정보 입력
+		vertices = new Vertex[vertexCount + 1];
+		for (int vCount = 0; vCount <= vertexCount; vCount++) {
+			vertices[vCount] = new Vertex(vCount);
+		}
+
+		for (int eCount = 0; eCount < edgeCount; eCount++) {
+
+			st = new StringTokenizer(br.readLine(), " ");
+
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			int d = Integer.parseInt(st.nextToken()) * 2;
+
+			if (a == visitedFrom && b == visitedTo || a == visitedTo && b == visitedFrom) {
+				d--;
+			}
+
+			// 양방향 도로
+			vertices[a].nodes.add(new Node(b, d));
+			vertices[b].nodes.add(new Node(a, d));
+
+		}
+
+		// 4. 목적지 후보 입력
+		targets = new int[targetCount];
+		for (int tCount = 0; tCount < targetCount; tCount++) {
+			targets[tCount] = Integer.parseInt(br.readLine().trim());
+		}
+		Arrays.sort(targets);
+
+	}
+
+	public static void dijkstra() {
 
 		boolean[] isVisited = new boolean[vertexCount + 1];
+		distances = new int[vertexCount + 1];
+		Arrays.fill(distances, INF);
+
+		PriorityQueue<Node> queue = new PriorityQueue<>();
+		queue.offer(new Node(start, 0));
+		distances[start] = 0;
+
 		while (!queue.isEmpty()) {
 
-			Node cur = queue.poll();
+			Node node = queue.poll();
+			int cVertex = node.name;
+			int cDistance = node.distance;
 
-			if (isVisited[cur.to]) {
+			if (isVisited[cVertex]) {
 				continue;
 			}
 
-			isVisited[cur.to] = true;
+			isVisited[cVertex] = true;
 
-			for (Node next : cities[cur.to].nodes) {
+			for (Node n : vertices[cVertex].nodes) {
 
-				if (!isVisited[next.to] &&  distance[next.to] > distance[cur.to] + next.weight) {
-					distance[next.to] = distance[cur.to] + next.weight;
-					queue.add(new Node(next.to, distance[next.to]));
+				int nVertex = n.name;
+				int nDistance = n.distance;
+
+				if (distances[nVertex] > cDistance + nDistance) {
+					distances[nVertex] = cDistance + nDistance;
+					queue.offer(new Node(nVertex, distances[nVertex]));
 				}
 
 			}
 
 		}
+
+	}
+
+	public static void print() {
+
+		for (int target : targets) {
+
+			if (distances[target] % 2 == 1) {
+				sb.append(target).append(" ");
+			}
+
+		}
+
+		sb.append("\n");
 
 	}
 

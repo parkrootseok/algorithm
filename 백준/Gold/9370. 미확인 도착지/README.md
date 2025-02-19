@@ -4,7 +4,7 @@
 
 ### 성능 요약
 
-메모리: 75808 KB, 시간: 516 ms
+메모리: 58596 KB, 시간: 384 ms
 
 ### 분류
 
@@ -12,7 +12,7 @@
 
 ### 제출 일자
 
-2024년 9월 29일 16:54:38
+2025년 2월 19일 14:52:24
 
 ### 문제 설명
 
@@ -22,7 +22,7 @@
 
 <p>이 듀오는 대체 어디로 가고 있는 것일까?</p>
 
-<p style="text-align: center;"><img alt="" src="https://www.acmicpc.net/upload/images/destination.png" style="font-size:medium; height:230px; width:236px"></p>
+<p style="text-align: center;"><img alt="" src="" style="font-size:medium; height:230px; width:236px"></p>
 
 <p>예제 입력의 두 번째 케이스를 시각화한 것이다. 이 듀오는 회색 원에서 두 검은 원 중 하나로 가고 있고 점선으로 표시된 도로에서 냄새를 맡았다. 따라서 그들은 6으로 향하고 있다.</p>
 
