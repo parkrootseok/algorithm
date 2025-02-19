@@ -7,6 +7,8 @@ import java.util.*;
  */
 public class Main {
 
+	static final int MOD = 1000;
+	
 	static BufferedReader br;
 	static BufferedWriter bw;
 	static StringTokenizer st;
@@ -30,20 +32,11 @@ public class Main {
 		for (int row = 0; row < N; row++) {
 			st = new StringTokenizer(br.readLine(), " ");
 			for (int col = 0; col < N; col++) {
-				matrix[row][col] = Integer.parseInt(st.nextToken());
+				matrix[row][col] = Integer.parseInt(st.nextToken()) % MOD;
 			}
 		}
-		
-		matrix = pow(matrix, B);
-		for (int row = 0; row < N; row++) {
-			for (int col = 0; col < N; col++) {
-				sb.append(matrix[row][col] % 1000);
-				if (col != N - 1) {
-					sb.append(" ");
-				}
-			}
-			sb.append("\n");
-		}
+
+		print(pow(matrix, B));
 		
 		bw.write(sb.toString());
 		bw.close();
@@ -81,13 +74,33 @@ public class Main {
 					sum += a[row][index] * b[index][col];
 				}
 
-				result[row][col] = sum % 1000;
+				result[row][col] = sum % MOD;
 
 			}
 
 		}
 
 		return result;
+
+	}
+
+	public static void print(int[][] result) {
+
+		for (int row = 0; row < N; row++) {
+
+			for (int col = 0; col < N; col++) {
+
+				sb.append(result[row][col]);
+
+				if (col != N - 1) {
+					sb.append(" ");
+				}
+
+			}
+
+			sb.append("\n");
+
+		}
 
 	}
 
