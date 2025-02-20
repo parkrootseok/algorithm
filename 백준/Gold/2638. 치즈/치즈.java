@@ -111,23 +111,6 @@ public class Main {
 
 	}
 
-	public static void melting(int[][] counts) {
-
-		for (int row = 0; row < N; row++) {
-
-			for (int col = 0; col < M; col++) {
-
-				if (1 < counts[row][col]) {
-					hasCheese[row][col] = false;
-					totalCheeseCount--;
-				}
-
-			}
-
-		}
-
-	}
-
 	public static boolean outRange(int row, int col) {
 		return row < 0 || N <= row || col < 0 || M <= col;
 	}
