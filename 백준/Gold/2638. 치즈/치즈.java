@@ -47,33 +47,41 @@ public class Main {
 	}
 
 	public static int simulation() {
-
-		int time = 0;
-
-		while (0 < totalCheeseCount) {
-
-			melting(bfs());
-			time++;
-
-		}
-
-		return time;
-
+		return bfs();
 	}
 
-	public static int[][] bfs() {
+	public static int bfs() {
 
 		int[][] counts = new int[N][M];
 		boolean[][] isVisited = new boolean[N][M];
-		Queue<int []> queue = new ArrayDeque<>();
-		queue.offer(new int[]{0, 0});
-		isVisited[0][0] = true;
 
+		Deque<int []> queue = new ArrayDeque<>();
+
+		for (int row = 0; row < N; row++) {
+			queue.offer(new int[]{row, 0, 0});
+			queue.offer(new int[]{row, M - 1, 0});
+		}
+
+		for (int col = 0; col < M; col++) {
+			queue.offer(new int[]{0, col, 0});
+			queue.offer(new int[]{N - 1, col, 0});
+		}
+
+		int time = 0;
 		while (!queue.isEmpty()) {
 
 			int[] node = queue.poll();
+
 			int row = node[0];
 			int col = node[1];
+			int cTime = node[2];
+
+			if (isVisited[row][col]) {
+				continue;
+			}
+
+			isVisited[row][col] = true;
+			time = cTime;
 
 			for (int dir = 0; dir < dr.length; dir++) {
 
@@ -86,19 +94,20 @@ public class Main {
 
 				// 치즈가 아니면 탐색
 				if (!hasCheese[nRow][nCol]) {
-					isVisited[nRow][nCol] = true;
-					queue.offer(new int[]{nRow, nCol});
+					queue.addFirst(new int[]{nRow, nCol, cTime});
 					continue;
 				}
 
 				// 치즈면 카운팅
-				counts[nRow][nCol]++;
+				if (1 < ++counts[nRow][nCol]) {
+					queue.addLast(new int[]{nRow, nCol, cTime + 1});
+				}
 
 			}
 
 		}
 
-		return counts;
+		return time;
 
 	}
 
