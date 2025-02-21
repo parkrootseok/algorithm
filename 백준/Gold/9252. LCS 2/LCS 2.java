@@ -47,14 +47,14 @@ public class Main {
 
 	private static String getLCS(String[] A, String[] B) {
 
-		Deque<String> deque = new ArrayDeque<>();
+		StringBuilder LCS = new StringBuilder();
 		int i = A.length;
 		int j = B.length;
 
 		while (0 < i && 0 < j) {
 
 			if (A[i - 1].equals(B[j - 1])) {
-				deque.addFirst(A[i - 1]);
+				LCS.insert(0, A[i- 1]);
 				i--;
 				j--;
 				continue;
@@ -68,7 +68,7 @@ public class Main {
 
 		}
 
-		return String.join("", deque);
+		return LCS.toString();
 
 	}
 
