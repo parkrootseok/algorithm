@@ -21,15 +21,15 @@ public class Main {
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
 
-		String[] A = br.readLine().trim().split("");
-		String[] B = br.readLine().trim().split("");
+		char[] A = br.readLine().toCharArray();
+		char[] B = br.readLine().toCharArray();
 		dp = new int[A.length + 1][B.length + 1];
 
 		for (int i = 1 ; i <= A.length; i++) {
 
 			for (int j = 1 ; j <= B.length; j++) {
 
-				if (A[i - 1].equals(B[j - 1])) {
+				if (A[i - 1] == B[j - 1]) {
 					dp[i][j] = dp[i - 1][j - 1] + 1;
 				} else {
 					dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
@@ -45,7 +45,7 @@ public class Main {
 
 	}
 
-	private static String getLCS(String[] A, String[] B) {
+	private static String getLCS(char[] A, char[] B) {
 
 		StringBuilder LCS = new StringBuilder();
 		int i = A.length;
@@ -53,19 +53,16 @@ public class Main {
 
 		while (0 < i && 0 < j) {
 
-			if (A[i - 1].equals(B[j - 1])) {
+			if (dp[i][j] == dp[i - 1][j]) {
+				i--;
+			} else if (dp[i][j] == dp[i][j - 1]) {
+				j--;
+			} else {
 				LCS.insert(0, A[i- 1]);
 				i--;
 				j--;
-				continue;
 			}
-
-			if (dp[i][j] == dp[i - 1][j]) {
-				i--;
-			} else {
-				j--;
-			}
-
+			
 		}
 
 		return LCS.toString();
