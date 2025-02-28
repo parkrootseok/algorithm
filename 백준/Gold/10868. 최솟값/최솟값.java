@@ -10,42 +10,36 @@ public class Main {
 	static class SegmentTree {
 
 		int[] numbers;
-		int[] element;
+		int[] elements;
 
 		public SegmentTree(int size) {
-			numbers = new int[size + 1];
-			element = new int[(int) Math.pow(2, Math.ceil(Math.log(size) / Math.log(2)) + 1)];
+			this.numbers = new int[size];
+			this.elements = new int[(int) Math.pow(2, Math.ceil(Math.log(size) / Math.log(2)) + 1)];
 		}
 
-		public int init(int parent, int start, int end) {
+		int init(int parent, int start, int end) {
 
 			if (start == end) {
-				return element[parent] = numbers[start];
+				return elements[parent] = numbers[start];
 			}
 
 			int mid = (start + end) >> 1;
-			return element[parent] = Math.min(
-				init(parent * 2, start, mid),
-				init(parent * 2 + 1, mid + 1, end)
-			);
+			return elements[parent] = Math.min(init(parent * 2, start, mid), init(parent * 2 + 1, mid + 1, end));
 
 		}
 
-		public int min(int parent, int start, int end, int tStart, int tEnd) {
+		int find(int parent, int start, int end, int tStart, int tEnd) {
 
 			if (end < tStart || tEnd < start) {
 				return Integer.MAX_VALUE;
 			}
 
 			if (tStart <= start && end <= tEnd) {
-				return element[parent];
+				return elements[parent];
 			}
 
 			int mid = (start + end) >> 1;
-			return Math.min(
-				min(parent * 2, start, mid, tStart, tEnd),
-				min(parent * 2 + 1, mid + 1, end, tStart, tEnd)
-			);
+			return Math.min(find(parent * 2, start, mid, tStart, tEnd), find(parent * 2 + 1, mid + 1, end, tStart, tEnd));
 
 		}
 
@@ -56,10 +50,8 @@ public class Main {
 	static StringTokenizer st;
 	static StringBuilder sb;
 
-	static int N;
-	static int M;
-
-	static SegmentTree segmentTree;
+	static int size;
+	static int commandCount;
 
 	public static void main(String[] args) throws IOException {
 
@@ -68,29 +60,28 @@ public class Main {
 		sb = new StringBuilder();
 
 		st = new StringTokenizer(br.readLine(), " ");
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
+		size = Integer.parseInt(st.nextToken());
+		commandCount = Integer.parseInt(st.nextToken());
 
-		segmentTree = new SegmentTree(N);
-		for (int n = 1; n <= N; ++n) {
-			segmentTree.numbers[n] = Integer.parseInt(br.readLine().trim());
+		SegmentTree segmentTree = new SegmentTree(size);
+		for (int index = 0; index < size; index++) {
+			segmentTree.numbers[index] = Integer.parseInt(br.readLine());
 		}
 
-		segmentTree.init(1, 1, N);
-
-		for (int m = 0; m < M; ++m) {
+		segmentTree.init(1, 0, size - 1);
+		for (int command = 0; command < commandCount; command++) {
 
 			st = new StringTokenizer(br.readLine(), " ");
 
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-
-			sb.append(segmentTree.min(1, 1, N, a, b)).append("\n");
+			int start = Integer.parseInt(st.nextToken());
+			int from = Integer.parseInt(st.nextToken());
+			sb.append(segmentTree.find(1, 0, size - 1, start - 1, from - 1)).append("\n");
 
 		}
 
 		bw.write(sb.toString());
 		bw.close();
+
 	}
 
 }
