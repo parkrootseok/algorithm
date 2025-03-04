@@ -1,9 +1,5 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.Arrays;
+import java.io.*;
+import java.util.*;
 
 /**
  * BOJ_내리막길
@@ -11,88 +7,82 @@ import java.util.Arrays;
  */
 public class Main {
 
-    // 상, 하, 좌, 우
-    public static int[] dr = {-1, 1, 0, 0};
-    public static int[] dc = {0, 0, -1, 1};
+	static int[] dr = {-1, 1, 0, 0};
+	static int[] dc = {0, 0, -1, 1};
 
-    public static BufferedReader br;
-    public static BufferedWriter bw;
-    public static StringBuilder sb;
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringTokenizer st;
+	static StringBuilder sb;
 
-    public static int colSize;
-    public static int rowSize;
-    public static int[][] map;
-    public static int count;
-    public static int[][] dp;
-    public static boolean[][] isVisited;
+	static int rowSize;
+	static int colSize;
+	static int[][] map;
+	static int[][] dp;
 
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
 
-        br = new BufferedReader(new InputStreamReader(System.in));
-        bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        sb = new StringBuilder();
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-        String[] inputs = br.readLine().trim().split(" ");
-        rowSize = Integer.parseInt(inputs[0]);
-        colSize = Integer.parseInt(inputs[1]);
+		st = new StringTokenizer(br.readLine(), " ");
+		rowSize = Integer.parseInt(st.nextToken());
+		colSize = Integer.parseInt(st.nextToken());
+		
+		map = new int[rowSize][colSize];
+		dp = new int[rowSize][colSize];
+		for (int row = 0; row < rowSize; row++) {
+			st = new StringTokenizer(br.readLine(), " ");
+			for (int col = 0; col < colSize; col++) {
+				map[row][col] = Integer.parseInt(st.nextToken());
+				dp[row][col] = -1;
+			}
+		}
 
-        map = new int[rowSize][colSize];
-        for (int row = 0; row < rowSize; row++) {
-            inputs = br.readLine().trim().split(" ");
-            for (int col = 0; col < colSize; col++) {
-                map[row][col] = Integer.parseInt(inputs[col]);
-            }
-        }
+		dfs(0, 0);
 
-        count = 0;
-        dp = new int[rowSize][colSize];
-        for (int row = 0; row < rowSize; row++) {
-            Arrays.fill(dp[row], -1);
-        }
+		sb.append(dp[0][0]);
+		bw.write(sb.toString());
+		bw.close();
 
-        dfs(0, 0);
+	}
 
-        sb.append(dp[0][0]);
-        bw.write(sb.toString());
-        bw.close();
+	public static int dfs(int row, int col) {
 
-    }
+		if (row == rowSize - 1 && col == colSize - 1) {
+			return 1;
+		}
 
-    public static int dfs(int row, int col) {
+		if (dp[row][col] != -1) {
+			return dp[row][col];
+		}
 
-        // 목표 지점에 도착했을 경우 1 반환
-        if (row == rowSize - 1 && col == colSize - 1)  {
-            return 1;
-        }
+		dp[row][col] = 0;
 
-        // 이미 탐색한 경로에 대해서 기존 값을 반환
-        if (dp[row][col] != -1) {
-            return dp[row][col];
-        }
+		for (int dir = 0; dir < dr.length; dir++) {
 
-        // 처음 방문한 경우 초기화
-        dp[row][col] = 0;
-        
-        for (int dir = 0; dir < dr.length;  dir++) {
+			int nRow = row + dr[dir];
+			int nCol = col + dc[dir];
 
-            int nextRow = row + dr[dir];
-            int nextCol = col + dc[dir];
+			if (outRange(nRow, nCol)) {
+				continue;
+			}
 
-            if (nextRow < 0 || rowSize <= nextRow || nextCol < 0 || colSize <= nextCol) {
-                continue;
-            }
+			if (map[row][col] <= map[nRow][nCol]) {
+				continue;
+			}
 
-            if (map[row][col] <= map[nextRow][nextCol]) {
-                continue;
-            }
+			dp[row][col] += dfs(nRow, nCol);
 
-            // 도착 여부를 반영
-            dp[row][col] += dfs(nextRow, nextCol);
-            
-        }
+		}
 
-        return dp[row][col];
+		return dp[row][col];
 
-    }
+	}
+
+	public static boolean outRange(int row, int col) {
+		return row < 0 || rowSize <= row || col < 0 || colSize <= col;
+	}
 
 }
