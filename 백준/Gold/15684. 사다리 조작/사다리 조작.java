@@ -1,27 +1,24 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.util.*;
 
 /**
- * BOJ_사다리조작
+ * BOJ_내리막길
  * @author parkrootseok
- *
- * - 시작 지점과 도착 지점의 숫자가 같도록 가로선을 추가
- * - 추가된 가로선의 개수가 3을 초과하거나 불가능하면 -1,
  */
 public class Main {
 
-	public static BufferedReader br;
-	public static BufferedWriter bw;
-	public static StringBuilder sb;
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringTokenizer st;
+	static StringBuilder sb;
 
-	public static int N;
-	public static int M;
-	public static int H;
-	public static boolean isPossible;
-	public static boolean[][] map;
+	static int colSize;
+	static int rowSize;
+	static int lineCount;
+	static boolean[][] ladder;
+	static int result;
+	static int maxCount;
+	static boolean isPossible;
 
 	public static void main(String[] args) throws IOException {
 
@@ -29,118 +26,100 @@ public class Main {
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
 
-		// 세로선 개수, 가로선 개수, 가로선을 놓을 수 있는 위치의 개수를 입력
-		String[] inputs = br.readLine().trim().split(" ");
-		N = Integer.parseInt(inputs[0]);
-		M = Integer.parseInt(inputs[1]);
-		H = Integer.parseInt(inputs[2]);
+		st = new StringTokenizer(br.readLine(), " ");
+		colSize = Integer.parseInt(st.nextToken());
+		lineCount = Integer.parseInt(st.nextToken());
+		rowSize = Integer.parseInt(st.nextToken());
 
-		map = new boolean[H + 1][N + 1];
-		for (int m = 0; m < M; m++) {
-			inputs = br.readLine().trim().split(" ");
+		ladder = new boolean[rowSize + 1][colSize + 1];
+		for (int count = 0; count < lineCount; count++) {
+			st = new StringTokenizer(br.readLine(), " ");
 
-			int a = Integer.parseInt(inputs[0]);
-			int b = Integer.parseInt(inputs[1]);
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
 
-			// b번 세로선과 b + 1 세로선을 a번 점선 위치에서 연결
-			map[a][b] = true;
-
+			ladder[from][to] = true;
 		}
 
-		if (check()) {
-			System.out.println(0);
-			return;
-		}
+		if (isPossible()) {
+			result = 0;
+		} else {
+			
+			for (int count = 1; count <= 3; count++) {
 
-		isPossible = false;
-		int answer = -1;
-		for (int useCount = 1; useCount <= 3; useCount++) {
+				maxCount = count;
+				simulation(0);
 
-			bruteforce(0, useCount);
+				if (isPossible) {
+					result = count;
+					break;
+				}
 
-			if (isPossible) {
-				answer = useCount;
-				break;
 			}
-
+			
+			if (!isPossible) {
+				result = -1;
+			}
+			
 		}
 
-		sb.append(answer);
+		sb.append(result);
 		bw.write(sb.toString());
 		bw.close();
 
 	}
 
-	public static void bruteforce(int curUseCount, int maxUseCount) {
+	public static void simulation(int count) {
 
 		if (isPossible) {
 			return;
 		}
 
-		// 가능한 가로선 개수를 모두 사용한 경우
-		if (curUseCount == maxUseCount) {
-
-			// 사다리 결과 확인
-			if (check()) {
-				isPossible = true;
-			}
-
+		if (count == maxCount) {
+			isPossible = isPossible();
 			return;
 		}
 
-		for (int row = 1; row <= H; row++) {
+		for (int row = 1; row <= rowSize; row++) {
+			for (int col = 1; col <= colSize; col++) {
 
-			for (int col = 1; col < N; col++) {
-
-				// 이미 사다리가 있는 경우
-				if (map[row][col]) {
+				if (ladder[row][col]) {
+					continue;
+				} else if ( 1 < col && ladder[row][col - 1]) {
+					continue;
+				} else if (col < colSize && ladder[row][col + 1]) {
 					continue;
 				}
 
-				// 좌측에 이미 사다리가 있는 경우
-				if (1 <= col - 1 && map[row][col - 1]) {
-					continue;
-				}
-
-				// 우측에 이미 사다리가 있는 경우
-				if (col + 1 < N && map[row][col + 1]) {
-					continue;
-				}
-
-				map[row][col] = true;
-				bruteforce(curUseCount + 1, maxUseCount);
-				map[row][col] = false;
+				ladder[row][col] = true;
+				simulation(count + 1);
+				ladder[row][col] = false;
 
 			}
-
 		}
 
 	}
 
-	public static boolean check() {
+	public static boolean isPossible() {
 
-		for (int col = 1; col <= N; col++) {
+		for (int start = 1; start <= colSize; start++) {
 
-			int row = 1;
-			int curCol = col;
+			int height = 1;
+			int target = start;
 
-			while (row <= H) {
+			while (height <= rowSize) {
 
-				// 좌측으로 이동가능
-				if (1 <= curCol - 1 && map[row][curCol - 1]) {
-					curCol = curCol - 1;
+				if (start < colSize && ladder[height][start]) {
+					start++;
+				} else if (1 < start && ladder[height][start - 1]) {
+					start--;
 				}
 
-				// 우측으로 이동 가능
-				else if (curCol < N && map[row][curCol]) {
-					curCol = curCol + 1;
-				}
-
-				row++;
+				height++;
 
 			}
 
-			if (col != curCol) {
+			if (start != target) {
 				return false;
 			}
 
