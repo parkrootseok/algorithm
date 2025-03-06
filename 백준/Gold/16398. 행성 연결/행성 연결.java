@@ -9,19 +9,17 @@ public class Main {
 
 	static class Flow implements Comparable<Flow> {
 
-		int from;
-		int to;
-		int cost;
+		int origin;
+		long cost;
 
-		public Flow(int from, int to, int cost) {
-			this.from = from;
-			this.to = to;
+		public Flow(int origin, long cost) {
+			this.origin = origin;
 			this.cost = cost;
 		}
 
 		@Override
 		public int compareTo(Flow f) {
-			return Integer.compare(this.cost, f.cost);
+			return Long.compare(this.cost, f.cost);
 		}
 
 	}
@@ -32,8 +30,8 @@ public class Main {
 	static StringBuilder sb;
 
 	static int planetNumber;
-	static Queue<Flow> flows;
-	static int[] unf;
+	static int[][] map;
+	static long[] costs;
 	static long totalCost;
 
 	public static void main(String[] args) throws IOException {
@@ -44,68 +42,55 @@ public class Main {
 
 		planetNumber = Integer.parseInt(br.readLine());
 
-		unf = new int[planetNumber + 1];
-		flows = new PriorityQueue<>();
-		for (int from = 1; from <= planetNumber; from++) {
-
-			unf[from] = from;
+		map = new int[planetNumber][planetNumber];
+		costs = new long[planetNumber];
+		for (int from = 0; from < planetNumber; from++) {
+			costs[from] = Integer.MAX_VALUE;
 			st = new StringTokenizer(br.readLine(), " ");
-
-			for (int to = 1; to <= from; to++) {
-
-				int cost = Integer.parseInt(st.nextToken());
-				if (0 < cost) {
-					flows.offer(new Flow(from, to, cost));
-					flows.offer(new Flow(to, from, cost));
-				}
-
+			for (int to = 0; to < from; to++) {
+				map[from][to] = map[to][from] = Integer.parseInt(st.nextToken());
 			}
-
 		}
 
-		kruskal();
+		prim();
 		sb.append(totalCost);
 		bw.write(sb.toString());
 		bw.close();
 
 	}
 
-	public static void kruskal() {
+	public static void prim() {
 
-		int connectionCount = 0;
-		while (!flows.isEmpty() && connectionCount < planetNumber - 1) {
+		boolean[] isVisited = new boolean[planetNumber + 1];
+		Queue<Flow> flows = new PriorityQueue<>();
+		flows.offer(new Flow(0, 0));
+		costs[0] = 0;
+
+		while (!flows.isEmpty()) {
 
 			Flow f = flows.poll();
 
-			if (find(f.from) != find(f.to)) {
-				union(f.from, f.to);
-				connectionCount++;
-				totalCost += f.cost;
+			if (isVisited[f.origin]) {
+				continue;
+			}
+
+			isVisited[f.origin] = true;
+			totalCost += costs[f.origin];
+
+			for (int destination = 0; destination < planetNumber; destination++) {
+
+				int needCost = map[f.origin][destination];
+				if (needCost == 0 || costs[destination] <= needCost) {
+					continue;
+				}
+
+				costs[destination] = needCost;
+				flows.add(new Flow(destination, costs[destination]));
+
 			}
 
 		}
 
-	}
-
-	public static void union(int a, int b) {
-
-		int findA = find(a);
-		int findB = find(b);
-
-		if (findA == findB) {
-			return;
-		}
-
-		unf[findB] = findA;
-
-	}
-
-	public static int find(int a) {
-		if (unf[a] == a) {
-			return a;
-		}
-
-		return unf[a] = find(unf[a]);
 	}
 
 }
