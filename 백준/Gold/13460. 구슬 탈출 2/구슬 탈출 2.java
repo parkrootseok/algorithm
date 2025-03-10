@@ -96,8 +96,14 @@ public class Main {
 		if (10 < count) {
 			return;
 		}
-
-		if (isPossible(beads, map)) {
+	
+		// 파란 구슬이 도착한 경우 더이상 불가
+		if (!isPossible(beads, map)) {
+			return;
+		}
+		
+		// 빨간 구슬만 도착한 경우 횟수 기록
+		if (check(beads, map)) {
 			result = Math.min(result, count);
 			return;
 		}
@@ -127,34 +133,25 @@ public class Main {
 	}
 
 	public static boolean isPossible(Bead[] beads, char[][] map) {
-
-		int redCount = 0;
-		int blueCount = 0;
-
 		for (Bead bead : beads) {
-
 			if (map[bead.row][bead.col] == HALL) {
-
-				if (bead.color == 'R') {
-					redCount++;
-				}
-
 				if (bead.color == 'B') {
-					blueCount++;
+					return false;
 				}
-
 			}
-
 		}
+		return true;
+	}
 
-		// 파란 구슬이 도착하면 무조건 실패
-		if (0 != blueCount) {
-			return false;
+	public static boolean check(Bead[] beads, char[][] map) {
+		for (Bead bead : beads) {
+			if (map[bead.row][bead.col] == HALL) {
+				if (bead.color == 'R') {
+					return true;
+				}
+			}
 		}
-
-		// 그렇지 않고, 빨간 구슬만 도착했다면 성공
-		return redCount == 1;
-
+		return false;
 	}
 
 
