@@ -5,9 +5,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.StringTokenizer;
 
 /**
  * BOJ_파티
@@ -15,145 +16,130 @@ import java.util.Queue;
  */
 public class Main {
 
-    public static class Vertex implements Comparable<Vertex> {
+	static class Village {
 
-        int index;
-        int cost;
-        List<AdjacentVertex> adjacentVertices;
+		int index;
+		List<Road> roads = new ArrayList<>();
 
-        public Vertex(int index) {
-            this.index = index;
-            this.adjacentVertices = new ArrayList<>();
-        }
+		public Village(int index) {
+			this.index = index;
+		}
 
-        @Override
-        public int compareTo(Vertex v) {
-            return Integer.compare(this.cost, v.cost);
-        }
+	}
 
-    }
+	static class Road implements Comparable<Road> {
 
-    public static class AdjacentVertex {
+		int index;
+		int time;
 
-        int to;
-        int weight;
+		public Road(int index, int time) {
+			this.index = index;
+			this.time = time;
+		}
 
-        public AdjacentVertex(int to, int weight) {
-            this.to = to;
-            this.weight = weight;
-        }
+		@Override
+		public int compareTo(Road r) {
+			return Integer.compare(this. time, r.time);
+		}
 
-    }
+	}
 
-    public static final int INF = 10_000_000;
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringTokenizer st;
+	static StringBuilder sb;
 
-    public static BufferedReader br;
-    public static BufferedWriter bw;
-    public static StringBuilder sb;
+	static int villageNumber;
+	static int roadNumber;
+	static int target;
+	static Village[] villages;
+	static int[] times;
 
-    public static int N;
-    public static int M;
-    public static int X;
+	public static void main(String[] args) throws IOException {
 
-    public static Vertex[] vertices;
-    public static int[] costs;
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-    public static void main(String[] args) throws IOException {
+		st = new StringTokenizer(br.readLine(), " ");
+		villageNumber = Integer.parseInt(st.nextToken());
+		roadNumber = Integer.parseInt(st.nextToken());
+		target = Integer.parseInt(st.nextToken());
 
-        br = new BufferedReader(new InputStreamReader(System.in));
-        bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        sb = new StringBuilder();
+		villages = new Village[villageNumber + 1];
+		for (int index = 1; index <= villageNumber; index++) {
+			villages[index] = new Village(index);
+		}
 
-        String[] inputs = br.readLine().trim().split(" ");
-        N = Integer.parseInt(inputs[0]);
-        M = Integer.parseInt(inputs[1]);
-        X = Integer.parseInt(inputs[2]);
+		for (int road = 0; road < roadNumber; road++) {
 
-        vertices = new Vertex[N + 1];
-        for (int idx = 1; idx <= N; idx++){
-            vertices[idx] =  new Vertex(idx);
-        }
+			st = new StringTokenizer(br.readLine(), " ");
 
-        for (int idx = 0; idx < M; idx++) {
+			int org = Integer.parseInt(st.nextToken());
+			int dest = Integer.parseInt(st.nextToken());
+			int time = Integer.parseInt(st.nextToken());
 
-            inputs = br.readLine().trim().split(" ");
+			villages[org].roads.add(new Road(dest, time));
 
-            int from = Integer.parseInt(inputs[0]);
-            int to = Integer.parseInt(inputs[1]);
-            int cost= Integer.parseInt(inputs[2]);
+		}
 
-            vertices[from].adjacentVertices.add(new AdjacentVertex(to, cost));
+		int[] totalTimes = new int[villageNumber + 1];
+		for (int origin = 1; origin <= villageNumber; origin++) {
 
-        }
+			if (origin == target) {
+				continue;
+			}
 
-        costs = new int[N + 1];
-        for (int to = 1; to <= N; to++){
-            
-            if (to == X) {
-                continue;
-            }
+			dijkstra(origin);
+			totalTimes[origin] = times[target];
 
-            dijkstra(to);
-            costs[to] = vertices[X].cost;
-            
-        }
+		}
 
-        dijkstra(X);
-        int max = Integer.MIN_VALUE;
-        for (int to = 1; to <= N; to++){
-            max = Math.max( max, costs[to] + vertices[to].cost);
-        }
-        
-        sb.append(max);
-        bw.write(sb.toString());
-        bw.close();
+		int answer = 0;
+		dijkstra(target);
+		for (int village = 1; village <= villageNumber; village++) {
+			answer = Math.max(answer, totalTimes[village] + times[village]);
+		}
 
-    }
+		sb.append(answer);
+		bw.write(sb.toString());
+		bw.close();
 
-    public static void dijkstra(int start) {
+	}
 
-        boolean[] isVisited = new boolean[N + 1];
+	public static void dijkstra(int start) {
 
-        PriorityQueue<Vertex> verticesQ = new PriorityQueue<>();
-        for (int idx = 1; idx <= N; idx++) {
+		times = new int[villageNumber + 1];
+		Arrays.fill(times, Integer.MAX_VALUE);
 
-            if (idx == start)  {
-                continue;
-            }
+		Queue<int[]> nodes = new ArrayDeque<>();
+		nodes.offer(new int[]{start, 0});
+		times[start] = 0;
 
-            vertices[idx].cost = INF;
+		while (!nodes.isEmpty()) {
 
-        }
+			int[] node = nodes.poll();
+			int org = node[0];
+			int usedTime = node[1];
 
-        verticesQ.add(vertices[start]);
-        vertices[start].cost = 0;
+			if (times[org] < usedTime) {
+				continue;
+			}
 
-        while (!verticesQ.isEmpty()) {
+			for (Road road : villages[org].roads) {
 
-            Vertex curVertex = verticesQ.poll();
-            int weight = curVertex.cost;
+				int dest = road.index;
+				int time = road.time;
 
-            if (isVisited[curVertex.index]) {
-                continue;
-            }
+				if (times[dest] > usedTime + time) {
+					times[dest] = usedTime + time;
+					nodes.offer(new int[]{dest, times[dest]});
+				}
 
-            isVisited[curVertex.index] = true;
+			}
 
-            for (AdjacentVertex adjacentVertex : curVertex.adjacentVertices) {
+		}
 
-                Vertex nextVertex = vertices[adjacentVertex.to];
-
-                if (nextVertex.cost > weight + adjacentVertex.weight) {
-                    nextVertex.cost = weight + adjacentVertex.weight;
-                    verticesQ.add(nextVertex);
-                }
-
-            }
-
-        }
-
-
-    }
-
+	}
 
 }
