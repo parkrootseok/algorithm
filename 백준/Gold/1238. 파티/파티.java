@@ -52,8 +52,6 @@ public class Main {
 	static int villageNumber;
 	static int roadNumber;
 	static int target;
-	static Village[] forward;
-	static Village[] reverse;
 
 	public static void main(String[] args) throws IOException {
 
@@ -66,8 +64,8 @@ public class Main {
 		roadNumber = Integer.parseInt(st.nextToken());
 		target = Integer.parseInt(st.nextToken());
 
-		forward = new Village[villageNumber + 1];
-		reverse = new Village[villageNumber + 1];
+		Village[] forward = new Village[villageNumber + 1];
+		Village[] reverse = new Village[villageNumber + 1];
 		for (int index = 1; index <= villageNumber; index++) {
 			forward[index] = new Village(index);
 			reverse[index] = new Village(index);
