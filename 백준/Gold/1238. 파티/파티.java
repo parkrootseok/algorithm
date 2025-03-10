@@ -52,8 +52,8 @@ public class Main {
 	static int villageNumber;
 	static int roadNumber;
 	static int target;
-	static Village[] villages;
-	static int[] times;
+	static Village[] forward;
+	static Village[] reverse;
 
 	public static void main(String[] args) throws IOException {
 
@@ -66,9 +66,11 @@ public class Main {
 		roadNumber = Integer.parseInt(st.nextToken());
 		target = Integer.parseInt(st.nextToken());
 
-		villages = new Village[villageNumber + 1];
+		forward = new Village[villageNumber + 1];
+		reverse = new Village[villageNumber + 1];
 		for (int index = 1; index <= villageNumber; index++) {
-			villages[index] = new Village(index);
+			forward[index] = new Village(index);
+			reverse[index] = new Village(index);
 		}
 
 		for (int road = 0; road < roadNumber; road++) {
@@ -79,26 +81,17 @@ public class Main {
 			int dest = Integer.parseInt(st.nextToken());
 			int time = Integer.parseInt(st.nextToken());
 
-			villages[org].roads.add(new Road(dest, time));
+			forward[org].roads.add(new Road(dest, time));
+			reverse[dest].roads.add(new Road(org, time));
 
 		}
 
-		int[] totalTimes = new int[villageNumber + 1];
-		for (int origin = 1; origin <= villageNumber; origin++) {
-
-			if (origin == target) {
-				continue;
-			}
-
-			dijkstra(origin);
-			totalTimes[origin] = times[target];
-
-		}
+		int[] forwardTimes = dijkstra(forward, target);
+		int[] reverseTimes = dijkstra(reverse, target);
 
 		int answer = 0;
-		dijkstra(target);
-		for (int village = 1; village <= villageNumber; village++) {
-			answer = Math.max(answer, totalTimes[village] + times[village]);
+		for (int index = 1; index <= villageNumber; index++) {
+			answer = Math.max(answer, forwardTimes[index] + reverseTimes[index]);
 		}
 
 		sb.append(answer);
@@ -107,9 +100,9 @@ public class Main {
 
 	}
 
-	public static void dijkstra(int start) {
+	public static int[] dijkstra(Village[] villages, int start) {
 
-		times = new int[villageNumber + 1];
+		int[] times = new int[villageNumber + 1];
 		Arrays.fill(times, Integer.MAX_VALUE);
 
 		Queue<int[]> nodes = new ArrayDeque<>();
@@ -139,6 +132,8 @@ public class Main {
 			}
 
 		}
+
+		return times;
 
 	}
 
