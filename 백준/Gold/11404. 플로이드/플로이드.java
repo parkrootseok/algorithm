@@ -1,71 +1,88 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 /**
  * BOJ_플로이드
  * @author parkrootseok
  */
-
 public class Main {
 
-    public static BufferedReader br;
-    public static BufferedWriter bw;
-    public static StringBuilder sb;
+	static final int INF = 10_000_000;
 
-    static final int INF = 100_000_000;
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringTokenizer st;
+	static StringBuilder sb;
 
-    static int cityCount;
-    static int busCount;
-    static int[][] cost;
+	static int cityNumber;
+	static int busNumber;
+	static int[][] costs;
 
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
 
-        br = new BufferedReader(new InputStreamReader(System.in));
-        bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        sb = new StringBuilder();
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-        cityCount = Integer.parseInt(br.readLine().trim());
-        cost = new int[cityCount][cityCount];
-        for (int city = 0; city < cityCount; city++) {
-            Arrays.fill(cost[city], INF);
-        }
+		cityNumber = Integer.parseInt(br.readLine().trim());
+		busNumber = Integer.parseInt(br.readLine().trim());
 
-        busCount = Integer.parseInt(br.readLine().trim());
-        for (int bus = 0; bus < busCount; bus++) {
-            String[] inputs = br.readLine().trim().split(" ");
+		costs = new int[cityNumber + 1][cityNumber + 1];
+		for (int city = 1; city <= cityNumber; city++) {
+			Arrays.fill(costs[city], INF);
+		}
 
-            int from = Integer.parseInt(inputs[0]);
-            int to = Integer.parseInt(inputs[1]);
-            int c = Integer.parseInt(inputs[2]);
+		for (int bus = 0; bus < busNumber; bus++) {
+			st = new StringTokenizer(br.readLine(), " ");
 
-            cost[from - 1][to - 1] = Math.min(cost[from - 1][to - 1], c);
-        }
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
+			int cost = Integer.parseInt(st.nextToken());
 
-        for (int s = 0; s < cityCount; s++) {
-            for (int from = 0; from < cityCount; from++) {
-                for (int to = 0; to < cityCount; to++) {
-                    if (from != to && cost[from][to] > cost[from][s] + cost[s][to]) {
-                        cost[from][to] = cost[from][s] + cost[s][to];
-                    }
+			costs[from][to] = Math.min(costs[from][to], cost);
+		}
 
-                }
-            }
-        }
+		floydWarshall();
 
-        for (int from = 0; from < cityCount; from++) {
-            for (int to = 0; to < cityCount; to++) {
-                if (cost[from][to] == INF) {
-                    sb.append("0").append(" ");
-                } else {
-                    sb.append(cost[from][to]).append(" ");
-                }
-            }
-            sb.append("\n");
-        }
+		for (int from = 1; from <= cityNumber; from++) {
+			for (int to = 1; to <= cityNumber; to++) {
+				sb.append(costs[from][to] != INF ? costs[from][to] : 0).append(" ");
+			}
+			sb.append("\n");
+		}
 
-        bw.write(sb.toString());
-        bw.close();
+		bw.write(sb.toString());
+		bw.close();
 
-    }
+	}
+
+	public static void floydWarshall() {
+
+		for (int stopover = 1; stopover <= cityNumber; stopover++) {
+
+			for (int from = 1; from <= cityNumber; from++) {
+
+				for (int to = 1; to <= cityNumber; to++) {
+
+					if (from == to) {
+						continue;
+					}
+
+					if (costs[from][to] > costs[from][stopover] + costs[stopover][to]) {
+						costs[from][to] = costs[from][stopover] + costs[stopover][to];
+					}
+
+				}
+
+			}
+
+		}
+
+	}
 
 }
