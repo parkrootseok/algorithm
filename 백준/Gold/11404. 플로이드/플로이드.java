@@ -29,16 +29,16 @@ public class Main {
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
 
-		cityNumber = Integer.parseInt(br.readLine().trim());
-		busNumber = Integer.parseInt(br.readLine().trim());
+		cityNumber = Integer.parseInt(br.readLine());
+		busNumber = Integer.parseInt(br.readLine());
 
 		costs = new int[cityNumber + 1][cityNumber + 1];
-		for (int city = 1; city <= cityNumber; city++) {
-			Arrays.fill(costs[city], INF);
+		for (int from = 1; from <= cityNumber; from++) {
+			Arrays.fill(costs[from], INF);
 		}
 
 		for (int bus = 0; bus < busNumber; bus++) {
-			st = new StringTokenizer(br.readLine(), " ");
+			st = new StringTokenizer(br.readLine());
 
 			int from = Integer.parseInt(st.nextToken());
 			int to = Integer.parseInt(st.nextToken());
@@ -51,7 +51,7 @@ public class Main {
 
 		for (int from = 1; from <= cityNumber; from++) {
 			for (int to = 1; to <= cityNumber; to++) {
-				sb.append(costs[from][to] != INF ? costs[from][to] : 0).append(" ");
+				sb.append(costs[from][to] == INF? 0 : costs[from][to]).append(" ");
 			}
 			sb.append("\n");
 		}
@@ -78,9 +78,7 @@ public class Main {
 					}
 
 				}
-
 			}
-
 		}
 
 	}
