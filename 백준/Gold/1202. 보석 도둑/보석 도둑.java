@@ -11,13 +11,12 @@ import java.util.StringTokenizer;
 
 /**
  * BOJ_보석도둑
+ * @author parkrootseok
  *
  * 1. 완전 탐색
  * -> O([보석 갯수]! * [가방 갯수]) -> 최악의 경우 O(300,000! * 300,000) -> 시간 초과
- *
  * 2. 그리디
- *
- * @author parkrootseok
+ * -> O([보석 갯수] * [가방 갯수] * [PQ]) -> 최악의 경우 (300,000 * 300,000 * log 300,000) -> O (N log N)
  */
 public class Main {
 
