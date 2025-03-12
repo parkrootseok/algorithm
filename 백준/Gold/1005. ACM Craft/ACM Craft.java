@@ -1,124 +1,120 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.StringTokenizer;
 
 /**
- * BOJ_ACMCraft
+ * BOJ_ACM Craft
  * @author parkrootseok
  */
-
 public class Main {
 
-    static class Vertex {
+	static class Building {
 
-        int number;
-        int buildTime;
-        int inDegree = 0;
-        List<Integer> adjVertices = new ArrayList<>();
+		int name;
+		int cost;
+		int inDegree;
+		List<Integer> rules;
 
-        public Vertex(int number, int buildTime) {
-            this.number = number;
-            this.buildTime = buildTime;
-        }
+		public Building(int name, int cost) {
+			this.name = name;
+			this.cost = cost;
+			this.inDegree = 0;
+			rules = new ArrayList<>();
+		}
 
-    }
+	}
 
-    public static BufferedReader br;
-    public static BufferedWriter bw;
-    public static StringBuilder sb;
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringTokenizer st;
+	static StringBuilder sb;
 
-    static int testCount;
-    static int vertexCount;
-    static int edgeCount;
-    static int goal;
+	static int testcaseNumber;
+	static int buildingNumber;
+	static int ruleNumber;
+	static int target;
 
-    static Vertex[] vertices;
-    static boolean[] isVisited;
-    static int[] minTime;
+	static Building[] buildings;
+	static int[] costs;
 
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
 
-        br = new BufferedReader(new InputStreamReader(System.in));
-        bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        sb = new StringBuilder();
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-        testCount = Integer.parseInt(br.readLine().trim());
-        for (int tCount = 0; tCount < testCount; tCount++) {
+		testcaseNumber = Integer.parseInt(br.readLine());
+		for (int testcase = 0; testcase < testcaseNumber; testcase++) {
 
-            String[] inputs = br.readLine().trim().split(" ");
-            vertexCount = Integer.parseInt(inputs[0]);
-            edgeCount = Integer.parseInt(inputs[1]);
+			st = new StringTokenizer(br.readLine(), " ");
+			buildingNumber = Integer.parseInt(st.nextToken());
+			ruleNumber = Integer.parseInt(st.nextToken());
 
-            inputs = br.readLine().trim().split(" ");
-            vertices = new Vertex[vertexCount + 1];
-            for (int vCount = 1; vCount <= vertexCount; vCount++) {
-                vertices[vCount] = new Vertex(vCount, Integer.parseInt(inputs[vCount - 1]));
-            }
+			st = new StringTokenizer(br.readLine(), " ");
+			buildings = new Building[buildingNumber + 1];
+			for (int building = 1; building <= buildingNumber; building++) {
+				buildings[building] = new Building(building, Integer.parseInt(st.nextToken()));
+			}
 
-            for (int eCount = 0; eCount < edgeCount; eCount++) {
+			for (int rule = 0; rule < ruleNumber; rule++) {
 
-                inputs = br.readLine().trim().split(" ");
-                int org = Integer.parseInt(inputs[0]);
-                int dest = Integer.parseInt(inputs[1]);
+				st = new StringTokenizer(br.readLine(), " ");
 
-                vertices[org].adjVertices.add(dest);
-                vertices[dest].inDegree++;
+				int from = Integer.parseInt(st.nextToken());
+				int to = Integer.parseInt(st.nextToken());
 
-            }
+				buildings[from].rules.add(to);
+				buildings[to].inDegree++;
 
-            goal = Integer.parseInt(br.readLine().trim());
+			}
 
-            minTime = new int[vertexCount + 1];
-            topologySort();
-            sb.append(minTime[goal]).append("\n");
+			target = Integer.parseInt(br.readLine());
+			topologySort();
+			sb.append(costs[target]).append("\n");
 
-        }
+		}
 
-        bw.write(sb.toString());
-        bw.close();
+		bw.write(sb.toString());
+		bw.close();
 
-    }
+	}
 
-    public static void topologySort() {
+	public static void topologySort() {
 
-        Queue<Integer> nodeQ = new ArrayDeque<>();
+		costs = new int[buildingNumber + 1];
+		
+		Queue<Integer> queue = new ArrayDeque<>();
+		for (int index = 1; index <= buildingNumber; index++) {
+			if (buildings[index].inDegree == 0) {
+				queue.offer(index);
+				costs[index] = buildings[index].cost;
+			}
+		}
 
-        // 위상 정렬을 수행하기 위해 이미 건설 가능한 건물들을 찾아 큐에 삽입
-        for (int vCount = 1; vCount <= vertexCount; vCount++) {
+		while (!queue.isEmpty()) {
+			Building curBuilding = buildings[queue.poll()];
 
-            minTime[vCount] = vertices[vCount].buildTime;
+			if (curBuilding.name == target) {
+				return;
+			}
 
-            if (vertices[vCount].inDegree == 0) {
-                nodeQ.offer(vCount);
-            }
+			for (int next : curBuilding.rules) {
+				Building nextBuilding = buildings[next];
+				costs[next] = Math.max(costs[next], costs[curBuilding.name] + nextBuilding.cost);
 
-        }
+				if (--nextBuilding.inDegree == 0) {
+					queue.offer(next);
+				}
+			}
+		}
 
-        while (!nodeQ.isEmpty()) {
-
-            // 건설 가능한 건물을 추출
-            int cNode = nodeQ.poll();
-
-            // 해당 건물이 선수 조건인 건물들을 탐색
-            for (int nNode : vertices[cNode].adjVertices) {
-
-                // 다음 건물에 대하여 현재 건물을 완료한 시간을 더하여 소요 시간을 초기화
-                minTime[nNode] = Math.max(minTime[nNode], minTime[cNode] + vertices[nNode].buildTime);
-
-                // 다음 건물에 대한 선수 조건 완료 체크
-                vertices[nNode].inDegree--;
-
-                // 모든 선수 조건을 만족했을 때 큐에 삽입
-                if (vertices[nNode].inDegree == 0) {
-                    nodeQ.offer(nNode);
-                }
-
-            }
-
-        }
-
-    }
+	}
 
 }
