@@ -3,8 +3,11 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 /**
  * BOJ_이분그래프
@@ -12,29 +15,30 @@ import java.util.List;
  */
 public class Main {
 
-	public static final int RED = 1;
-	public static final int BLUE = -1;
+	static class Vertex  {
 
-	public static class Vertex {
+		int name;
+		List<Integer> adjacent;
 
-		int number;
-		List<Integer> adjacentVertices = new ArrayList<>();
-
-		public Vertex(int number) {
-			this.number = number;
+		public Vertex(int name) {
+			this.name = name;
+			this.adjacent = new ArrayList<>();
 		}
 	}
 
-	public static BufferedReader br;
-	public static BufferedWriter bw;
-	public static StringBuilder sb;
+	public static final int RED = 1;
 
-	public static int testCount;
-	public static int vertexCount;
-	public static int edgeCount;
-	public static Vertex[] vertices;
-	public static int[] colors;
-	public static boolean isPossible;
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringTokenizer st;
+	static StringBuilder sb;
+
+	static int K;
+	static int V;
+	static int E;
+
+	static Vertex[] vertices;
+	static int[] colors;
 
 	public static void main(String[] args) throws IOException {
 
@@ -42,51 +46,43 @@ public class Main {
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
 
-		testCount = Integer.parseInt(br.readLine().trim());
+		K = Integer.parseInt(br.readLine());
+		for (int k = 0; k < K; k++) {
 
-		for (int curTestCount = 0; curTestCount < testCount; curTestCount++) {
+			st = new StringTokenizer(br.readLine(), " ");
+			V = Integer.parseInt(st.nextToken());
+			E = Integer.parseInt(st.nextToken());
 
-			String[] inputs = br.readLine().trim().split(" ");
-			vertexCount = Integer.parseInt(inputs[0]);
-			vertices = new Vertex[vertexCount + 1];
-
-			for (int number = 1; number <= vertexCount; number++) {
-				vertices[number] = new Vertex(number);
+			vertices = new Vertex[V + 1];
+			for (int v = 1; v <= V; v++) {
+				vertices[v] = new Vertex(v);
 			}
 
-			edgeCount = Integer.parseInt(inputs[1]);
-			for (int curEdgeCount = 0; curEdgeCount < edgeCount; curEdgeCount++) {
-				inputs = br.readLine().trim().split(" ");
-				int from = Integer.parseInt(inputs[0]);
-				int to = Integer.parseInt(inputs[1]);
+			for (int e = 0; e < E; e++) {
+				st = new StringTokenizer(br.readLine(), " ");
 
-				vertices[from].adjacentVertices.add(to);
-				vertices[to].adjacentVertices.add(from);
+				int from = Integer.parseInt(st.nextToken());
+				int to = Integer.parseInt(st.nextToken());
 
+				vertices[from].adjacent.add(to);
+				vertices[to].adjacent.add(from);
 			}
 
-			isPossible = true;
-			colors = new int[vertexCount + 1];
-			for (int number = 1; number <= vertexCount; number++) {
+			colors = new int[V + 1];
+			boolean isPossible = false;
+			for (int v = 1; v <= V; v++) {
+
+				if (colors[v] == 0) {
+					isPossible = isBipartiteGraph(v);
+				}
 
 				if (!isPossible) {
 					break;
 				}
 
-				// 방문하지 않은 정점만 탐색
-				if (colors[number] == 0) {
-					dfs(number, RED);
-				}
-
 			}
 
-			if (isPossible) {
-				sb.append("YES").append("\n");
-			}
-
-			else {
-				sb.append("NO").append("\n");
-			}
+			sb.append(isPossible? "YES\n" : "NO\n");
 
 		}
 
@@ -95,29 +91,32 @@ public class Main {
 
 	}
 
-	public static void dfs(int curVertex, int color) {
+	public static boolean isBipartiteGraph(int start) {
 
-		if (!isPossible) {
-			return;
-		}
+		Queue<Integer> nodes = new ArrayDeque<>();
+		nodes.offer(start);
+		colors[start] = RED;
 
-		// 현재 정점에 색깔 할당
-		colors[curVertex] = color;
+		while (!nodes.isEmpty()) {
 
-		for (int adjacentVertex : vertices[curVertex].adjacentVertices) {
+			int cVertex = nodes.poll();
 
-			// 현재 정점의 색과 동일한 인접한 정점이 있다면 불가능하므로 종료
-			if (colors[adjacentVertex] == colors[curVertex]) {
-				isPossible = false;
-				return;
+			for (int nVertex : vertices[cVertex].adjacent) {
+
+				if (colors[cVertex] == colors[nVertex]) {
+					return false;
+				}
+
+				if (colors[nVertex] == 0) {
+					colors[nVertex] = colors[cVertex] * -1;
+					nodes.offer(nVertex);
+				}
+
 			}
 
-			// 방문하지 않은 정점만 탐색
-			if (colors[adjacentVertex] == 0) {
-				dfs(adjacentVertex, color * -1);
-			}
-
 		}
+
+		return true;
 
 	}
 
