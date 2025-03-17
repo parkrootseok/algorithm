@@ -11,16 +11,18 @@ import java.util.StringTokenizer;
  * @author parkrootseok
  */
 public class Main {
-	
+
+	static final int LIMIT = 5;
+
 	static BufferedReader br;
 	static BufferedWriter bw;
 	static StringTokenizer st;
-	static StringBuilder sb;
+	static StringBuilder sb;;
 
 	static int size;
 	static int[][] board;
-	static int answer;
 	static int[] commands;
+	static int answer;
 
 	public static void main(String[] args) throws IOException {
 
@@ -37,9 +39,9 @@ public class Main {
 			}
 		}
 
-		commands = new int[5];
-		answer = Integer.MIN_VALUE;
-		simulation(0);
+		commands = new int[LIMIT];
+		answer = 0;
+		permutation(0);
 
 		sb.append(answer);
 		bw.write(sb.toString());
@@ -47,61 +49,46 @@ public class Main {
 
 	}
 
-	public static void simulation(int depth) {
+	public static void permutation(int depth) {
 
-		if (depth == 5) {
-			int[][] copyBoard = copy(board);
+		if (depth == LIMIT) {
 
-			for (int cmd : commands) {
-				swipe(copyBoard, cmd);
+			int[][] copyBoard = copyBoard();
+
+			for (int command : commands) {
+				swipe(copyBoard, command);
 			}
 
-			int max = 0;
-			for (int row = 0; row < size; row++) {
-				for (int col = 0; col < size; col++) {
-					max = Math.max(max, copyBoard[row][col]);
-				}
-			}
-
-			answer = Math.max(answer, max);
+			answer = Math.max(answer, getMaxBlock(copyBoard));
 			return;
+
 		}
 
 		for (int dir = 0; dir < 5; dir++) {
 			commands[depth] = dir;
-			simulation(depth + 1);
+			permutation(depth + 1);
 		}
 
 	}
 
-	public static int[][] copy(int[][] board) {
-		int[][] copyBoard = new int[size][size];
-		for (int row = 0; row < size; row++) {
-			copyBoard[row] = board[row].clone();
-		}
-		return copyBoard;
-	}
+	public static void swipe(int[][] board, int command) {
 
-	public static void swipe(int[][] board, int dir) {
+		switch (command) {
 
-		switch (dir) {
 			case 0:
 				for (int col = 0; col < size; col++) {
-
-					int nextPos = 0;
-					int prevBlock = 0;
-
+					int position = 0;
+					int block = 0;
 					for (int row = 0; row < size; row++) {
-						if (board[row][col] != 0) {
-							if (prevBlock == board[row][col]) {
-								board[nextPos - 1][col] = prevBlock * 2;
-								prevBlock = 0;
+						if (0 < board[row][col]) {
+							if (board[row][col] == block) {
+								board[position - 1][col] = block * 2;
+								block = 0;
 								board[row][col] = 0;
 							} else {
-								prevBlock = board[row][col];
+								block = board[row][col];
 								board[row][col] = 0;
-								board[nextPos][col] = prevBlock;
-								nextPos++;
+								board[position++][col] = block;
 							}
 						}
 					}
@@ -109,44 +96,37 @@ public class Main {
 				break;
 			case 1:
 				for (int col = 0; col < size; col++) {
-
-					int nextPos = size - 1;
-					int lastNumber = 0;
-
+					int position = size - 1;
+					int block = 0;
 					for (int row = size - 1; 0 <= row; row--) {
-						if (board[row][col] != 0) {
-							if (lastNumber == board[row][col]) {
-								board[nextPos + 1][col] = lastNumber * 2;
-								lastNumber = 0;
+						if (0 < board[row][col]) {
+							if (board[row][col] == block) {
+								board[position + 1][col] = block * 2;
+								block = 0;
 								board[row][col] = 0;
 							} else {
-								lastNumber = board[row][col];
+								block = board[row][col];
 								board[row][col] = 0;
-								board[nextPos][col] = lastNumber;
-								nextPos--;
+								board[position--][col] = block;
 							}
 						}
 					}
-
 				}
 				break;
 			case 2:
 				for (int row = 0; row < size; row++) {
-
-					int nextPos = 0;
-					int prevBlock = 0;
-
+					int position = 0;
+					int block = 0;
 					for (int col = 0; col < size; col++) {
-						if (board[row][col] != 0) {
-							if (prevBlock == board[row][col]) {
-								board[row][nextPos - 1] = prevBlock * 2;
-								prevBlock = 0;
+						if (0 < board[row][col]) {
+							if (board[row][col] == block) {
+								board[row][position - 1] = block * 2;
+								block = 0;
 								board[row][col] = 0;
 							} else {
-								prevBlock = board[row][col];
+								block = board[row][col];
 								board[row][col] = 0;
-								board[row][nextPos] = prevBlock;
-								nextPos++;
+								board[row][position++] = block;
 							}
 						}
 					}
@@ -154,21 +134,18 @@ public class Main {
 				break;
 			case 3:
 				for (int row = 0; row < size; row++) {
-
-					int nextPos = size - 1;
-					int prevBlock = 0;
-
+					int position = size - 1;
+					int block = 0;
 					for (int col = size - 1; 0 <= col; col--) {
-						if (board[row][col] != 0) {
-							if (prevBlock == board[row][col]) {
-								board[row][nextPos + 1] = prevBlock * 2;
-								prevBlock = 0;
+						if (0 < board[row][col]) {
+							if (board[row][col] == block) {
+								board[row][position + 1] = block * 2;
+								block = 0;
 								board[row][col] = 0;
 							} else {
-								prevBlock = board[row][col];
+								block = board[row][col];
 								board[row][col] = 0;
-								board[row][nextPos] = prevBlock;
-								nextPos--;
+								board[row][position--] = block;
 							}
 						}
 					}
@@ -178,8 +155,22 @@ public class Main {
 
 	}
 
-	public static boolean outRange(int row, int col) {
-		return row < 0 || size <= row || col < 0 || size <= col;
+	public static int getMaxBlock(int[][] board) {
+		int maxBlock = 0;
+		for (int row = 0; row < size; row++) {
+			for (int col = 0; col < size; col++) {
+				maxBlock = Math.max(maxBlock, board[row][col]);
+			}
+		}
+		return maxBlock;
+	}
+
+	public static int[][] copyBoard() {
+		int[][] copyBoard = new int[size][size];
+		for (int row = 0; row < size; row++) {
+			copyBoard[row] = board[row].clone();
+		}
+		return copyBoard;
 	}
 
 }
