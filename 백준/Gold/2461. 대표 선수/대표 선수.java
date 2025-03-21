@@ -56,6 +56,7 @@ public class Main {
 
 		abilities = new PriorityQueue[N];
 		candidates = new PriorityQueue<>();
+		
 		for (int classNum = 0; classNum < N; classNum++) {
 
 			abilities[classNum] = new PriorityQueue<>();
