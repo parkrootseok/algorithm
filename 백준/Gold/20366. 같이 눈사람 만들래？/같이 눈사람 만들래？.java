@@ -35,11 +35,19 @@ public class Main {
 		}
 		Arrays.sort(diameters);
 
+		sb.append(twoPointer());
+		bw.write(sb.toString());
+		bw.close();
+
+	}
+
+	public static int twoPointer() {
+
 		int min = Integer.MAX_VALUE;
 		for (int elsaBottom = 0; elsaBottom < N; elsaBottom++) {
-
 			for (int elsaTop = elsaBottom + 1; elsaTop < N; elsaTop++) {
 
+				int elsa = getHeight(elsaBottom, elsaTop);
 				int annaBottom = 0;
 				int annaTop = N - 1;
 
@@ -55,31 +63,29 @@ public class Main {
 						continue;
 					}
 
-					// 차이가 크다는 것은, 한쪽이 너무 작거나, 너무 크다는 것을 의미함
-					// 현재 정렬된 상태이므로, 오른쪽 범위를 줄이면 차이를 작게
-					// 왼쪽을 줄이면 차이를 크게 만드는 것임
-					int anna = getHeight(annaBottom, annaTop);	// 안나의 눈사람 크기
-					int elsa = getHeight(elsaBottom, elsaTop);	// 엘사의 눈사람 크기
-
+					int anna = getHeight(annaBottom, annaTop);
 					min = Math.min(min, getDiff(anna, elsa));
 
 					if (anna > elsa) {
+						// 안나가 만든 눈사람이 더 큰 경우 작게 조정
 						annaTop--;
-					} else {
+					} else if (anna < elsa) {
+						// 안나가 만든 눈사람이 더 작은 경우 크게 조정
 						annaBottom++;
+					} else {
+						// 같을 경우 0을 바로 리턴
+						return 0;
 					}
 
 				}
 
 			}
-
 		}
 
-		sb.append(min);
-		bw.write(sb.toString());
-		bw.close();
+		return min;
 
 	}
+
 
 	public static int getHeight(int b, int t) {
 		return diameters[b] + diameters[t];
