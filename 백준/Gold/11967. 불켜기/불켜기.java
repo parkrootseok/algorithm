@@ -17,7 +17,8 @@ public class Main {
 
 	static int N;
 	static int M;
-	static List<int[]>[][] map;
+	static List<int[]>[][] switches;
+
 	public static void main(String[] args) throws IOException {
 
 		br = new BufferedReader(new InputStreamReader(System.in));
@@ -28,83 +29,90 @@ public class Main {
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 
-		map = new ArrayList[N][N];
+		switches = new ArrayList[N][N];
 		for (int row = 0; row < N; row++) {
 			for (int col = 0; col < N; col++) {
-				map[row][col] = new ArrayList<>();
+				switches[row][col] = new ArrayList<>();
 			}
 		}
 
 		for (int index = 0; index < M; index++) {
+
 			st = new StringTokenizer(br.readLine(), " ");
 
-			int cRow = Integer.parseInt(st.nextToken()) - 1;
-			int cCol = Integer.parseInt(st.nextToken()) - 1;
-			int nRow = Integer.parseInt(st.nextToken()) - 1;
-			int nCol = Integer.parseInt(st.nextToken()) - 1;
+			int x = Integer.parseInt(st.nextToken()) - 1;
+			int y = Integer.parseInt(st.nextToken()) - 1;
+			int a = Integer.parseInt(st.nextToken()) - 1;
+			int b = Integer.parseInt(st.nextToken()) - 1;
 
-			map[cRow][cCol].add(new int[]{nRow, nCol});
+			switches[x][y].add(new int[]{a, b});
+
 		}
 
-		sb.append(bfs(0, 0));
+		sb.append(bfs());
 		bw.write(sb.toString());
 		bw.close();
 
 	}
 
+	public static int bfs() {
 
-	public static int bfs(int row, int col) {
-
-		int count = 1;
 		boolean[][] isVisited = new boolean[N][N];
 		boolean[][] isTurnOn = new boolean[N][N];
-		Queue<int[]> positions = new ArrayDeque<>();
-		positions.offer(new int[]{row, col});
-		isVisited[row][col] = true;
-		isTurnOn[row][col] = true;
 
-		while (!positions.isEmpty()) {
+		Queue<int[]> nodes = new ArrayDeque<>();
+		nodes.add(new int[]{0, 0});
+		isVisited[0][0] = true;
+		isTurnOn[0][0] = true;
 
-			int[] curPosition = positions.poll();
-			int curRow = curPosition[0];
-			int curCol = curPosition[1];
+		int answer = 1;
+		while (!nodes.isEmpty()) {
 
-			if (!map[curRow][curCol].isEmpty()) {
+			int[] node = nodes.poll();
+			int cRow = node[0];
+			int cCol = node[1];
+
+			if (!switches[cRow][cCol].isEmpty()) {
+
 				isVisited = new boolean[N][N];
-				isVisited[curRow][curCol] = true;
-				for (int[] infos : map[curRow][curCol]) {
-					if (!isTurnOn[infos[0]][infos[1]]) {
-						count++;
-						isTurnOn[infos[0]][infos[1]] = true;
+				isVisited[cRow][cCol] = true;
+
+				for (int[] s : switches[cRow][cCol]) {
+
+					int row = s[0];
+					int col = s[1];
+
+					if (!isTurnOn[row][col]) {
+						answer++;
+						isTurnOn[row][col] = true;
 					}
+
 				}
-				map[curRow][curCol].clear();
+
+				switches[cRow][cCol].clear();
+
 			}
 
 			for (int dir = 0; dir < dr.length; dir++) {
 
-				int nextRow = curRow + dr[dir];
-				int nextCol = curCol + dc[dir];
+				int nRow = cRow + dr[dir];
+				int nCol = cCol + dc[dir];
 
-				if (outRange(nextRow, nextCol)) {
+				if (outRange(nRow, nCol) || isVisited[nRow][nCol]) {
 					continue;
 				}
 
-				if (isVisited[nextRow][nextCol]) {
-					continue;
-				}
-
-				if (isTurnOn[nextRow][nextCol]) {
-					positions.add(new int[]{nextRow, nextCol});
-					isVisited[nextRow][nextCol] = true;
+				if (isTurnOn[nRow][nCol]) {
+					isVisited[nRow][nCol] = true;
+					nodes.add(new int[]{nRow, nCol});
 				}
 
 			}
 
 		}
 
-		return count;
-
+		return answer;
+		
 	}
 
 	public static boolean outRange(int row, int col) {
