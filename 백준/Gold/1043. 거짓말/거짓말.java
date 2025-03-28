@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.*;
 
+import javax.swing.*;
+
 /**
  * BOJ_거짓말
  * @author parkrootseok
@@ -12,74 +14,62 @@ public class Main {
 	static StringTokenizer st;
 	static StringBuilder sb;
 
-	static int personCount;
-	
-	static int knownCount;
-	static int[] knownPeople;
-	
-	static int partyCount;
+	static int N;
+	static int M;
+	static int[] isKnown;
 	static List<Integer>[] parties;
-	
 	static int[] unf;
-	
+
 	public static void main(String[] args) throws IOException {
 
 		br = new BufferedReader(new InputStreamReader(System.in));
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
-		
+
 		st = new StringTokenizer(br.readLine(), " ");
-		personCount = Integer.parseInt(st.nextToken());
-		partyCount = Integer.parseInt(st.nextToken());
-		
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+
+		parties = new ArrayList[M];
+		unf = new int[N + 1];
+		for (int person = 1; person <= N; person++) {
+			unf[person] = person;
+		}
+
 		st = new StringTokenizer(br.readLine(), " ");
-		knownCount = Integer.parseInt(st.nextToken());
-		knownPeople = new int[knownCount];
-		for (int kCount = 0; kCount < knownCount; kCount++) {
-			knownPeople[kCount] = Integer.parseInt(st.nextToken());
+		isKnown = new int[Integer.parseInt(st.nextToken())];
+		for (int index = 0 ; index < isKnown.length; index++) {
+			isKnown[index] = Integer.parseInt(st.nextToken());
 		}
-		
-		unf = new int[personCount + 1];
-		for (int idx = 0; idx <= personCount; idx++) {
-			unf[idx] = idx;
-		}
-		
-		parties = new ArrayList[partyCount];
-		for (int pCount = 0; pCount < partyCount; pCount++) {
-			
-			parties[pCount] = new ArrayList<>();
-			st = new StringTokenizer(br.readLine(), " ");
-			int invitationPersonCount = Integer.parseInt(st.nextToken());
-			for (int iCount = 0; iCount < invitationPersonCount; iCount++) {
-				parties[pCount].add(Integer.parseInt(st.nextToken()));
-			}
-			
-			int leader = parties[pCount].get(0);
-			for (int idx = 1; idx < parties[pCount].size(); idx++) {
-				union(leader, parties[pCount].get(idx));
-			}
-			
-		}
-		
-		int count = 0;
-		for (List<Integer> p : parties) {
-			
-			int leader = p.get(0);
-			boolean isPossible = true;
-			
-			for (int kCount = 0; kCount < knownCount; kCount++) {
-				
-				if (find(leader) == find(knownPeople[kCount])) {
-					isPossible = false;
-					break;
+
+		int count = M;
+		if (isKnown.length != 0) {
+			for (int pIndex = 0; pIndex < parties.length; pIndex++) {
+
+				parties[pIndex] = new ArrayList<>();
+				st = new StringTokenizer(br.readLine(), " ");
+
+				int peopleNumber = Integer.parseInt(st.nextToken());
+				for (int index = 0; index < peopleNumber; index++) {
+					parties[pIndex].add(Integer.parseInt(st.nextToken()));
 				}
-				
+
+				int leader = parties[pIndex].get(0);
+				for (int person : parties[pIndex]) {
+					union(leader, person);
+				}
+
 			}
-			
-			if (isPossible) {
-				count++;
+
+			for (List<Integer> party : parties) {
+				int leader = party.get(0);
+				for (int person : isKnown) {
+					if (find(leader) == find(person)) {
+						count--;
+						break;
+					}
+				}
 			}
-			
 		}
 
 		sb.append(count);
@@ -89,26 +79,24 @@ public class Main {
 	}
 
 	public static void union(int a, int b) {
-		
+
 		int findA = find(a);
 		int findB = find(b);
-		
+
 		if (findA == findB) {
 			return;
 		}
-		
+
 		unf[findB] = findA;
-		
+
 	}
-	
+
 	public static int find(int a) {
-		
 		if (unf[a] == a) {
 			return a;
 		}
-		
+
 		return unf[a] = find(unf[a]);
-		
 	}
-	
+
 }
