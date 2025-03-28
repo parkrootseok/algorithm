@@ -50,15 +50,14 @@ public class Main {
 				st = new StringTokenizer(br.readLine(), " ");
 
 				int peopleNumber = Integer.parseInt(st.nextToken());
-				for (int index = 0; index < peopleNumber; index++) {
-					parties[pIndex].add(Integer.parseInt(st.nextToken()));
-				}
+				int leader = Integer.parseInt(st.nextToken());
+				parties[pIndex].add(leader);
 
-				int leader = parties[pIndex].get(0);
-				for (int person : parties[pIndex]) {
-					union(leader, person);
+				for (int index = 1; index < peopleNumber; index++) {
+					int follower = Integer.parseInt(st.nextToken());
+					union(leader, follower);
+					parties[pIndex].add(follower);
 				}
-
 			}
 
 			for (List<Integer> party : parties) {
