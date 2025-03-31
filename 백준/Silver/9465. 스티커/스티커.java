@@ -13,11 +13,6 @@ public class Main {
 	static StringBuilder sb;
 
 	static int T;
-	static int n;
-	static int[][] scores;
-	static boolean[][] isUsed;
-	static int max;
-	static int[][] dp;
 
 	public static void main(String[] args) throws IOException {
 
@@ -25,40 +20,34 @@ public class Main {
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
 
-		T = Integer.parseInt(br.readLine().trim());
-		for (int t = 0; t < T; ++t) {
+		T = Integer.parseInt(br.readLine());
+		for (int t = 0; t < T; t++) {
 
-			n = Integer.parseInt(br.readLine().trim());
-
-			max = Integer.MIN_VALUE;
-			scores = new int[2][n + 1];
-			isUsed = new boolean[2][n + 1];
-			for (int row = 0; row < scores.length; ++row) {
-
+			int N = Integer.parseInt(br.readLine());
+			int[][] stickers = new int[2][N];
+			for (int index = 0; index < 2; index++) {
 				st = new StringTokenizer(br.readLine(), " ");
-
-				int col = 1;
-				while (st.hasMoreTokens()) {
-					scores[row][col++] = Integer.parseInt(st.nextToken());
+				for (int n = 0; n < N; n++) {
+					stickers[index][n] = Integer.parseInt(st.nextToken());
 				}
-
 			}
 
-			dp = new int[3][n + 1];
-			for (int col = 1; col <= n; col++) {
+			int[][] dp = new int[3][N + 1];
+			for (int n = 1; n <= N; n++) {
 
-				// 위
-				dp[0][col] = Math.max(dp[1][col - 1] + scores[0][col], dp[2][col - 1] + scores[0][col]);
+				// X
+				dp[0][n] = Math.max(dp[1][n - 1], dp[2][n - 1]);
 
 				// 아래
-				dp[1][col] = Math.max(dp[0][col - 1] + scores[1][col], dp[2][col - 1] + scores[1][col]);
+				dp[1][n] = Math.max(dp[0][n - 1] + stickers[0][n - 1], dp[2][n - 1] + stickers[0][n - 1]);
 
-				// 선택 X
-				dp[2][col] = Math.max(dp[0][col - 1], dp[1][col - 1]);
+				// 위
+				dp[2][n] = Math.max(dp[0][n - 1] + stickers[1][n - 1], dp[1][n - 1] + stickers[1][n - 1]);
+
 
 			}
 
-			sb.append(Math.max(dp[0][n], Math.max(dp[1][n], dp[2][n]))).append("\n");
+			sb.append(Math.max(dp[0][N], Math.max(dp[1][N], dp[2][N]))).append("\n");
 
 		}
 
