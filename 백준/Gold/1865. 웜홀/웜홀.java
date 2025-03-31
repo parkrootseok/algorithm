@@ -2,134 +2,115 @@ import java.io.*;
 import java.util.*;
 
 /**
- * BOJ_웜홀 - 슈퍼소스 버전
+ * BOJ_웜홀
+ * @author parkrootseok
  */
 public class Main {
 
-    static class Vertex {
-        int name;
-        List<Edge> adjacentVertices;
+	static class City {
+		int index;
+		List<Edge> edges;
 
-        public Vertex(int name) {
-            this.name = name;
-            this.adjacentVertices = new ArrayList<>();
-        }
-    }
+		public City(int index) {
+			this.index = index;
+			this.edges = new ArrayList<>();
+		}
+	}
 
-    static class Edge {
-        int name;
-        int time;
-        public Edge(int name, int time) {
-            this.name = name;
-            this.time = time;
-        }
-    }
+	static class Edge {
+		int dest;
+		int time;
 
-    static BufferedReader br;
-    static BufferedWriter bw;
-    static StringTokenizer st;
-    static StringBuilder sb;
+		public Edge(int dest, int time) {
+			this.dest = dest;
+			this.time = time;
+		}
+	}
 
-    static int testCount;
-    static int N;
-    static int M;
-    static int W;
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringTokenizer st;
+	static StringBuilder sb;
 
-    // 정점 배열(0번 = 슈퍼소스, 1..N = 실제 정점)
-    static Vertex[] vertices; 
-    static int[] distance;
+	static int TC;
+	static int N;
+	static int M;
+	static int W;
+	static City[] cities;
 
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
 
-        br = new BufferedReader(new InputStreamReader(System.in));
-        bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        sb = new StringBuilder();
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-        testCount = Integer.parseInt(br.readLine().trim());
-        for (int tCount = 0; tCount < testCount; tCount++) {
+		TC = Integer.parseInt(br.readLine());
 
-            st = new StringTokenizer(br.readLine(), " ");
-            N = Integer.parseInt(st.nextToken());
-            M = Integer.parseInt(st.nextToken());
-            W = Integer.parseInt(st.nextToken());
+		for (int tc = 0; tc < TC; tc++) {
 
-            // 슈퍼소스 포함: 0..N => 총 (N+1)개
-            vertices = new Vertex[N+1];
-            for (int i = 0; i <= N; i++) {
-                vertices[i] = new Vertex(i);
-            }
+			st = new StringTokenizer(br.readLine(), " ");
+			N = Integer.parseInt(st.nextToken());
+			M = Integer.parseInt(st.nextToken());
+			W = Integer.parseInt(st.nextToken());
 
-            // 도로(양방향) 입력
-            for (int m = 0; m < M; m++) {
-                st = new StringTokenizer(br.readLine(), " ");
-                int S = Integer.parseInt(st.nextToken());
-                int E = Integer.parseInt(st.nextToken());
-                int T = Integer.parseInt(st.nextToken());
+			cities = new City[N + 1];
+			for (int n = 0; n <= N; n++) {
+				cities[n] = new City(n);
+			}
 
-                vertices[S].adjacentVertices.add(new Edge(E, T));
-                vertices[E].adjacentVertices.add(new Edge(S, T));
-            }
+			for (int m = 0; m < M; m++) {
+				st = new StringTokenizer(br.readLine(), " ");
 
-            // 웜홀(단방향, 음수 가중치) 입력
-            for (int w = 0; w < W; w++) {
-                st = new StringTokenizer(br.readLine(), " ");
-                int S = Integer.parseInt(st.nextToken());
-                int E = Integer.parseInt(st.nextToken());
-                int T = Integer.parseInt(st.nextToken());
+				int org = Integer.parseInt(st.nextToken());
+				int dest = Integer.parseInt(st.nextToken());
+				int time = Integer.parseInt(st.nextToken());
 
-                // 웜홀은 -T 로 처리
-                vertices[S].adjacentVertices.add(new Edge(E, -T));
-            }
+				cities[org].edges.add(new Edge(dest, time));
+				cities[dest].edges.add(new Edge(org, time));
+			}
 
-            // **슈퍼소스(0)에서 모든 정점(1~N)으로 0 가중치 간선 추가** 
-            for (int v = 1; v <= N; v++) {
-                vertices[0].adjacentVertices.add(new Edge(v, 0));
-            }
+			for (int w = 0; w < W; w++) {
+				st = new StringTokenizer(br.readLine(), " ");
 
-            // Bellman-Ford 실행
-            boolean hasNegativeCycle = bellmanFord();
+				int org = Integer.parseInt(st.nextToken());
+				int dest = Integer.parseInt(st.nextToken());
+				int time = Integer.parseInt(st.nextToken());
 
-            sb.append(hasNegativeCycle ? "YES\n" : "NO\n");
-        }
+				cities[org].edges.add(new Edge(dest, time * -1));
+			}
 
-        bw.write(sb.toString());
-        bw.close();
-    }
+			sb.append(bellmanFord() ? "YES" : "NO").append("\n");
 
-    /**
-     * 슈퍼소스(0)을 시작점으로 하는 Bellman-Ford
-     * 그래프에 음수 사이클이 있으면 true, 없으면 false
-     */
-    public static boolean bellmanFord() {
-        int INF = 100_000_000;
-        distance = new int[N+1];
-        Arrays.fill(distance, INF);
+		}
 
-        // 슈퍼소스(0)까지의 거리를 0으로
-        distance[0] = 0;
+		bw.write(sb.toString());
+		bw.close();
 
-        // 실제 정점 총 개수: N+1 (0..N)
-        // => 최단 거리 확정은 (N+1 - 1) = N번 반복
-        // => 추가 1번 (즉, N번째 반복 시도)에서 갱신 일어나면 음수 사이클
-        for (int count = 1; count <= N; count++) {
-            for (int cur = 0; cur <= N; cur++) {
-                // cur 정점에서 갈 수 있는 모든 간선 탐색
-                for (Edge e : vertices[cur].adjacentVertices) {
-                    int next = e.name;
-                    int cost = e.time;
-                    // Relaxation 조건
-                    if (distance[cur] != INF && distance[next] > distance[cur] + cost) {
-                        distance[next] = distance[cur] + cost;
+	}
 
-                        // N번째 라운드에서 갱신 발생 => 음수 사이클
-                        if (count == N) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
+	public static boolean bellmanFord() {
 
-        return false;
-    }
+		int INF = 100_000_000;
+		int[] dist = new int[N + 1];
+		Arrays.fill(dist, INF);
+		dist[1] = 0;
+
+		for (int count = 1; count <= N; count++) {
+			for (int cur = 1; cur <= N; cur++) {
+				for (Edge edge : cities[cur].edges) {
+					if (dist[edge.dest] > dist[cur] + edge.time) {
+						dist[edge.dest] = dist[cur] + edge.time;
+
+						if (count == N) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+
+		return false;
+
+	}
+
 }
