@@ -9,13 +9,14 @@ public class Main {
 
 	static BufferedReader br;
 	static BufferedWriter bw;
-	static StringBuilder sb;
 	static StringTokenizer st;
+	static StringBuilder sb;
 
 	static int N;
 	static int M;
-	static long limit;
-	static int[] runningTimes;
+	static int min;
+	static int max;
+	static int[] times;
 
 	public static void main(String[] args) throws IOException {
 
@@ -23,59 +24,59 @@ public class Main {
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
 
-		input();
+		st = new StringTokenizer(br.readLine(), " ");
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 
-		sb.append(binarySearch(0, limit));
+		times = new int[N];
+		min = Integer.MAX_VALUE;
+		max = Integer.MIN_VALUE;
+
+		for (int n = 0; n < N; n++) {
+			times[n] = Integer.parseInt(br.readLine());
+			min = Math.min(min, times[n]);
+			max = Math.max(max, times[n]);
+		}
+
+		sb.append(binarySearch());
 		bw.write(sb.toString());
 		bw.close();
 
 	}
 
-	public static long binarySearch(long left, long right) {
+	public static long binarySearch() {
 
-		while (left < right) {
+		long answer = 0;
+		long left = 0;
+		long right = (long) max * M;
+
+		while (left <= right) {
 
 			long mid = (left + right) >> 1;
-
-			if (getCompletedPersonCount(mid)) {
-				right = mid;
+			if (M <= getPersonCount(mid)) {
+				// 목표를 만족하는 경우 -> 더 작은 시간으로 이동
+				answer = mid;
+				right = mid - 1;
 			} else {
+				// 목표를 만족하지 못하는 경우 -> 더 많은 시간으로 이동
 				left = mid + 1;
 			}
 
 		}
 
-		return right;
+		return answer;
 
 	}
 
-	public static boolean getCompletedPersonCount(long mid) {
-
-		long sum = 0;
+	public static long getPersonCount(long mid) {
+		long count = 0;
 		for (int n = 0; n < N; n++) {
-			sum += (mid / runningTimes[n]);
-			if (M <= sum) {
-				return true;
+			count += (mid / times[n]);
+			if (M <= count) {
+				break;
 			}
 		}
-
-		return false;
-
-	}
-
-	public static void input() throws IOException{
-
-		st = new StringTokenizer(br.readLine(), " ");
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-
-		runningTimes = new int[N];
-		for (int n = 0; n < N; n++) {
-			runningTimes[n] = Integer.parseInt(new StringTokenizer(br.readLine()).nextToken());
-		}
-
-		limit = (long) (Math.pow(10, 9) * Math.pow(10, 9));
-
+		return count;
 	}
 
 }
