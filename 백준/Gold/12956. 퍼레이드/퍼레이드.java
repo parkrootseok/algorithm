@@ -12,8 +12,8 @@ public class Main {
 	static StringTokenizer st;
 	static StringBuilder sb;
 
-	static int cityNumber;
-	static int roadNumber;
+	static int N;
+	static int M;
 	static int[][] roads;
 	static List<int[]> edges;
 
@@ -24,12 +24,12 @@ public class Main {
 		sb = new StringBuilder();
 
 		st = new StringTokenizer(br.readLine(), " ");
-		cityNumber = Integer.parseInt(st.nextToken());
-		roadNumber = Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 
 		edges = new ArrayList<>();
-		roads = new int[cityNumber][cityNumber];
-		for (int index = 0; index < roadNumber; index++) {
+		roads = new int[N][N];
+		for (int m = 0; m < M; m++) {
 			st = new StringTokenizer(br.readLine(), " ");
 
 			int from = Integer.parseInt(st.nextToken());
@@ -40,21 +40,19 @@ public class Main {
 			edges.add(new int[]{from, to});
 		}
 
-		int[][] times = floydWarshall();
+		int[][] originTimes = floydWarshall();
 		for (int[] edge : edges) {
-
 			int from = edge[0];
 			int to = edge[1];
 			int temp = roads[from][to];
-
 			roads[from][to] = roads[to][from] = 0;
 			int[][] curTimes = floydWarshall();
 			roads[from][to] = roads[to][from] = temp;
 
 			int count = 0;
-			for (int f = 0; f < cityNumber; f++) {
+			for (int f = 0; f < N; f++) {
 				for (int t = 0; t < f; t++) {
-					if (times[f][t] != curTimes[f][t]) {
+					if (originTimes[f][t] != curTimes[f][t]) {
 						count++;
 					}
 				}
@@ -71,10 +69,11 @@ public class Main {
 
 	public static int[][] floydWarshall() {
 
-		int INF = 100_000_000;
-		int[][] times = new int[cityNumber][cityNumber];
-		for (int from = 0; from < cityNumber; from++) {
-			for (int to = 0; to < cityNumber; to++) {
+		final int INF = 10_000_000;
+
+		int[][] times = new int[N][N];
+		for (int from = 0; from < N; from++) {
+			for (int to = 0; to < N; to++) {
 
 				if (from == to) {
 					continue;
@@ -85,13 +84,12 @@ public class Main {
 				} else {
 					times[from][to] = INF;
 				}
-
 			}
 		}
 
-		for (int stopover = 0; stopover < cityNumber; stopover++) {
-			for (int from = 0; from < cityNumber; from++) {
-				for (int to = 0; to < cityNumber; to++) {
+		for (int stopover = 0; stopover < N; stopover++) {
+			for (int from = 0; from < N; from++) {
+				for (int to = 0; to < N; to++) {
 					times[from][to] = Math.min(times[from][to], times[from][stopover] + times[stopover][to]);
 				}
 			}
