@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 /**
- * BOJ_달빛여우
+ * BOJ_냅색문제
  * @author parkrootseok
  */
 public class Main {
@@ -42,8 +42,8 @@ public class Main {
 		Collections.sort(rSub);
 
 		int totalCount = 0;
-		for (int index = 0; index < lSub.size(); index++) {
-			int count = binarySearch(0, rSub.size() - 1, lSub.get(index));
+		for (int diff : lSub) {
+			int count = binarySearch(0, rSub.size() - 1, diff);
 			totalCount += (count + 1);
 		}
 
