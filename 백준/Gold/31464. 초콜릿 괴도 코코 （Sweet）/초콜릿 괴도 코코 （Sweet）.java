@@ -5,7 +5,6 @@ public class Main {
 
 	static int[] dr = {-1, 1, 0, 0};
 	static int[] dc = {0, 0, -1, 1};
-
 	static final char CHOCOLATE = '#';
 	static final char EMPTY = '.';
 
@@ -33,10 +32,9 @@ public class Main {
 		}
 
 		List<int[]> result = new ArrayList<>();
-
 		for (int r = 0; r < size; r++) {
 			for (int c = 0; c < size; c++) {
-				if (chocolate[r][c] == CHOCOLATE && isTreeAfterRemove(r, c)) {
+				if (chocolate[r][c] == CHOCOLATE && isTree(r, c)) {
 					result.add(new int[]{r + 1, c + 1});
 				}
 			}
@@ -52,68 +50,71 @@ public class Main {
 		bw.close();
 	}
 
-	static boolean isTreeAfterRemove(int bRow, int bCol) {
+	static boolean isTree(int bRow, int bCol) {
 
-		boolean[][] visited = new boolean[size][size];
-		Queue<int[]> q = new ArrayDeque<>();
+		boolean[][] isVisited = new boolean[size][size];
+		Queue<int[]> nodes = new ArrayDeque<>();
 
+		// 1. 떼어낸 초콜릿 위치를 제외한 곳 중 연결성을 확인할 시작점을 구한다.
 		boolean found = false;
 		for (int r = 0; r < size && !found; r++) {
 			for (int c = 0; c < size && !found; c++) {
-				if (chocolate[r][c] == CHOCOLATE && !(r == bRow && c == bCol)) {
-					q.offer(new int[]{r, c});
-					visited[r][c] = true;
-					found = true;
+				if (chocolate[r][c] == EMPTY || r == bRow && c == bCol) {
+					continue;
 				}
+
+				found = true;
+				isVisited[r][c] = true;
+				nodes.offer(new int[]{r, c});
 			}
 		}
 
 		if (!found) return false;
 
+		// 2. 시작점을 기준으로 방문할 수 있는 초콜릿수와 이를 만족할 때 간선수를 카운팅
 		int nodeCount = 1;
 		int edgeCount = 0;
+		while (!nodes.isEmpty()) {
 
-		while (!q.isEmpty()) {
+			int[] node = nodes.poll();
+			int cRow = node[0];
+			int cCol = node[1];
 
-			int[] cur = q.poll();
+			for (int dir = 0; dir < dr.length; dir++) {
 
-			int r = cur[0];
-			int c = cur[1];
+				int nRow = cRow + dr[dir];
+				int nCol = cCol + dc[dir];
 
-			for (int d = 0; d < 4; d++) {
-				int nr = r + dr[d];
-				int nc = c + dc[d];
-
-				if (outRange(nr, nc)) {
+				if (nRow == bRow && nCol == bCol) {
 					continue;
 				}
 
-				if (chocolate[nr][nc] != CHOCOLATE) {
+				if (outRange(nRow, nCol) || chocolate[nRow][nCol] != CHOCOLATE) {
 					continue;
 				}
 
-				if (nr == bRow && nc == bCol) {
-					continue;
-				}
-
+				// 간선수 카운팅
 				edgeCount++;
 
-				if (!visited[nr][nc]) {
-					visited[nr][nc] = true;
-					q.offer(new int[]{nr, nc});
+				if (!isVisited[nRow][nCol]) {
+					// 연결된 초콜릿 수 카운팅
 					nodeCount++;
+					isVisited[nRow][nCol] = true;
+					nodes.offer(new int[]{nRow, nCol});
 				}
 
 			}
 
 		}
 
+		// 떼어낸 초콜릿을 제외한 모든 초콜릿을 방문할 수 있으며
+		// 연결된 초콜릿 조각들에 사이클이 발생하는지 확인
 		return nodeCount == hasChocolateCount - 1 && edgeCount >> 1 == nodeCount - 1;
 
 	}
 
 	static boolean outRange(int r, int c) {
-		return r < 0 || r >= size || c < 0 || c >= size;
+		return r < 0 || size <= r || c < 0 || size <= c;
 	}
 
 }
