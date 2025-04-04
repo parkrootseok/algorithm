@@ -5,6 +5,7 @@ public class Main {
 
 	static int[] dr = {-1, 1, 0, 0};
 	static int[] dc = {0, 0, -1, 1};
+
 	static final char CHOCOLATE = '#';
 	static final char EMPTY = '.';
 
@@ -22,9 +23,9 @@ public class Main {
 		chocolate = new char[size][size];
 
 		for (int r = 0; r < size; r++) {
-			String line = br.readLine();
+			char[] inputs = br.readLine().toCharArray();
 			for (int c = 0; c < size; c++) {
-				chocolate[r][c] = line.charAt(c);
+				chocolate[r][c] = inputs[c];
 				if (chocolate[r][c] == CHOCOLATE) {
 					hasChocolateCount++;
 				}
