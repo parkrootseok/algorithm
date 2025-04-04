@@ -7,23 +7,24 @@ import java.util.*;
  */
 public class Main {
 
-	static class Problem implements Comparable<Problem> {
+	static class Homework implements Comparable<Homework> {
 
 		int deadline;
-		int noodleCount;
+		int count;
 
-		public Problem(int deadline, int noodleCount) {
+		public Homework(int deadline, int count) {
 			this.deadline = deadline;
-			this.noodleCount = noodleCount;
+			this.count = count;
 		}
 
 		@Override
-		public int compareTo(Problem p) {
-			if (this.deadline == p.deadline) {
-				return Integer.compare(p.noodleCount, this.noodleCount);
+		public int compareTo(Homework h) {
+			if (this.deadline == h.deadline) {
+				return Integer.compare(h.count, this.count);
 			}
-			return Integer.compare(this.deadline, p.deadline);
+			return Integer.compare(this.deadline, h.deadline);
 		}
+
 
 	}
 
@@ -32,9 +33,9 @@ public class Main {
 	static StringTokenizer st;
 	static StringBuilder sb;
 
-	static int N;
-	static Queue<Problem> problems;
-	static int limit;
+	static int size;
+	static int limitOfDay;
+	static Queue<Homework> homeworks;
 
 	public static void main(String[] args) throws IOException {
 
@@ -42,39 +43,39 @@ public class Main {
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
 
-		N = Integer.parseInt(br.readLine());
-		problems = new PriorityQueue<>();
-		for (int n = 0; n < N; n++) {
+		size = Integer.parseInt(br.readLine());
+		homeworks = new PriorityQueue<>();
+		for (int index = 0; index < size; index++) {
 			st = new StringTokenizer(br.readLine(), " ");
 
 			int deadline = Integer.parseInt(st.nextToken());
-			int noodleCount = Integer.parseInt(st.nextToken());
+			int count = Integer.parseInt(st.nextToken());
 
-			problems.offer(new Problem(deadline, noodleCount));
-			limit = Math.max(limit, deadline);
+			homeworks.offer(new Homework(deadline, count));
+			limitOfDay = Math.max(limitOfDay, deadline);
 		}
 
-		Queue<Integer> queue = new PriorityQueue<>();
-		for (int day = 1; day <= limit; day++) {
+		Queue<Integer> completedHomeworks = new PriorityQueue<>();
+		for (int today = 1; today <= limitOfDay; today++) {
 
-			// 현재 날짜에 풀 수 있는 문제를 모두 삽입
-			while (!problems.isEmpty() && problems.peek().deadline == day) {
-				queue.offer(problems.poll().noodleCount);
+			// 오늘까지 끝내야 하는 숙제를 모두 기록
+			while (!homeworks.isEmpty() && homeworks.peek().deadline <= today) {
+				completedHomeworks.offer(homeworks.poll().count);
 			}
 
-			// 풀 수 있는 문제 갯수가 현재 날짜를 초과하면 가장 낮은 숫자를 삭제
-			while (day < queue.size()) {
-				queue.poll();
+			// 오늘까지 끝내야 하는 숙제가 주어진 기간내에 모두 끝낼 수 없다면, 가장 컵라면을 적게 주는 숙제는 버리기
+			while (today < completedHomeworks.size()) {
+				completedHomeworks.poll();
 			}
 
 		}
 
-		long answer = 0;
-		while (!queue.isEmpty()) {
-			answer += queue.poll();
+		int count = 0;
+		while (!completedHomeworks.isEmpty()) {
+			count += completedHomeworks.poll();
 		}
 
-		sb.append(answer);
+		sb.append(count);
 		bw.write(sb.toString());
 		bw.close();
 
