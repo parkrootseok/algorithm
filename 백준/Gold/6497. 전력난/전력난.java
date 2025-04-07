@@ -78,7 +78,7 @@ public class Main {
 
 	}
 
-	public static long kruskal() {
+	public static int kruskal() {
 
 		unf = new int[M];
 		for (int m = 0; m < M; m++) {
@@ -86,7 +86,7 @@ public class Main {
 		}
 
 		int linkedHouseCount = 0;
-		long totalDistance = 0;
+		int totalDistance = 0;
 		while (!edges.isEmpty() && linkedHouseCount != M - 1) {
 
 			Edge cur = edges.poll();
