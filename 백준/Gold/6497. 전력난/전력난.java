@@ -36,9 +36,7 @@ public class Main {
 	static int total;
 
 	static int[] unf;
-	static List<int[]> sizes;
-	static List<Integer> totals;
-	static List<Queue<Edge>> graphs;
+	static Queue<Edge> edges;
 
 	public static void main(String[] args) throws IOException {
 
@@ -46,10 +44,6 @@ public class Main {
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
 
-		int TC = 0;
-		sizes = new ArrayList<>();
-		totals = new ArrayList<>();
-		graphs = new ArrayList<>();
 		while (true) {
 
 			st = new StringTokenizer(br.readLine(), " ");
@@ -60,9 +54,8 @@ public class Main {
 				break;
 			}
 
-			sizes.add(new int[]{M, N});
 			total = 0;
-			graphs.add(new PriorityQueue<>());
+			edges = new PriorityQueue<>();
 
 			for (int n = 0; n < N; n++) {
 				st = new StringTokenizer(br.readLine(), " ");
@@ -72,26 +65,20 @@ public class Main {
 				int distance = Integer.parseInt(st.nextToken());
 
 				total += distance;
-				graphs.get(TC).offer(new Edge(org, dest, distance));
+				edges.offer(new Edge(org, dest, distance));
 			}
 
-			totals.add(total);
-			TC++;
+			sb.append(total - kruskal()).append("\n");
 
 		}
 
-		for (int tc = 0; tc < TC; tc++) {
-			M = sizes.get(tc)[0];
-			total = totals.get(tc);
-			sb.append(total - kruskal(graphs.get(tc))).append("\n");
-		}
 
 		bw.write(sb.toString());
 		bw.close();
 
 	}
 
-	public static long kruskal(Queue<Edge> edges) {
+	public static long kruskal() {
 
 		unf = new int[M];
 		for (int m = 0; m < M; m++) {
