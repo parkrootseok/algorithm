@@ -83,7 +83,6 @@ public class Main {
 		for (int tc = 0; tc < TC; tc++) {
 			M = mns.get(tc)[0];
 			total = totals.get(tc);
-
 			sb.append(total - kruskal(graphs.get(tc))).append("\n");
 		}
 
