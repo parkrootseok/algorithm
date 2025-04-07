@@ -36,7 +36,7 @@ public class Main {
 	static int total;
 
 	static int[] unf;
-	static List<int[]> mns;
+	static List<int[]> sizes;
 	static List<Integer> totals;
 	static List<Queue<Edge>> graphs;
 
@@ -47,7 +47,7 @@ public class Main {
 		sb = new StringBuilder();
 
 		int TC = 0;
-		mns = new ArrayList<>();
+		sizes = new ArrayList<>();
 		totals = new ArrayList<>();
 		graphs = new ArrayList<>();
 		while (true) {
@@ -60,7 +60,7 @@ public class Main {
 				break;
 			}
 
-			mns.add(new int[]{M, N});
+			sizes.add(new int[]{M, N});
 			total = 0;
 			graphs.add(new PriorityQueue<>());
 
@@ -81,7 +81,7 @@ public class Main {
 		}
 
 		for (int tc = 0; tc < TC; tc++) {
-			M = mns.get(tc)[0];
+			M = sizes.get(tc)[0];
 			total = totals.get(tc);
 			sb.append(total - kruskal(graphs.get(tc))).append("\n");
 		}
@@ -100,7 +100,7 @@ public class Main {
 
 		int linkedHouseCount = 0;
 		long totalDistance = 0;
-		while (!edges.isEmpty() && linkedHouseCount < M) {
+		while (!edges.isEmpty() && linkedHouseCount != M - 1) {
 
 			Edge cur = edges.poll();
 
