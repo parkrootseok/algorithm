@@ -7,23 +7,22 @@ import java.util.*;
  */
 public class Main {
 
-	static class Edge implements Comparable<Edge> {
+	static class Road implements Comparable<Road> {
 
-		int origin;
-		int destination;
-		int distance;
+		int org;
+		int dest;
+		int meter;
 
-		public Edge(int origin, int destination, int distance) {
-			this.origin = origin;
-			this.destination = destination;
-			this.distance = distance;
+		public Road(int org, int dest, int meter) {
+			this.org = org;
+			this.dest = dest;
+			this.meter = meter;
 		}
 
 		@Override
-		public int compareTo(Edge e) {
-			return Integer.compare(this.distance, e.distance);
+		public int compareTo(Road r) {
+			return Integer.compare(this.meter, r.meter);
 		}
-
 	}
 
 	static BufferedReader br;
@@ -33,10 +32,8 @@ public class Main {
 
 	static int M;
 	static int N;
-	static int total;
-
 	static int[] unf;
-	static Queue<Edge> edges;
+	static Queue<Road> roads;
 
 	public static void main(String[] args) throws IOException {
 
@@ -50,56 +47,55 @@ public class Main {
 			M = Integer.parseInt(st.nextToken());
 			N = Integer.parseInt(st.nextToken());
 
-			if (M == 0 && N == 0) {
+			if (M == 0 || N == 0) {
 				break;
 			}
 
-			total = 0;
-			edges = new PriorityQueue<>();
+			int totalMeter = 0;
+			roads = new PriorityQueue<>();;
 
 			for (int n = 0; n < N; n++) {
 				st = new StringTokenizer(br.readLine(), " ");
 
 				int org = Integer.parseInt(st.nextToken());
 				int dest = Integer.parseInt(st.nextToken());
-				int distance = Integer.parseInt(st.nextToken());
+				int meter = Integer.parseInt(st.nextToken());
 
-				total += distance;
-				edges.offer(new Edge(org, dest, distance));
+				totalMeter += meter;
+				roads.offer(new Road(org, dest, meter));
 			}
 
-			sb.append(total - kruskal()).append("\n");
+			sb.append(totalMeter - dijkstra()).append("\n");
 
 		}
-
 
 		bw.write(sb.toString());
 		bw.close();
 
 	}
 
-	public static int kruskal() {
+	public static int dijkstra() {
 
 		unf = new int[M];
-		for (int m = 0; m < M; m++) {
-			unf[m] = m;
+		for (int parent = 0; parent < M; parent++) {
+			unf[parent] = parent;
 		}
 
-		int linkedHouseCount = 0;
-		int totalDistance = 0;
-		while (!edges.isEmpty() && linkedHouseCount != M - 1) {
+		int linkedRoadCount = 0;
+		int usedMeter = 0;
+		while (linkedRoadCount != M - 1) {
 
-			Edge cur = edges.poll();
+			Road road = roads.poll();
 
-			if (find(cur.origin) != find(cur.destination)) {
-				linkedHouseCount++;
-				totalDistance += cur.distance;
-				union(cur.origin, cur.destination);
+			if (find(road.org) != find(road.dest)) {
+				linkedRoadCount++;
+				usedMeter += road.meter;
+				union(road.org, road.dest);
 			}
 
 		}
 
-		return totalDistance;
+		return usedMeter;
 
 	}
 
