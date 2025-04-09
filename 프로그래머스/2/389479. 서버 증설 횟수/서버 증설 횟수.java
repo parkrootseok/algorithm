@@ -1,8 +1,9 @@
 import java.util.*;
 
-// 1. m명마다 서버 1대 추가 증설
-// 2. 증설한 서버는 h ~ h+5 운영
-// 3. 서버 최소 몇 번 증설
+/**
+ * BOJ_서버증설횟수
+ * @author parkrootseok
+ */
 class Solution {
     
     static class Server {
@@ -30,7 +31,7 @@ class Solution {
         
         for (int hour = 0; hour <= 23; hour++) {
             
-            // 1. 증설된 서버 종료
+            // 증설된 서버 종료
             while(!servers.isEmpty()) {
                 // 가장 먼저 증설된 서버의 종료 시각이 현재 시간보다 큰 경우
                 if (hour < servers.peek().end) {
@@ -57,16 +58,13 @@ class Solution {
                 servers.offer(new Server(hour));
             }
             
-            System.out.println("[시각:" +  hour + "] 현재 인원 " + player + ", 현재 서버 갯수 " + servers.size());
-            
         }
         
         return answer;
+        
     }
     
     public boolean isRunnable(int player, int size) {
-        // 현재 인원수가 서버*용량 미만이면 실행 가능
-        // 3명 이상 6명 미만
         return player < (size + 1) * M;
     }
     
