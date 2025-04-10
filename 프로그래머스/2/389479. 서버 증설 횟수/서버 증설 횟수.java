@@ -1,7 +1,7 @@
 import java.util.*;
 
 /**
- * BOJ_서버증설횟수
+ * PG_서버증설횟수
  * @author parkrootseok
  */
 class Solution {
