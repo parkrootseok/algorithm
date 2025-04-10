@@ -1,18 +1,20 @@
 import java.util.*;
-import java.io.*;
 
+/**
+ * PG_단체사진찍기
+ * @author parkrootseok
+ */
 class Solution {
 
-    static final int SIZE = 8;
-	static char[] friends = {'A', 'C', 'F', 'J', 'M', 'N', 'R', 'T'};
+    static char[] friends = {'A', 'C', 'F', 'J', 'M', 'N', 'R', 'T'};
 	static boolean[] isUsed;
-	static String[] DATA;
+	static String[] conditions;
 	static int answer;
 
 	public int solution(int n, String[] data) {
 		answer = 0;
-		isUsed = new boolean[SIZE];
-		DATA = data;
+		isUsed = new boolean[friends.length];
+		conditions = data;
 		dfs(0, new StringBuilder());
 		System.out.println(answer);
 		return answer;
@@ -21,14 +23,14 @@ class Solution {
 
 	public void dfs(int depth, StringBuilder result) {
 
-		if (depth == SIZE) {
+		if (depth == friends.length) {
 			if (isValid(result.toString())) {
 				answer++;
 			}
 			return;
 		}
 
-		for (int index = 0; index < SIZE; index++) {
+		for (int index = 0; index < friends.length; index++) {
 
 			if (!isUsed[index]) {
 				isUsed[index] = true;
@@ -44,11 +46,11 @@ class Solution {
 
 	public boolean isValid(String result) {
 
-		for (String d : DATA) {
+		for (String condition : conditions) {
 
-			int diff = Math.abs((result.indexOf(d.charAt(0)) - result.indexOf(d.charAt(2)))) - 1;
-			char sign = d.charAt(3);
-			int target = d.charAt(4) - '0';
+			int diff = Math.abs((result.indexOf(condition.charAt(0)) - result.indexOf(condition.charAt(2)))) - 1;
+			char sign = condition.charAt(3);
+			int target = condition.charAt(4) - '0';
 
 			if (sign == '=') {
 				if (target != diff) {
@@ -70,5 +72,4 @@ class Solution {
 
 	}
 
-    
 }

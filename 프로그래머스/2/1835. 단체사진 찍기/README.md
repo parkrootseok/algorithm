@@ -1,10 +1,10 @@
 # [level 2] 단체사진 찍기 - 1835 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/1835?language=java) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/1835) 
 
 ### 성능 요약
 
-메모리: 209 MB, 시간: 1233.98 ms
+메모리: 222 MB, 시간: 1594.74 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 04월 08일 12:26:48
+2025년 04월 10일 11:11:11
 
 ### 문제 설명
 
