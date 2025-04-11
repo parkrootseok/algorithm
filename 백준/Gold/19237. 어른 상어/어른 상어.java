@@ -1,179 +1,248 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.StringTokenizer;
 
-class Main {
-    // 1, 2, 3, 4 는 각각 위, 아래, 왼쪽, 오른쪽
-    static class Shark {
-        int id, x, y, dir;
-        int[][] priority = new int[5][5];
+/**
+ * BOJ_어른상어
+ * @author parkrootseok
+ */
+public class Main {
 
-        Shark() { }
+	static class Shark {
+		int id;
+		int row;
+		int col;
+		int direction;
+		int[][] priority;
 
-        int findNextDir(Set<Integer> candidates) {
-            for (int i = 1; i < 5; i++) {
-                if (candidates.contains(priority[dir][i])) {
-                    return priority[dir][i];
-                }
-            }
-            return 0;
-        }
-    }
+		public Shark(int id, int row, int col) {
+			this.id = id;
+			this.row = row;
+			this.col = col;
+			this.priority = new int[5][5];
+		}
 
-    static int N, M, k;
-    static int[][] arr = new int[21][21];
-    static int[][] smellOwner = new int[21][21];
-    static int[][] leftTime = new int[21][21];
-    static Map<Integer, Shark> sharks = new HashMap<>();
-    static int time = 0;
+		int getNextDirection(Set<Integer> candidates) {
+			for (int index = 1; index <= 4; index++) {
+				if (candidates.contains(priority[this.direction][index])) {
+					return priority[this.direction][index];
+				}
+			}
+			return 0;
+		}
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
+	}
 
-        // input
-        st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(st.nextToken());
+	static class Smell {
+		int owner;
+		int second;
 
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
+		public Smell(int owner, int second) {
+			this.owner = owner;
+			this.second = second;
+		}
+	}
 
-            for (int j = 0; j < N; j++) {
-                arr[i][j] = Integer.parseInt(st.nextToken());
+	static BufferedReader br;
+	static BufferedWriter bw;
+	static StringTokenizer st;
+	static StringBuilder sb;
 
-                if (arr[i][j] > 0) {
-                    Shark s = new Shark();
-                    s.id = arr[i][j];
-                    s.x = i;
-                    s.y = j;
-                    sharks.put(s.id, s);
-                    
-                    smellOwner[i][j] = s.id;
-                    leftTime[i][j] = k;
-                }
-            }
-        }
+	static int N;
+	static int M;
+	static int K;
+	static Map<Integer, Shark> sharks;
+	static int[][] grid;
+	static int[][] owner;
+	static int[][] times;
+	static int second;
 
-        // direction of sharks
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < M; i++) {
-            Shark s = sharks.get(i + 1);
-            s.dir = Integer.parseInt(st.nextToken());
-        }
+	public static void main(String[] args) throws IOException {
 
-        // priority of sharks
-        for (int i = 0; i < M; i++) {
-            Shark s = sharks.get(i + 1);
+		br = new BufferedReader(new InputStreamReader(System.in));
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		sb = new StringBuilder();
 
-            for (int j = 0; j < 4; j++) {
-                st = new StringTokenizer(br.readLine());
+		// 1. 정보를 입력 받는다.
+		input();
 
-                for (int z = 0; z < 4; z++) {
-                    s.priority[j + 1][z + 1] = Integer.parseInt(st.nextToken());
-                }
-            }
-        }
+		// 2. 시뮬레이션 수행
+		if (simulation()) {
+			sb.append(second);
+		} else {
+			sb.append(-1);
+		}
 
-        // solution
-        solution();
-    }
+		bw.write(sb.toString());
+		bw.close();
 
-    static void solution() {
-        while (time++ < 1000) {
-            moveShark();
-            decreaseSmellTime();
-            createSmell();
+	}
 
-            if (sharks.size() == 1) {
-                System.out.println(time);
-                return;
-            }
-        }
+	public static boolean simulation() {
 
-        System.out.println(-1);
-    }
+		second = 0;
+		while (second++ < 1000) {
+			moveShark();
+			decreaseSmellTime();
+			createSmell();
 
-    // 상어 이동 후 겹친 애 쫓아내기
-    static void moveShark() {
-        // dx dy 는 위, 아래, 왼쪽, 오른쪽 순서
-        int[] dx = {-1, 1, 0, 0};
-        int[] dy = {0, 0, -1, 1};
-        Queue<Integer> willRemove = new LinkedList<Integer>();
+			if (sharks.size() == 1) {
+				return true;
+			}
+		}
 
-        for (Integer id : sharks.keySet()) {
-            Set<Integer> noSmellSet = new HashSet<>();
-            Set<Integer> mySmellSet = new HashSet<>();
-            Shark s = sharks.get(id);
+		return false;
 
-            for (int i = 0; i < 4; i++) {
-                int nx = s.x + dx[i];
-                int ny = s.y + dy[i];
+	}
 
-                if (nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
+	public static void moveShark() {
 
-                if (smellOwner[nx][ny] == 0) {
-                    noSmellSet.add(i + 1);
-                } else if (smellOwner[nx][ny] == s.id) {
-                    mySmellSet.add(i + 1);
-                }
-            }
+		// 위, 아래, 왼쪽, 오른쪽
+		int[] dr = {-1, 1, 0, 0};
+		int[] dc = {0, 0, -1, 1};
+		Queue<Integer> outOfGridSharks = new ArrayDeque<>();
 
-            // 냄새 없는 곳부터 스캔하고 자기 냄새 있는 곳을 스캔해서 이동할 방향 구하기
-            int nextDir = s.findNextDir(noSmellSet);
+		for (int id : sharks.keySet()) {
 
-            if (nextDir == 0) {
-                nextDir = s.findNextDir(mySmellSet);
-            }
+			Shark shark = sharks.get(id);
+			Set<Integer> noSmell = new HashSet<>();
+			Set<Integer> mySmell = new HashSet<>();
 
-            // 상어 이동
-            arr[s.x][s.y] = 0;
-            if (nextDir == 1) {
-                s.x -= 1;
-            } else if (nextDir == 2) {
-                s.x += 1;
-            } else if (nextDir == 3) {
-                s.y -= 1;
-            } else if (nextDir == 4) {
-                s.y += 1;
-            }
-            
-            // 이동할 위치에 상어 있으면 경쟁 후 작은 번호가 승리
-            if (arr[s.x][s.y] == 0 || s.id < arr[s.x][s.y]) {
-                arr[s.x][s.y] = s.id;
-                s.dir = nextDir;
-            } else {
-                willRemove.add(s.id);
-            }
-        }
+			for (int dir = 0; dir < 4; dir++) {
 
-        while (!willRemove.isEmpty()) {
-            sharks.remove(willRemove.poll());
-        }
-    }
+				int nr = shark.row + dr[dir];
+				int nc = shark.col + dc[dir];
 
-    // 맵 전체의 냄새 시간을 하나씩 감소 시키고 0 이 되면 냄새 주인 정보도 지움
-    static void decreaseSmellTime() {
-        for(int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (leftTime[i][j] == 0) continue;
+				if (outRange(nr, nc)) {
+					continue;
+				}
 
-                leftTime[i][j]--;
+				if (times[nr][nc] == 0) {
+					noSmell.add(dir + 1);
+				} else if (owner[nr][nc] == shark.id) {
+					mySmell.add(dir + 1);
+				}
 
-                if (leftTime[i][j] == 0) {
-                    smellOwner[i][j] = 0;
-                }
-            }
-        }
-    }
+			}
 
-    // 상어가 이동한 곳에 새로운 냄새 생성
-    static void createSmell() {
-        for (Integer id : sharks.keySet()) {
-            Shark s = sharks.get(id);
+			int nextDirection = shark.getNextDirection(noSmell);
+			if (nextDirection == 0) {
+				nextDirection = shark.getNextDirection(mySmell);
+			}
 
-            smellOwner[s.x][s.y] = s.id;
-            leftTime[s.x][s.y] = k;
-        }
-    }
+			// 상어 이동
+			grid[shark.row][shark.col] = 0;
+			if (nextDirection == 1) {
+				shark.row -= 1;
+			} else if (nextDirection == 2) {
+				shark.row += 1;
+			} else if (nextDirection == 3) {
+				shark.col -= 1;
+			} else if (nextDirection == 4) {
+				shark.col += 1;
+			}
+
+			// 이동한 위치에 상어가 없거나, 자신보다 숫자가 크다면
+			if (grid[shark.row][shark.col] == 0 || shark.id < grid[shark.row][shark.col]) {
+				// 이동 가능
+				grid[shark.row][shark.col] = shark.id;
+				shark.direction = nextDirection;
+			}
+
+			// 그렇지 않다면
+			else {
+				// 이동 불가능
+				outOfGridSharks.offer(id);
+			}
+		}
+
+		while (!outOfGridSharks.isEmpty()) {
+			sharks.remove(outOfGridSharks.poll());
+		}
+
+	}
+
+	public static void decreaseSmellTime() {
+		for (int row = 0; row < N; row++) {
+			for (int col = 0; col < N; col++) {
+				if (times[row][col] == 0) {
+					continue;
+				}
+
+				times[row][col]--;
+				if (times[row][col] == 0) {
+					owner[row][col] = 0;
+				}
+			}
+		}
+
+	}
+
+	public static void createSmell() {
+		for (Shark shark : sharks.values()) {
+			owner[shark.row][shark.col] = shark.id;
+			times[shark.row][shark.col] = K;
+		}
+	}
+
+	public static boolean outRange(int row, int col) {
+		return row < 0 || N <= row || col < 0 || N <= col;
+	}
+
+	public static void input() throws IOException {
+
+		sharks = new HashMap<>();
+		grid = new int[21][21];
+		owner = new int[21][21];
+		times = new int[21][21];
+
+		// 1. N, M, K 입력
+		// -> 격자 크기, 상어 갯수, 이동 횟수
+		st = new StringTokenizer(br.readLine(), " ");
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+
+		// 2. 격자 정보 입력
+		for (int row = 0; row < N; row++) {
+			st = new StringTokenizer(br.readLine(), " ");
+			for (int col = 0; col < N; col++) {
+				// 2-1. 현재 입력이 0이 아닌 경우, 상어
+				grid[row][col] = Integer.parseInt(st.nextToken());
+				if (0 < grid[row][col]) {
+					sharks.put(grid[row][col], new Shark(grid[row][col], row, col));
+					owner[row][col] = grid[row][col];
+					times[row][col] = K;
+				}
+			}
+		}
+
+		// 3. 현재 방향 정보 받기
+		st = new StringTokenizer(br.readLine(), " ");
+		for (int id = 0; id < M; id++) {
+			sharks.get(id + 1).direction = Integer.parseInt(st.nextToken());
+		}
+
+		// 4. 우선 순위 받기
+		for (int id = 0; id < M; id++) {
+			Shark shark = sharks.get(id + 1);
+			for (int dir = 0; dir < 4; dir++) {
+				st = new StringTokenizer(br.readLine(), " ");
+				for (int index = 0; index < 4; index++) {
+					shark.priority[dir + 1][index + 1] = Integer.parseInt(st.nextToken());
+				}
+			}
+		}
+
+	}
+
 }
