@@ -30,20 +30,12 @@ class Solution {
 	public void dfs(int depth, int start, int limit) {
 
 		if (depth == limit) {
-
-			// 유일성 만족
-			if (!isUnique()) {
-				return;
+            String key = createKey();
+			if (isUnique() && isMimimal(key)) {
+                candidates.add(key);
 			}
-
-			// 최소성 만족
-			String key = createKey();
-			if (isMimimal(key)) {
-				candidates.add(key);
-			}
-
-			return;
-
+            
+            return;
 		}
 
 		for (int column = start; column < columnSize; column++) {
