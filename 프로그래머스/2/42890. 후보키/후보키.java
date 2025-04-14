@@ -34,7 +34,6 @@ class Solution {
 			if (isUnique() && isMimimal(key)) {
                 candidates.add(key);
 			}
-            
             return;
 		}
 
@@ -58,11 +57,9 @@ class Solution {
 			StringBuilder sb = new StringBuilder();
 
 			for (int index = 0; index < isVisited.length; index++) {
-
 				if (isVisited[index]) {
 					sb.append(RELATION[row][index]);
 				}
-
 			}
 
 			if (combination.contains(sb.toString())) {
