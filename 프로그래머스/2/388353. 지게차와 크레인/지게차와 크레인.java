@@ -100,27 +100,6 @@ class Solution {
         return willRemove;
         
     }
-
-    public boolean isPossible(int row, int col) {
-        
-        for (int dir = 0; dir < dr.length; dir++) {
-            
-            int nr = row + dr[dir];
-            int nc = col + dc[dir];
-            
-            if (outRange(nr, nc)) {
-                return true;
-            }
-            
-            if (map[nr][nc] == EMPTY) {
-                return true;
-            }
-            
-        }
-        
-        return false;
-        
-    }
     
     public boolean outRange(int r, int c) {
         return r < 0 || N <= r || c < 0 || M <= c;
@@ -149,14 +128,5 @@ class Solution {
             }
         }
     }
-    
-    public void printMap() {
-        for (int row = 0; row < N; row++) {            
-            for (int col = 0; col < M; col++) {
-                System.out.print(map[row][col] + " ");
-            }
-            System.out.println();
-        }
-    } 
     
 }
