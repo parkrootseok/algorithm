@@ -1,6 +1,10 @@
 import java.util.*;
 import java.io.*;
 
+/**
+ * PG_충돌위험 찾기
+ * @author parkrootseok
+ */
 class Solution {
     
     static class Robot {   
@@ -54,6 +58,7 @@ class Solution {
             
         }
         
+        // 시작 위치에서 충돌이 발생했으면 이를 반영 후 시뮬레이션 시작
         int count = 0;
         for (int index = 0; index < counts.length; index++) {
             if (2 <= counts[index]) {
@@ -68,10 +73,11 @@ class Solution {
     public int simulation(Robot[] robots, int offset) {
       
         int count = offset;
+        Map<String, Integer> positionOfCount = new HashMap<>();
         while (isPossible(robots)) {
             
             int[] nextDir = new int[robots.length];
-            Map<String, Integer> positionOfCount = new HashMap<>();
+            positionOfCount.clear();
             
             for (int id = 0; id < robots.length; id++) {
                 
@@ -79,31 +85,33 @@ class Solution {
                     continue;
                 }
 
-                // 로봇이 이동할 방향을 얻은 후 기록  
+                // 로봇이 이동할 방향을 기록  
                 nextDir[id] = selectDirection(robots[id]);
                 int nRow = robots[id].row + dr[nextDir[id]];
                 int nCol = robots[id].col + dc[nextDir[id]];
                 
-                // 다음 이동할 위치를 기록
+                // 다음 이동할 위치에서 발생할 충돌 횟수 카운트
                 String key = nRow + "," + nCol;
                 positionOfCount.put(key, positionOfCount.getOrDefault(key, 0) + 1);
                 
             }
 
+            
             for (String key : positionOfCount.keySet()) {
+                // 충돌 횟수가 2를 넘어가면
                 if (positionOfCount.get(key) >= 2) {
+                    // 카운팅
                     count++;
                 }
             }
             
-            // 위치 이동
             for (int id = 0; id < robots.length; id++) {
                 
                 if (!isMovable(robots[id])) {
                     continue;
                 }
                 
-                // 위치 이동
+                // 다음 위치로 이동
                 nextDir[id] = selectDirection(robots[id]);
                 robots[id].row += dr[nextDir[id]];
                 robots[id].col += dc[nextDir[id]];
@@ -145,6 +153,7 @@ class Solution {
             int nRow = r.row + dr[dir];
             int nCol = r.col + dc[dir];
             
+            // 격자를 벗어나면 이동 불가
             if (outRange(nRow, nCol)) {
                 continue;
             }
@@ -154,7 +163,7 @@ class Solution {
             int dist = getDistance(nRow, nCol, position[0], position[1]);
             // 가 현재 최소 거리보다 작으면
             if (dist < minDistance) {
-                // 해당 위치로 이동
+                // 해당 위치로 이동 가능하므로 기록
                 minDistance = dist;
                 nDir = dir;
             }
@@ -165,7 +174,6 @@ class Solution {
         
     }
     
-    // 목표물과 거리를 얻기 위한 함수
     public int getDistance(int cRow, int cCol, int tRow, int tCol) {
         return (int) (Math.abs(cRow - tRow) + Math.abs(cCol - tCol)); 
     }
