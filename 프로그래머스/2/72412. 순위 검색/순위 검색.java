@@ -32,7 +32,7 @@ class Solution {
             // 키를 포함하고 있다면, 조건에 만족하는 지원자 검색
             if (table.containsKey(key)) {
                 List<Integer> scores = table.get(key);
-                int rank = lowerBounded(scores, Integer.parseInt(conditions[4]));
+                int rank = lowerBound(scores, Integer.parseInt(conditions[4]));
                 answer[index] = scores.size() - rank;
             }
         
@@ -42,7 +42,7 @@ class Solution {
         
     }
     
-    public int lowerBounded(List<Integer> scores, int target) {
+    public int lowerBound(List<Integer> scores, int target) {
         
         int start = 0;
         int end = scores.size();
