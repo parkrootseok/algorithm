@@ -24,18 +24,17 @@ class Solution {
                     break;
                 case 'C':       
                     removedRow.push(pointer);
-                    size--;
-                    if (pointer == size) {
+                    if (pointer == --size) {
                         // 마지막 행이라면, 포인터를 아래로 이동 
                         pointer--;
                     }
                     break;         
                 case 'Z':
-                    // 가장 최근에 삭제된 행 복구
-                    // 포인터는 그대로
                     if (removedRow.pop() <= pointer) {
+                        // 복구된 행이, 현재 위치보다 작다면 포인터 증가
                         pointer++;
                     }
+                    // 사이즈 증가
                     size++;
                     break;            
             }
