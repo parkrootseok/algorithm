@@ -6,66 +6,84 @@ import java.util.*;
  */
 class Solution {
     
-    static String[] friends = {"A", "C", "F", "J", "M", "N", "R", "T"};
-    static boolean[] isUsed;
+    static char[] friends = {'A', 'C', 'F', 'J', 'M', 'N', 'R', 'T'};
+    static char[] permutation = new char[friends.length];
+    static boolean[] isUsed = new boolean[friends.length];
     static String[] queries;
     static int answer;
     
     public int solution(int n, String[] data) {
         answer = 0;
         queries = data;
-        isUsed = new boolean[friends.length];
-        bruteforce(0, new StringBuilder());
+        bruteforce(0);
         return answer;
     }
     
-    public void bruteforce(int depth, StringBuilder perm) {
+    public void bruteforce(int depth) {
         
         if (depth == friends.length) {
-             if (isValid(perm.toString())) {
-                 answer++;
-             }
+            
+            for (String query : queries) {
+                
+                int offset = Math.abs(getOrder(query.charAt(0)) - getOrder(query.charAt(2))) - 1;
+                char command = query.charAt(3);
+                int condition = query.charAt(4) - '0';
+                
+                if (!isValid(command, condition, offset)) {
+                    return;
+                }
+                
+            }
+            
+            answer++;
             return;
+            
         }
         
         for (int index = 0; index < friends.length; index++) {
             if (!isUsed[index]) {
                 isUsed[index] = true;
-                perm.append(friends[index]);
-                bruteforce(depth + 1, perm);
-                perm.deleteCharAt(perm.length() - 1);
+                permutation[depth] = friends[index];
+                bruteforce(depth + 1);
                 isUsed[index] = false;
             }
         }
         
     }
     
-    public boolean isValid(String permutation) {
+    public boolean isValid(char command, int condition, int offset) {
         
-        for (String query : queries) {
+        if (command == '=') {
             
-            int offset = Math.abs(permutation.indexOf(query.charAt(0)) - permutation.indexOf(query.charAt(2))) - 1;
-            char command = query.charAt(3);
-            int condition = query.charAt(4) - '0';
-
-            if (command == '=') {
-                if (offset != condition) {
-                    return false;
-                }
-            } else if (command == '>') {
-                if (offset <= condition) {
-                    return false;
-                }
-            } else {
-                if (offset >= condition) {
-                    return false;
-                }
+            if (offset != condition) {
+                return false;
+            }
+            
+        } else if (command == '>') {
+            
+            if (offset <= condition) {
+                return false;
+            }
+            
+        } else {
+            
+            if (offset >= condition) {
+                return false;
             }
             
         }
         
         return true;
         
+    }
+    
+    public int getOrder(char friend) {
+        for (int order = 0; order < permutation.length; order++) {
+            if (permutation[order] == friend) {
+                return order;
+            }
+        }
+        return -1;
     }
     
 }
