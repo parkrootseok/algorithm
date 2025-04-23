@@ -1,5 +1,9 @@
 import java.util.*;
 
+/**
+ * PG_표편집
+ * @author parkrootseok
+ */
 class Solution {
     
     public String solution(int n, int k, String[] cmd) {
