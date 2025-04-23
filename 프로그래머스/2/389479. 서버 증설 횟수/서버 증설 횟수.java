@@ -46,7 +46,6 @@ class Solution {
             }
             
             // 감당할 수 없다면 서버 증설
-            System.out.println("현재 시간[" + hour + "] " + "서버 증설 수행");
             int needServerCount = (player / M) - servers.size();
             for (int count = 0; count < needServerCount; count++) {
                 answer++;
