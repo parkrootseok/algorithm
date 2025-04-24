@@ -1,5 +1,4 @@
 import java.util.*;
-import java.io.*;
 
 /**
  * PG_후보키
@@ -7,102 +6,99 @@ import java.io.*;
  */
 class Solution {
     
-   static String[][] RELATION;
-	static boolean[] isVisited;
-	static Set<String> candidates;
-	static int columnSize;
-
-	public int solution(String[][] relation) {
-
-		RELATION = relation;
-		columnSize = relation[0].length;
-		candidates = new HashSet<>();
-
-		for (int size = 0; size < columnSize; size++) {
-			isVisited = new boolean[columnSize];
-			dfs(0, 0, size + 1);
-		}
-
-		return candidates.size();
-
-	}
-
-	public void dfs(int depth, int start, int limit) {
-
-		if (depth == limit) {
+    static String[][] RELATION;
+    static int[] isSelected;
+    static boolean[] isUsed;
+    static Set<String> candidates;
+    
+    public int solution(String[][] relation) {
+        
+        RELATION = relation;
+        candidates = new HashSet<>();
+        for (int limit = 1; limit <= RELATION[0].length; limit++) {
+            isUsed = new boolean[RELATION[0].length];
+            isSelected = new int[limit];
+            dfs(limit, 0);
+        }
+        
+        return candidates.size();
+        
+    }
+    
+    public void dfs(int limit, int depth) {
+        
+        if (depth == limit) {
+            
             String key = createKey();
-			if (isUnique() && isMimimal(key)) {
+            if (isUnique() && isMinimum(key)) {
                 candidates.add(key);
-			}
+            }
             return;
-		}
-
-		for (int column = start; column < columnSize; column++) {
-
-			if (!isVisited[column]) {
-				isVisited[column] = true;
-				dfs(depth + 1, start + 1, limit);
-				isVisited[column] = false;
-			}
-
-		}
-
-	}
-
-	public boolean isUnique() {
-
-		Set<String> combination = new HashSet<>();
-		for (int row = 0; row < RELATION.length; row++) {
-
-			StringBuilder sb = new StringBuilder();
-
-			for (int index = 0; index < isVisited.length; index++) {
-				if (isVisited[index]) {
-					sb.append(RELATION[row][index]);
-				}
-			}
-
-			if (combination.contains(sb.toString())) {
-				return false;
-			} else {
-				combination.add(sb.toString());
-			}
-
-		}
-
-		return true;
-
-	}
-
-	public boolean isMimimal(String key) {
-
-		for (String c : candidates) {
-
-			int count = 0;
-			for (int index = 0; index < key.length(); index++) {
-				if (c.contains(String.valueOf(key.charAt(index)))) {
-					count++;
-				}
-			}
-			
-			if (c.length() == count) {
-				return false;
-			}
-
-		}
-
-		return true;
-
-	}
-
-	public String createKey() {
-		StringBuilder key = new StringBuilder();
-		for (int index = 0; index < isVisited.length; index++) {
-			if (isVisited[index]) {
-				key.append(index + 1);
-			}
-		}
-		return key.toString();
-	}
+        }
+        
+        for (int column = 0; column < RELATION[0].length; column++) {
+            if (!isUsed[column]) {
+                isUsed[column] = true;
+                isSelected[depth] = column;
+                dfs(limit, depth + 1);
+                isUsed[column] = false;
+            }
+        }
+        
+    }
+    
+    public String createKey() {
+        StringBuilder key = new StringBuilder();
+        for (int id = 0; id < isSelected.length; id++) {
+            key.append(isSelected[id]);        
+        }
+        return key.toString();
+    }
+    
+    public boolean isUnique() {
+        
+        Set<String> records = new HashSet<>();
+        
+        for (int r = 0; r < RELATION.length; r++) {
+            
+            StringBuilder record = new StringBuilder();
+        
+            for (int id = 0; id < isSelected.length; id++) {
+                record.append(RELATION[r][isSelected[id]]);        
+            }
+        
+            if (records.contains(record.toString())) {
+                    return false;
+            } else {
+                records.add(record.toString());
+            }
+        
+        }
+    
+        return true;
+    
+    }    
+    
+    public boolean isMinimum(String key) {
+        
+        for (String candidate : candidates) {
+            
+            int count = 0;
+            for (int index = 0; index < key.length(); index++) {
+                
+                if (candidate.contains(String.valueOf(key.charAt(index)))) {
+                    count++;
+                }
+                
+            }
+            
+            if (candidate.length() == count) {
+                return false;
+            }
+            
+        }
+        
+        return true;
+    }  
     
 }
