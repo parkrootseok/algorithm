@@ -7,50 +7,52 @@ import java.util.*;
  */
 public class Main {
 
-	static class Shark {
-		int row;
-		int col;
-		int dir;
-		int score;
-
-		public Shark(int row, int col, int dir, int score) {
-			this.row = row;
-			this.col = col;
-			this.dir = dir;
-			this.score = score;
-		}
-	}
-
 	static class Fish {
-		int id;
+
 		int row;
 		int col;
-		int dir;
+		int direction;
 		boolean isAlive;
 
-
-		public Fish(int id, int row, int col, int dir, boolean isAlive) {
-			this.id = id;
+		public Fish(int row, int col, int direction, boolean isAlive) {
 			this.row = row;
 			this.col = col;
-			this.dir = dir;
+			this.direction = direction;
 			this.isAlive = isAlive;
 		}
+
 	}
 
-	public static final int SHARK = -1;
-	public static final int EMPTY = 0;
+	static class Shark {
 
-	// ↑, ↖, ←, ↙, ↓, ↘, →, ↗
+		int row;
+		int col;
+		int direction;
+		int score;
+
+		public Shark(int row, int col, int direction, int score) {
+			this.row = row;
+			this.col = col;
+			this.direction = direction;
+			this.score = score;
+		}
+
+	}
+
+	static final int SIZE = 4;
+	static final int EMPTY = 0;
+	static final int SHARK = -1;
+
 	static int[] dr = {-1, -1, 0, 1, 1, 1, 0, -1};
-	static int[] dc = {0, -1, -1, -1, 0, 1, 1, 1} ;
+	static int[] dc = {0, -1, -1, -1, 0, 1, 1, 1};
 
 	static BufferedReader br;
 	static BufferedWriter bw;
 	static StringTokenizer st;
 	static StringBuilder sb;
 
-	static int SIZE = 4;
+	static Fish[] fishes;
+	static int[][] map;
 	static int answer;
 
 	public static void main(String[] args) throws IOException {
@@ -59,25 +61,24 @@ public class Main {
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		sb = new StringBuilder();
 
-		int[][] map = new int[SIZE][SIZE];
-		Fish[] fishes = new Fish[SIZE * SIZE];
+		map = new int[SIZE][SIZE];
+		fishes = new Fish[(SIZE * SIZE) + 1];
 		for (int r = 0; r < SIZE; r++) {
 			st = new StringTokenizer(br.readLine(), " ");
 			for (int c = 0; c < SIZE; c++) {
 				int id = Integer.parseInt(st.nextToken());
 				int direction = Integer.parseInt(st.nextToken()) - 1;
-				Fish f = new Fish(id, r, c, direction, true);
-				fishes[id - 1] = f;
-				map[r][c] = f.id;
+				fishes[id] = new Fish(r, c, direction, true);
+				map[r][c] = id;
 			}
 		}
 
-		Fish f = fishes[map[0][0] - 1];
+		Fish f = fishes[map[0][0]];
 		f.isAlive = false;
-		Shark shark = new Shark(0, 0, f.dir, f.id);
+		Shark shark = new Shark(0, 0, f.direction, map[0][0]);
 		map[0][0] = SHARK;
 
-		bruteforce(map, shark, fishes);
+		bruteforce(map, fishes, shark);
 
 		sb.append(answer);
 		bw.write(sb.toString());
@@ -85,87 +86,80 @@ public class Main {
 
 	}
 
-	public static void bruteforce(int[][] map, Shark shark, Fish[] fishes) {
+	public static void bruteforce(int[][] map, Fish[] fishes, Shark cShark) {
 
-		answer = Math.max(answer, shark.score);
-		moveFish(map, fishes);
+		answer = Math.max(answer, cShark.score);
+		move(map, fishes);
+
+		int cRow = cShark.row;
+		int cCol = cShark.col;
+		int cDir = cShark.direction;
+		int cScore = cShark.score;
 
 		for (int offset = 1; offset <= 4; offset++) {
 
-			int nRow = shark.row + (dr[shark.dir] * offset);
-			int nCol = shark.col + (dc[shark.dir] * offset);
+			int nRow = cRow + (dr[cDir] * offset);
+			int nCol = cCol + (dc[cDir] * offset);
 
-			if (outRange(nRow, nCol)) {
+			if (outRange(nRow, nCol) || map[nRow][nCol] <= EMPTY) {
 				continue;
 			}
 
-			if (map[nRow][nCol] <= EMPTY) {
-				continue;
-			}
+			int[][] copiedMap = copy(map);
+			Fish[] copiedFishes = copy(fishes);
 
-			// 정보 복사
-			int[][] copiedMap = copyMap(map);
-			Fish[] copiedFishes = copyFish(fishes);
+			Fish killedFish = copiedFishes[copiedMap[nRow][nCol]];
+			int nScore = cScore + copiedMap[nRow][nCol];
+			copiedMap[cRow][cCol] = EMPTY;
+			copiedMap[nRow][nCol] = SHARK;
+			killedFish.isAlive = false;
 
-			// 현재 위치에 존재하는 물고기
-			Fish eatFish = copiedFishes[map[nRow][nCol] - 1];
-
-			// 상어 위치 이동
-			copiedMap[shark.row][shark.col] = EMPTY;
-			copiedMap[eatFish.row][eatFish.col] = SHARK;
-
-			// 물고기 잡아먹기
-			eatFish.isAlive = false;
-			Shark nShark = new Shark(nRow, nCol, eatFish.dir, shark.score + eatFish.id);
-			bruteforce(copiedMap, nShark, copiedFishes);
+			bruteforce(
+				copiedMap,
+				copiedFishes,
+				new Shark(nRow, nCol, killedFish.direction, nScore)
+			);
 
 		}
 
 	}
 
-	public static void moveFish(int[][] map, Fish[] fishes) {
+	public static void move(int[][] map, Fish[] fishes) {
 
-		// 작은 번호를 가진 물고기부터 이동 시작
-		for (int id = 0; id < fishes.length; id++) {
+		for (int id = 1; id < fishes.length; id++) {
 
-			Fish fish = fishes[id];
-
-			if (!fish.isAlive) {
+			if (!fishes[id].isAlive) {
 				continue;
 			}
 
-			// 현재 방향에서 반시계 방향으로 증가하며 이동 가능한 곳으로 이동
+			int cDir = fishes[id].direction;
+			int cRow = fishes[id].row;
+			int cCol = fishes[id].col;
+
 			for (int offset = 0; offset < dr.length; offset++) {
 
-				int nDir = (fish.dir + offset) % dr.length;
-				int nRow = fish.row + dr[nDir];
-				int nCol = fish.col + dc[nDir];
+				int nDir = (cDir + offset) % dr.length;
+				int nRow = cRow + dr[nDir];
+				int nCol = cCol + dc[nDir];
 
-				if (outRange(nRow, nCol)) {
+				if (outRange(nRow, nCol) || map[nRow][nCol] == SHARK) {
 					continue;
 				}
 
-				if (map[nRow][nCol] == SHARK) {
-					continue;
-				}
-
-				// 현재 위치 초기화
-				map[fish.row][fish.col] = EMPTY;
-
+				map[cRow][cCol] = EMPTY;
+				
 				if (map[nRow][nCol] != EMPTY) {
-					// 이동할 위치에 물고기가 존재할 경우 위치 교환
-					Fish temp = fishes[map[nRow][nCol] - 1];
-					temp.row = fish.row;
-					temp.col = fish.col;
-					map[fish.row][fish.col] = temp.id;
+					Fish nFish = fishes[map[nRow][nCol]];
+					nFish.row = cRow;
+					nFish.col = cCol;
+					map[cRow][cCol] = map[nRow][nCol];
 				}
 
-				fish.row = nRow;
-				fish.col = nCol;
-				map[nRow][nCol] = fish.id;
-				fish.dir = nDir;
+				map[nRow][nCol] = id;
+				fishes[id].direction = nDir;
+				fishes[id].row = nRow;
+				fishes[id].col = nCol;
 
-				// 이동 완료 후 탈출
 				break;
 
 			}
@@ -174,25 +168,25 @@ public class Main {
 
 	}
 
-	public static int[][] copyMap(int[][] map) {
-		int[][] copyMap = new int[SIZE][SIZE];
-		for (int row = 0; row < SIZE; row++) {
-			copyMap[row] = map[row].clone();
-		}
-		return copyMap;
-	}
-
-	public static Fish[] copyFish(Fish[] fishes) {
-		Fish[] copyFishes = new Fish[fishes.length];
-		for (int id = 0; id < fishes.length; id++) {
-			Fish f = fishes[id];
-			copyFishes[f.id - 1] = new Fish(f.id, f.row, f.col, f.dir, f.isAlive);
-		}
-		return copyFishes;
-	}
-
 	public static boolean outRange(int r, int c) {
 		return r < 0 || SIZE <= r || c < 0 || SIZE <= c;
+	}
+
+	public static int[][] copy(int[][] map) {
+		int[][] copiedMap = new int[SIZE][SIZE];
+		for (int r = 0; r < SIZE; r++) {
+			copiedMap[r] = map[r].clone();
+		}
+		return copiedMap;
+	}
+
+	public static Fish[] copy(Fish[] fishes) {
+		Fish[] copiedFishes = new Fish[fishes.length];
+		for (int id = 1; id < fishes.length; id++) {
+			Fish f = fishes[id];
+			copiedFishes[id] = new Fish(f.row, f.col, f.direction, f.isAlive);
+		}
+		return copiedFishes;
 	}
 
 }
