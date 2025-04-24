@@ -14,30 +14,32 @@ class Solution {
         int[] seconds = new int[360_000];
         for (String log : logs) {
             String[] partOfLog = log.split("-");
-            int start = convertToInt(partOfLog[0]);
-            int end = convertToInt(partOfLog[1]);
-            for (int second = start; second < end; second++) {
-                seconds[second]++;
-            }
+            seconds[convertToInt(partOfLog[0])]++;
+            seconds[convertToInt(partOfLog[1])]--;
+        }
+        
+        // 누적합 계산
+        for (int second = 1; second < seconds.length ; second++) {
+            seconds[second] += seconds[second - 1];
         }
         
         int playTime = convertToInt(play_time);
         int advTime = convertToInt(adv_time);
         
-        // 00:00:00 ~ adv_time까지 누적 시간
+        // 00:00:00 ~ (adv_time - 1)까지 누적 시간 계산
         long sum = 0;
         for (int second = 0; second < advTime; second++) {
             sum += seconds[second];
         }
         
+        // adv_time 이후 누적 시간 계산
         int maxSecond = 0;
         long maxSum = sum;
         for (int second = advTime; second < playTime; second++) {
             
-            // 이전 기록은 빼기
+            // 윈도우 이동
+            // s1 ~ s2 -> (s1 + 1) ~ (s2 + 1)
             sum -= seconds[second - advTime];
-            
-            // 새롭게 추가되는 기록은 더하고
             sum += seconds[second];
             
             // 윈도우를 이동한 후 누적합이 더 크다면
@@ -72,7 +74,6 @@ class Solution {
             .append(minute < 10 ? "0" + minute : minute).append(":")
             .append(second < 10 ? "0" + second : second)
             .toString();
-        
     }
     
 }
