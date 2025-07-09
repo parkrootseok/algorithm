@@ -51,17 +51,10 @@ public class Main {
 			}
 		}
 
-		isVisited = new boolean[N + 1];
-		for (int index = 1; index <= N; index++) {
-			if (!isVisited[index]) {
-				isVisited[index] = true;
-				dfs(index, index, 0);
-				isVisited[index] = false;
+		for (int leader = 1; leader <= N; leader++) {
+			for (int index = 0; index < enemies[leader].size() - 1; index++) {
+				union(enemies[leader].get(index), enemies[leader].get(index + 1));
 			}
-		}
-
-		for (int index = 1; index <= N; index++) {
-			find(index);
 		}
 
 		Set<Integer> teams = new HashSet<>();
@@ -79,11 +72,9 @@ public class Main {
 		int findA = find(a);
 		int findB = find(b);
 
-		if (findA == findB) {
-			return;
+		if (findA != findB) {
+			unf[findB] = findA;
 		}
-
-		unf[findB] = findA;
 	}
 
 	public static int find(int element) {
@@ -95,7 +86,6 @@ public class Main {
 	}
 
 	public static void dfs(int start, int cur, int count) {
-
 		if (count == 2) {
 			union(start, cur);
 			return;
@@ -108,7 +98,6 @@ public class Main {
 				isVisited[index] = false;
 			}
 		}
-
 	}
 
 }
