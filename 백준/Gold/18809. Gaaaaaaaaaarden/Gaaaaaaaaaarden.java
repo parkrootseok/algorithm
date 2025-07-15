@@ -7,47 +7,41 @@ import java.util.*;
  */
 public class Main {
 
-	static class Position {
-
+	static class Node {
 		int row;
 		int col;
 		int color;
 		int time;
 
-		public Position(int row, int col, int color, int time) {
+		public Node(int row, int col, int color, int time) {
 			this.row = row;
 			this.col = col;
 			this.color = color;
 			this.time = time;
 		}
-
 	}
 
-	public static final int EMPTY = 0;
-	public static final int GREEN = 1;
-	public static final int RED = 2;
-	public static final int FLOWER = 3;
+	static final int WHITE = 0;
+	static final int GREEN = 1;
+	static final int RED = 2;
+	static final int FLOWER = 4;
 
-	public static final int LAKE = 0;
-	public static final int IMPOSSIBLE = 1;
-	public static final int POSSIBLE = 2;
-
-	static int[] dr = new int[] {-1, 1, 0, 0};
-	static int[] dc = new int[] {0, 0, -1, 1};
+	// 0은 호수, 1은 배양액을 뿌릴 수 없는 땅, 2는 배양액을 뿌릴 수 있는 땅을 의미한다.
+	static final int LAKE = 0;
+	static final int IMPOSSIBLE = 1;
+	static final int POSSIBLE = 2;
 
 	static BufferedReader br;
 	static BufferedWriter bw;
 	static StringTokenizer st;
 	static StringBuilder sb;
 
+	static int N, M, G, R;
 	static int[][] garden;
-	static int N;
-	static int M;
-	static int G;
-	static int R;
+	static List<int[]> candidates;
 
-	static List<Position> candidates;
 	static int answer;
+	static int[] permutation;
 
 	public static void main(String[] args) throws IOException {
 
@@ -56,7 +50,6 @@ public class Main {
 		sb = new StringBuilder();
 
 		st = new StringTokenizer(br.readLine().trim());
-
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 		G = Integer.parseInt(st.nextToken());
@@ -64,18 +57,19 @@ public class Main {
 
 		garden = new int[N][M];
 		candidates = new ArrayList<>();
-		for (int n = 0; n < N; n++) {
+		for (int row = 0; row < N; row ++) {
 			st = new StringTokenizer(br.readLine().trim());
-			for (int m = 0; m < M; m++) {
-				int input = Integer.parseInt(st.nextToken());
-				garden[n][m] = input;
-				if (garden[n][m] == POSSIBLE) {
-					candidates.add(new Position(n, m, 0, 0));
+			for (int col = 0; col < M; col ++) {
+				garden[row][col] = Integer.parseInt(st.nextToken());
+				if (garden[row][col] == POSSIBLE) {
+					candidates.add(new int[]{row, col});
 				}
 			}
 		}
 
-		bruteforce(0, 0, 0, new int[candidates.size()]);
+		answer = 0;
+		permutation = new int[candidates.size()];
+		bruteforce(0, 0, 0);
 
 		sb.append(answer);
 		bw.write(sb.toString());
@@ -83,9 +77,9 @@ public class Main {
 
 	}
 
-	public static void bruteforce(int depth, int green, int red, int[] isSelected) {
+	public static void bruteforce(int depth, int green, int red) {
 		if (green == G && red == R) {
-			answer = Math.max(answer, bfs(isSelected));
+			answer = Math.max(answer, bfs());
 			return;
 		}
 
@@ -93,60 +87,66 @@ public class Main {
 			return;
 		}
 
+		bruteforce(depth + 1, green, red);
+
 		if (green < G) {
-			isSelected[depth] = GREEN;
-			bruteforce(depth + 1, green + 1, red, isSelected);
-			isSelected[depth] = EMPTY;
+			permutation[depth] = GREEN;
+			bruteforce(depth + 1, green + 1, red);
+			permutation[depth] = WHITE;
 		}
 
 		if (red < R) {
-			isSelected[depth] = RED;
-			bruteforce(depth + 1, green, red + 1, isSelected);
-			isSelected[depth] = EMPTY;
+			permutation[depth] = RED;
+			bruteforce(depth + 1, green, red + 1);
+			permutation[depth] = WHITE;
 		}
-
-		bruteforce(depth + 1, green, red, isSelected);
 	}
 
-	public static int bfs(int[] isSelected) {
+	public static int bfs() {
+
+		int[] dr = new int[]{-1, 1, 0, 0};
+		int[] dc = new int[]{0, 0, -1, 1};
 
 		int[][] times = new int[N][M];
 		int[][] isVisited = new int[N][M];
-		Queue<Position> queue = new ArrayDeque<>();
+		Queue<Node> nodes = new ArrayDeque<>();
 
 		for (int index = 0; index < candidates.size(); index++) {
-			if (isSelected[index] != EMPTY) {
-				Position pos = candidates.get(index);
-				queue.offer(new Position(pos.row, pos.col, isSelected[index], 0));
-				isVisited[pos.row][pos.col] = isSelected[index];
+			if (permutation[index] != WHITE) {
+				int[] candidate = candidates.get(index);
+				nodes.offer(new Node(candidate[0], candidate[1], permutation[index], 0));
+				isVisited[candidate[0]][candidate[1]] = permutation[index];
 			}
 		}
 
 		int count = 0;
-		while (!queue.isEmpty()) {
-
-			Position cur = queue.poll();
-
-			if (isVisited[cur.row][cur.col] == FLOWER) {
+		while (!nodes.isEmpty()) {
+			Node node = nodes.poll();
+			
+			if (isVisited[node.row][node.col] == FLOWER) {
 				continue;
 			}
 
 			for (int dir = 0; dir < dr.length; dir++) {
-				int nr = cur.row + dr[dir];
-				int nc = cur.col + dc[dir];
+				int nr = node.row + dr[dir];
+				int nc = node.col + dc[dir];
 
-				if (outRange(nr, nc) || garden[nr][nc] == LAKE || isVisited[nr][nc] == FLOWER) {
+				if (nr < 0 || N <= nr || nc < 0 || M <= nc) {
 					continue;
 				}
 
-				if (isVisited[nr][nc] == EMPTY) {
-					isVisited[nr][nc] = cur.color;
-					times[nr][nc] = cur.time + 1;
-					queue.add(new Position(nr, nc, cur.color, cur.time + 1));
-				} else if (isVisited[nr][nc] == GREEN && cur.color == RED && times[nr][nc] == cur.time + 1) {
+				if (garden[nr][nc] == LAKE || isVisited[nr][nc] == FLOWER) {
+					continue;
+				}
+
+				if (isVisited[nr][nc] == WHITE) {
+					times[nr][nc] = node.time + 1;
+					isVisited[nr][nc] = node.color;
+					nodes.offer(new Node(nr, nc, node.color, node.time + 1));
+				} else if (node.color == GREEN && isVisited[nr][nc] == RED && times[nr][nc] == node.time + 1) {
 					isVisited[nr][nc] = FLOWER;
 					count++;
-				} else if (isVisited[nr][nc] == RED && cur.color == GREEN && times[nr][nc] == cur.time + 1) {
+				} else if (node.color == RED && isVisited[nr][nc] == GREEN && times[nr][nc] == node.time + 1) {
 					isVisited[nr][nc] = FLOWER;
 					count++;
 				}
@@ -154,10 +154,7 @@ public class Main {
 		}
 
 		return count;
-	}
 
-	public static boolean outRange(int row, int col) {
-		return row < 0 || N <= row || col < 0 || M <= col;
 	}
 
 }
