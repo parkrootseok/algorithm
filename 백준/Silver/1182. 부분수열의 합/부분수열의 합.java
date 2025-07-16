@@ -32,7 +32,10 @@ public class Main {
 			numbers[index] = Integer.parseInt(st.nextToken());
 		}
 
-		bruteforce(0, 0, 0);
+		bruteforce(0, 0);
+		if (S == 0) {
+			answer--;
+		}
 
 		sb.append(answer);
 		bw.write(sb.toString());
@@ -40,17 +43,17 @@ public class Main {
 
 	}
 
-	public static void bruteforce(int depth, int sum, int count) {
+	public static void bruteforce(int depth, int sum) {
 
 		if (depth == N) {
-			if (0 < count && S == sum) {
+			if (S == sum) {
 				answer++;
 			}
 			return;
 		}
 
-		bruteforce(depth + 1, sum + numbers[depth], count + 1);
-		bruteforce(depth + 1, sum, count);
+		bruteforce(depth + 1, sum + numbers[depth]);
+		bruteforce(depth + 1, sum);
 
 	}
 
