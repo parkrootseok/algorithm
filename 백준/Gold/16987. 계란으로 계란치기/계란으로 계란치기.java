@@ -42,57 +42,56 @@ public class Main {
 			eggs[index] = new Egg(S, W);
 		}
 
-		bruteforce(0);
+		bruteforce(0, 0);
 
 		sb.append(answer);
 		bw.write(sb.toString());
 		bw.close();
 	}
 
-	public static void bruteforce(int curIndex) {
+	public static void bruteforce(int curIndex, int count) {
 
 		// 가장 오른쪽 계란을 도달한 경우
 		if (curIndex == N) {
 			// 깨진 계란 수를 체크 후 종료
-			int count = 0;
-			for (Egg e : eggs) {
-				if (e.S <= 0) {
-					count++;
-				}
-			}
 			answer = Math.max(answer, count);
 			return;
 		}
 
-		// 현재 계란이 깨져있다면
-		if (eggs[curIndex].S <= 0) {
+		// 현재 계란이 깨져있거나, 다른 계란이 모두 깨진 경우
+		if (eggs[curIndex].S <= 0 || count == N - 1) {
 			// 다음 계란 선택
-			bruteforce(curIndex + 1);
-		} else {
-			// 다른 계란들 중
-			boolean flag = false;
-			for (int index = 0; index < N; index++) {
-				// 깨지지 않은 계란이 있다면
-				if (index != curIndex && 0 < eggs[index].S) {
-					flag = true;
-
-					// 계란 치기를 수행 후
-					eggs[curIndex].S -= eggs[index].W;
-					eggs[index].S -= eggs[curIndex].W;
-
-					// 다음 계란 선택
-					bruteforce(curIndex + 1);
-
-					// 상태 복구
-					eggs[curIndex].S += eggs[index].W;
-					eggs[index].S += eggs[curIndex].W;
-				}
-			}
-			if (!flag) {
-				bruteforce(curIndex + 1);
-			}
+			bruteforce(curIndex + 1, count);
+			return;
 		}
 
+		// 다른 계란들 중
+		for (int index = 0; index < N; index++) {
+			// 자기 자신이거나 깨진 계란이라면 스킵
+			if (index == curIndex || eggs[index].S <= 0) {
+				continue;
+			}
+
+			int curCount = 0;
+
+			// 계란 치기를 수행 후
+			eggs[curIndex].S -= eggs[index].W;
+			eggs[index].S -= eggs[curIndex].W;
+
+			if(eggs[curIndex].S <= 0) {
+				curCount++;
+			}
+			if(eggs[index].S <= 0) {
+				curCount++;
+			}
+
+			// 다음 계란 선택
+			bruteforce(curIndex + 1, count + curCount);
+
+			// 상태 복구
+			eggs[curIndex].S += eggs[index].W;
+			eggs[index].S += eggs[curIndex].W;
+		}
 	}
 
 }
