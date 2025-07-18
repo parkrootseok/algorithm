@@ -37,6 +37,7 @@ public class Main {
 	static int W, H;
 
 	static char[][] building;
+	static boolean[][] isVisited;
 	static Queue<int[]> fires;
 	static Queue<Node> node;
 
@@ -55,11 +56,19 @@ public class Main {
 			building = new char[H][W];
 			node = new ArrayDeque<>();
 			fires = new ArrayDeque<>();
+			isVisited = new boolean[H][W];
 
 			for (int h = 0; h < H; h++) {
 				char[] inputs = br.readLine().toCharArray();
 				for (int w = 0; w < W; w++) {
 					building[h][w] = inputs[w];
+					if (building[h][w] == START) {
+						isVisited[h][w] = true;
+						node.offer(new Node(h, w, 0));
+					}
+					if (building[h][w] == FIRE) {
+						fires.offer(new int[]{h, w});
+					}
 				}
 			}
 
@@ -73,69 +82,53 @@ public class Main {
 	}
 	public static String bfs() {
 
-		boolean[][] isVisited = new boolean[H][W];
-		int[][] times = new int[H][W];
-		for (int h = 0; h < H; h++) {
-			Arrays.fill(times[h], -1);
-		}
+		while (!node.isEmpty()) {
+			burn();
 
-		for (int h = 0; h < H; h++) {
-			for (int w = 0; w < W; w++) {
-				if (building[h][w] == START) {
-					isVisited[h][w] = true;
-					node.offer(new Node(h, w, 0));
+			int size = node.size();
+			for (int s = 0; s < size; s++) {
+				Node cNode = node.poll();
+				int cH = cNode.h;
+				int cW = cNode.w;
+				int cT = cNode.time;
+
+				if (cH == 0 || cH == H - 1 || cW == 0 || cW == W - 1) {
+					return String.valueOf(cT + 1);
 				}
-				if (building[h][w] == FIRE) {
-					times[h][w] = 0;
-					fires.offer(new int[]{h, w});
+
+				for (int dir = 0; dir < dh.length; dir++) {
+					int nH = cH + dh[dir];
+					int nW = cW + dw[dir];
+					if (!outRange(nH, nW) && !isVisited[nH][nW] && building[nH][nW] == EMPTY) {
+						isVisited[nH][nW] = true;
+						node.offer(new Node(nH, nW, cT + 1));
+					}
 				}
 			}
 		}
 
-		while (!fires.isEmpty()) {
+		return "IMPOSSIBLE";
+
+	}
+
+	public static void burn() {
+		int size = fires.size();
+		for (int s = 0; s < size; s++) {
 			int[] fire = fires.poll();
 			int cH = fire[0];
 			int cW = fire[1];
 			for (int dir = 0; dir < dh.length; dir++) {
 				int nH = cH + dh[dir];
 				int nW = cW + dw[dir];
-				if (outRange(nH, nW)) {
-					continue;
-				}
-				if (building[nH][nW] == EMPTY && times[nH][nW] == -1) {
-					times[nH][nW] = times[cH][cW] + 1;
+				if (!outRange(nH, nW) && building[nH][nW] == EMPTY) {
+					building[nH][nW] = FIRE;
 					fires.offer(new int[]{nH, nW});
 				}
 			}
 		}
+	}
 
-		while (!node.isEmpty()) {
-			Node cNode = node.poll();
-			int cH = cNode.h;
-			int cW = cNode.w;
-			int cT = cNode.time;
-
-			if (cH == 0 || cH == H - 1 || cW == 0 || cW == W - 1) {
-				return String.valueOf(cT + 1);
-			}
-
-			for (int dir = 0; dir < dh.length; dir++) {
-				int nH = cH + dh[dir];
-				int nW = cW + dw[dir];
-				if (outRange(nH, nW)) {
-					continue;
-				}
-				if (isVisited[nH][nW]) {
-					continue;
-				}
-				if (building[nH][nW] == EMPTY && (times[nH][nW] == -1 || cT + 1 < times[nH][nW])) {
-					isVisited[nH][nW] = true;
-					node.offer(new Node(nH, nW, cT + 1));
-				}
-			}
-		}
-
-		return "IMPOSSIBLE";
+	public static void move() {
 
 	}
 
