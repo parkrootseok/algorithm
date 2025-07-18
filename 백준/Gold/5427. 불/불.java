@@ -128,10 +128,6 @@ public class Main {
 		}
 	}
 
-	public static void move() {
-
-	}
-
 	public static boolean outRange(int h, int w) {
 		return h < 0 || H <= h || w < 0 || W <= w;
 	}
