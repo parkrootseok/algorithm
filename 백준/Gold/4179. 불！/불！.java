@@ -19,7 +19,7 @@ public class Main {
 	static int R, C;
 	static char[][] building;
 
-	static boolean[][] isVisited;
+ 	static String answer;
 	static Queue<int[]> positions;
 	static Queue<int[]> fires;
 
@@ -33,7 +33,6 @@ public class Main {
 		C = Integer.parseInt(st.nextToken());
 
 		building = new char[R][C];
-		isVisited = new boolean[R][C];
 		positions = new ArrayDeque<>();
 		fires = new ArrayDeque<>();
 		for (int row = 0; row < R; row++) {
@@ -42,7 +41,6 @@ public class Main {
 				building[row][col] = inputs[col];
 				if (building[row][col] == 'J') {
 					positions.add(new int[]{row, col, 0});
-					isVisited[row][col] = true;
 				}
 				if (building[row][col] == 'F') {
 					fires.add(new int[]{row, col});
@@ -50,37 +48,22 @@ public class Main {
 			}
 		}
 
-		sb.append(bfs());
+		answer = "IMPOSSIBLE";
+		bfs();
+
+		sb.append(answer);
 		bw.write(sb.toString());
 		bw.close();
 
 	}
 
-	public static String bfs() {
+	public static void bfs() {
 		while (!positions.isEmpty()) {
 			burn();
-
-			int size = positions.size();
-			for (int s = 0; s < size; s++) {
-				int[] pos = positions.poll();
-
-				for (int dir = 0; dir < dr.length; dir++) {
-					int nr = pos[0] + dr[dir];
-					int nc = pos[1] + dc[dir];
-
-					if (pos[0] == 0 || pos[0] == R - 1 || pos[1] == 0 || pos[1] == C - 1) {
-						return String.valueOf(pos[2] + 1);
-					}
-
-					if (!outRange(nr, nc) && !isVisited[nr][nc] && building[nr][nc] == EMPTY) {
-						isVisited[nr][nc] = true;
-						positions.offer(new int[]{nr, nc, pos[2] + 1});
-					}
-				}
+			if (!move()) {
+				break;
 			}
 		}
-
-		return "IMPOSSIBLE";
 	}
 
 	public static void burn() {
@@ -98,6 +81,29 @@ public class Main {
 				}
 			}
 		}
+	}
+
+	public static boolean move() {
+		int size = positions.size();
+		for (int s = 0; s < size; s++) {
+			int[] pos = positions.poll();
+
+			for (int dir = 0; dir < dr.length; dir++) {
+				int nr = pos[0] + dr[dir];
+				int nc = pos[1] + dc[dir];
+
+				if (pos[0] == 0 || pos[0] == R - 1 || pos[1] == 0 || pos[1] == C - 1) {
+					answer = String.valueOf(pos[2] + 1);
+					return false;
+				}
+
+				if (building[nr][nc] == EMPTY) {
+					building[nr][nc] = 'J';
+					positions.offer(new int[]{nr, nc, pos[2] + 1});
+				}
+			}
+		}
+		return true;
 	}
 
 	public static boolean outRange(int row, int col) {
