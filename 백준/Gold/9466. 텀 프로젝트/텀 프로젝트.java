@@ -39,7 +39,8 @@ public class Main {
 			isVisited = new boolean[N + 1];
 			isDone = new boolean[N + 1];
 			for (int student = 1; student <= N; student++) {
-				if (!isDone[student]) {
+				if (!isVisited[student]) {
+					isVisited[student] = true;
 					dfs(student);
 				}
 			}
@@ -53,21 +54,31 @@ public class Main {
 	}
 
 	public static void dfs(int cur) {
+		// 다음 방문할 학생 구하기
+		int next = parent[cur];
 
-		if (isDone[cur]) {
-			return;
+		// 다음 학생을 방문하지 않은 경우 탐색 시작
+		if (!isVisited[next]) {
+			isVisited[next] = true;
+			dfs(next);
 		}
 
-		if (isVisited[cur]) {
-			isDone[cur] = true;
-			count++;
+		// 다음 학생을 이미 방문했다면,
+		else {
+			// 사이클 발생 여부를 체크했는지 확인
+			if (!isDone[next]) {
+				// 역추적하면서 카운팅
+				count++;
+				while (next != cur) {
+					count++;
+					next = parent[next];
+				}
+
+			}
 		}
 
-		isVisited[cur] = true;
-		dfs(parent[cur]);
+		// 방문한 학생에 대하여 검사 완료 체크
 		isDone[cur] = true;
-		isVisited[cur] = false;
-		
 	}
 
 }
