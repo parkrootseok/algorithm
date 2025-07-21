@@ -49,7 +49,7 @@ public class Main {
 		}
 
 		answer = "IMPOSSIBLE";
-		bfs();
+		execute();
 
 		sb.append(answer);
 		bw.write(sb.toString());
@@ -57,10 +57,10 @@ public class Main {
 
 	}
 
-	public static void bfs() {
+	public static void execute() {
 		while (!positions.isEmpty()) {
 			burn();
-			if (!move()) {
+			if (!isDone()) {
 				break;
 			}
 		}
@@ -83,7 +83,7 @@ public class Main {
 		}
 	}
 
-	public static boolean move() {
+	public static boolean isDone() {
 		int size = positions.size();
 		while (size-- > 0) {
 			int[] pos = positions.poll();
@@ -110,6 +110,5 @@ public class Main {
 	public static boolean outRange(int row, int col) {
 		return row < 0 || R <= row || col < 0 || C <= col;
 	}
-
 
 }
