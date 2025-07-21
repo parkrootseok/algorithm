@@ -68,7 +68,7 @@ public class Main {
 
 	public static void burn() {
 		int size = fires.size();
-		for (int s = 0; s < size; s++) {
+		while (size-- > 0) {
 			int[] fire = fires.poll();
 
 			for (int dir = 0; dir < dr.length; dir++) {
@@ -85,7 +85,7 @@ public class Main {
 
 	public static boolean move() {
 		int size = positions.size();
-		for (int s = 0; s < size; s++) {
+		while (size-- > 0) {
 			int[] pos = positions.poll();
 
 			for (int dir = 0; dir < dr.length; dir++) {
@@ -103,6 +103,7 @@ public class Main {
 				}
 			}
 		}
+
 		return true;
 	}
 
