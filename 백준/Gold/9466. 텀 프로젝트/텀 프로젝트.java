@@ -14,10 +14,9 @@ public class Main {
 
 	static int T, N;
 	static int[] parent;
-
-	static int count;
-	static boolean[] isDone;
 	static boolean[] isVisited;
+	static boolean[] hasTeam;
+	static int count;
 
 	public static void main(String[] args) throws IOException {
 		br = new BufferedReader(new InputStreamReader(System.in));
@@ -25,23 +24,21 @@ public class Main {
 		sb = new StringBuilder();
 
 		T = Integer.parseInt(br.readLine());
-		while (T-- != 0) {
+		while (0 < T--) {
 
 			N = Integer.parseInt(br.readLine());
-
 			parent = new int[N + 1];
-			st = new StringTokenizer(br.readLine().trim());
-			for (int student = 1; student <= N; student++) {
-				parent[student] = Integer.parseInt(st.nextToken());
+			st = new StringTokenizer(br.readLine());
+			for (int index = 1; index <= N; index++) {
+				parent[index] = Integer.parseInt(st.nextToken());
 			}
 
-			count = 0;
 			isVisited = new boolean[N + 1];
-			isDone = new boolean[N + 1];
-			for (int student = 1; student <= N; student++) {
-				if (!isVisited[student]) {
-					isVisited[student] = true;
-					dfs(student);
+			hasTeam = new boolean[N + 1];
+			count = 0;
+			for (int index = 1; index <= N; index++) {
+				if (!hasTeam[index]) {
+					dfs(index);
 				}
 			}
 
@@ -50,35 +47,24 @@ public class Main {
 
 		bw.write(sb.toString());
 		bw.close();
-
 	}
 
-	public static void dfs(int cur) {
-		// 다음 방문할 학생 구하기
-		int next = parent[cur];
-
-		// 다음 학생을 방문하지 않은 경우 탐색 시작
-		if (!isVisited[next]) {
-			isVisited[next] = true;
-			dfs(next);
+	public static void dfs(int curStudent) {
+		if (hasTeam[curStudent]) {
+			// 이미 팀이 있다면 종료
+			return;
 		}
 
-		// 다음 학생을 이미 방문했다면,
-		else {
-			// 사이클 발생 여부를 체크했는지 확인
-			if (!isDone[next]) {
-				// 역추적하면서 카운팅
-				count++;
-				while (next != cur) {
-					count++;
-					next = parent[next];
-				}
-
-			}
+		if (isVisited[curStudent]) {
+			// 사이클이 발생한 경우 카운팅
+			hasTeam[curStudent] = true;
+			count++;
 		}
 
-		// 방문한 학생에 대하여 검사 완료 체크
-		isDone[cur] = true;
+		isVisited[curStudent] = true;
+		dfs(parent[curStudent]);
+		isVisited[curStudent] = false;
+		hasTeam[curStudent] = true;
 	}
 
 }
