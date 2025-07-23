@@ -2,36 +2,34 @@ import java.io.*;
 import java.util.*;
 
 /**
- * BOJ_텀 프로젝트
+ * BOJ_확장 게임
  * @author parkrootseok
  */
 public class Main {
 
-
 	static BufferedReader br;
-
 	static BufferedWriter bw;
 	static StringTokenizer st;
 	static StringBuilder sb;
 
 	static class Player {
 		int moveCount;
-		Queue<int[]> castles;
+		Queue<int[]> continents;
 
 		public Player(int moveCount) {
 			this.moveCount = moveCount;
-			this.castles = new ArrayDeque<>();
+			this.continents = new ArrayDeque<>();
 		}
 	}
 
-	static final char EMPTY = '.';
-	static final char WALL = '#';
 	static final int[] dr = new int[]{-1, 1, 0, 0};
 	static final int[] dc = new int[]{0, 0, -1, 1};
+	static final char EMPTY = '.';
+	static final char WALL = '#';
 
 	static int N, M, P;
-	static Player[] players;
 	static char[][] map;
+	static Player[] players;
 	static int[] counts;
 
 	public static void main(String[] args) throws IOException {
@@ -44,30 +42,28 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 		P = Integer.parseInt(st.nextToken());
 
+		map = new char[N][M];
+		counts = new int[P + 1];
 		players = new Player[P + 1];
+
 		st = new StringTokenizer(br.readLine().trim());
 		for (int index = 1; index <= P; index++) {
 			players[index] = new Player(Integer.parseInt(st.nextToken()));
 		}
 
-		map = new char[N][M];
-		counts = new int[P + 1];
-		for (int r = 0 ; r < N; r++) {
-			char[] inputs = br.readLine().toCharArray();
-			for (int c = 0 ; c < M; c++) {
-				map[r][c] = inputs[c];
-				if (map[r][c] != EMPTY && map[r][c] != WALL) {
-					players[map[r][c] - '0'].castles.offer(new int[]{r, c});
-					counts[map[r][c] - '0']++;
+		for (int row = 0; row < N; row++) {
+			String inputs = br.readLine();
+			for (int col = 0; col < M; col++) {
+				map[row][col] = inputs.charAt(col);
+				if (map[row][col] != EMPTY && map[row][col] != WALL) {
+					players[map[row][col] - '0'].continents.add(new int[]{row, col});
+					counts[map[row][col] - '0']++;
 				}
 			}
 		}
 
-		while (true) {
-			boolean isContinue = bfs();
-			if (!isContinue) {
-				break;
-			}
+
+		while (bfs()) {
 		}
 
 		for (int index = 1; index <= P; index++) {
@@ -78,24 +74,26 @@ public class Main {
 		bw.close();
 	}
 
-	public static boolean bfs() {
+	public static boolean bfs()  {
 		boolean flag = false;
 		for (int index = 1; index <= P; index++) {
-			for (int curMoveCount = 0; curMoveCount < players[index].moveCount; curMoveCount++) {
-				if (players[index].castles.isEmpty()) {
+			Player player = players[index];
+			for (int curMoveCount = 0; curMoveCount < player.moveCount; curMoveCount++) {
+				if (player.continents.isEmpty()) {
 					break;
 				}
-
-				int size = players[index].castles.size();
+				int size = player.continents.size();
 				while (0 < size--) {
-					int[] pos = players[index].castles.poll();
+					int[] continent = player.continents.poll();
+					int r = continent[0];
+					int c = continent[1];
 					for (int dir = 0; dir < dr.length; dir++) {
-						int nr = pos[0] + dr[dir];
-						int nc = pos[1] + dc[dir];
+						int nr = r + dr[dir];
+						int nc = c + dc[dir];
 						if (!outRange(nr, nc) && map[nr][nc] == EMPTY) {
-							players[index].castles.offer(new int[]{nr, nc});
-							map[nr][nc] = (char)(index + '0');
-							counts[index]++;
+							player.continents.add(new int[]{nr, nc});
+							map[nr][nc] = map[r][c];
+							counts[map[r][c] - '0']++;
 							flag = true;
 						}
 					}
