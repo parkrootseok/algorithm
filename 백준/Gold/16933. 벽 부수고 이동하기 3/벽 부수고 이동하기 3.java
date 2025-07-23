@@ -17,14 +17,12 @@ public class Main {
 		int col;
 		int distance;
 		int count;
-		int status;
 
-		public Node(int row, int col, int distance, int count, int status) {
+		public Node(int row, int col, int distance, int count) {
 			this.row = row;
 			this.col = col;
 			this.distance = distance;
 			this.count = count;
-			this.status = status;
 		}
 	}
 
@@ -35,6 +33,7 @@ public class Main {
 
 	static int N, M, K;
 	static int[][] map;
+	static int[][] counts;
 
 	public static void main(String[] args) throws IOException {
 		br = new BufferedReader(new InputStreamReader(System.in));
@@ -47,8 +46,10 @@ public class Main {
 		K = Integer.parseInt(st.nextToken());
 
 		map = new int[N][M];
+		counts = new int[N][M];
 		for (int row = 0; row < N; row++) {
 			String inputs = br.readLine();
+			Arrays.fill(counts[row], Integer.MAX_VALUE);
 			for (int col = 0; col < M; col++) {
 				map[row][col] = inputs.charAt(col) - '0';
 			}
@@ -60,50 +61,46 @@ public class Main {
 	}
 
 	public static int bfs() {
-
-		boolean[][][][] isVisited = new boolean[2][K + 1][N][M];
 		Queue<Node> queue = new ArrayDeque<>();
-		isVisited[0][0][0][0] = true;
-		queue.offer(new Node(0, 0, 1, 0,0));
+		queue.offer(new Node(0, 0, 1, 0));
+		counts[0][0] = 0;
 
 		while (!queue.isEmpty()) {
 			Node node = queue.poll();
-			int nDis = node.distance + 1;
-			int nStatus = (node.status + 1) % 2;
-
 			if (node.row == N - 1 && node.col == M - 1) {
 				return node.distance;
-			}
-
-			if (!isVisited[nStatus][node.count][node.row][node.col]) {
-				isVisited[nStatus][node.count][node.row][node.col] = true;
-				queue.offer(new Node(node.row, node.col, nDis, node.count, nStatus));
 			}
 
 			for (int dir = 0; dir < dr.length; dir++) {
 				int nRow = node.row + dr[dir];
 				int nCol = node.col + dc[dir];
 
-				if (outRange(nRow, nCol)) {
+				if (outRange(nRow, nCol) || counts[nRow][nCol] <= node.count) {
 					continue;
 				}
 
-				if (map[nRow][nCol] == EMPTY) {
-					if (!isVisited[nStatus][node.count][nRow][nCol]) {
-						isVisited[nStatus][node.count][nRow][nCol] = true;
-						queue.offer(new Node(nRow, nCol, nDis, node.count, nStatus));
+				if (map[nRow][nCol] == WALL) {
+					if (K <= node.count || counts[nRow][nCol] <= node.count + 1) {
+						continue;
 					}
-				}
-				if (map[nRow][nCol] == WALL && node.status == 0 && node.count < K) {
-					if (!isVisited[nStatus][node.count + 1][nRow][nCol]) {
-						isVisited[nStatus][node.count + 1][nRow][nCol] = true;
-						queue.offer(new Node(nRow, nCol, nDis, node.count + 1, nStatus));
+					if (isNight(node.distance)) {
+						queue.offer(new Node(node.row, node.col, node.distance + 1, node.count));
+					} else {
+						queue.offer(new Node(nRow, nCol, node.distance + 1, node.count + 1));
+						counts[nRow][nCol] = node.count + 1;
 					}
+				} else {
+					queue.offer(new Node(nRow, nCol, node.distance + 1, node.count));
+					counts[nRow][nCol] = node.count;
 				}
 			}
 		}
 
 		return -1;
+	}
+
+	public static boolean isNight(int distance) {
+		return distance % 2 == 0;
 	}
 
 	public static boolean outRange(int r, int c) {
