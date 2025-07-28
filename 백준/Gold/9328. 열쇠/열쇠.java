@@ -61,7 +61,7 @@ public class Main {
 							answer++;
 						} else if (isKey(h, w)) {
 							key |= 1 << (BUILDING[h][w] - 'a');
-						} 
+						}
 						entrance.offer(new Node(h, w));
 					}
 				}
@@ -81,13 +81,7 @@ public class Main {
 				if (isDoor(cH, cW)) {
 					int doorKey = 1 << (BUILDING[cH][cW] - 'A');
 					if (!hasKey(doorKey)) {
-						if (doors.containsKey(doorKey)) {
-							doors.get(doorKey).offer(new Node(cH, cW));
-						} else {
-							Queue<Node> queue = new ArrayDeque<>();
-							queue.offer(new Node(cH, cW));
-							doors.put(doorKey, queue);
-						}
+						addWaitingQueue(doorKey, cH, cW);
 						continue;
 					}
 				}
@@ -99,6 +93,16 @@ public class Main {
 
 		bw.write(sb.toString());
 		bw.close();
+	}
+
+	private static void addWaitingQueue(int doorKey, int cH, int cW) {
+		if (doors.containsKey(doorKey)) {
+			doors.get(doorKey).offer(new Node(cH, cW));
+		} else {
+			Queue<Node> queue = new ArrayDeque<>();
+			queue.offer(new Node(cH, cW));
+			doors.put(doorKey, queue);
+		}
 	}
 
 	public static void bfs(int h, int w) {
@@ -126,23 +130,13 @@ public class Main {
 					key |= (1 << BUILDING[nH][nW] - 'a');
 					for (int doorKey : doors.keySet()) {
 						if (hasKey(doorKey)) {
-							Queue<Node> queue = doors.get(doorKey);
-							while (!queue.isEmpty()) {
-								Node door = queue.poll();
-								nodes.offer(new Node(door.h, door.w));
-							}
+							extractWatingQueue(doorKey, nodes);
 						}
 					}
 				} else if (isDoor(nH, nW)) {
 					int doorKey = 1 << (BUILDING[nH][nW] - 'A');
 					if (!hasKey(doorKey)) {
-						if (doors.containsKey(doorKey)) {
-							doors.get(doorKey).offer(new Node(nH, nW));
-						} else {
-							Queue<Node> queue = new ArrayDeque<>();
-							queue.offer(new Node(nH, nW));
-							doors.put(doorKey, queue);
-						}
+						addWaitingQueue(doorKey, nH, nW);
 						continue;
 					}
 				}
@@ -150,6 +144,14 @@ public class Main {
 				nodes.offer(new Node(nH, nW));
 				isVisited[nH][nW] = true;
 			}
+		}
+	}
+
+	private static void extractWatingQueue(int doorKey, Queue<Node> nodes) {
+		Queue<Node> queue = doors.get(doorKey);
+		while (!queue.isEmpty()) {
+			Node door = queue.poll();
+			nodes.offer(new Node(door.h, door.w));
 		}
 	}
 
