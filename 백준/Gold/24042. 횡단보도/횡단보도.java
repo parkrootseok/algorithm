@@ -23,8 +23,8 @@ public class Main {
 			this.next = next;
 		}
 	}
-	
-	
+
+
 	static class Node implements Comparable<Node> {
 		int index;
 		long time;
@@ -90,11 +90,12 @@ public class Main {
 
 			for (Vertex v = vertices[cIndex]; v != null; v = v.next) {
 				int nIndex = v.index;
-				long waitingTime = (v.openTime - (cTime % M) + M) % M;
-				
-				if (cTime + waitingTime + 1 < times[nIndex]) {
-					times[nIndex] = cTime + waitingTime + 1;
-					nodeQ.offer(new Node(nIndex, cTime + waitingTime + 1));
+				long offset = (v.openTime - (cTime % M) + M) % M;
+				long needTime = cTime + offset + 1; 
+
+				if (needTime < times[nIndex]) {
+					times[nIndex] = needTime;
+					nodeQ.offer(new Node(nIndex, needTime));
 				}
 			}
 		}
