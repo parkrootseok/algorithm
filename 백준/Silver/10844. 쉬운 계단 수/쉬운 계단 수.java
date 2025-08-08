@@ -13,6 +13,7 @@ public class Main {
 	static StringBuilder sb;
 
 	static int N;
+	static int[] A;
 	static int[][] DP;
 
 	public static void main(String[] args) throws IOException {
@@ -21,23 +22,25 @@ public class Main {
 		sb = new StringBuilder();
 
 		N = Integer.parseInt(br.readLine());
+		A = new int[N + 1];
 		DP = new int[N + 1][10];
-		DP[1][0] = 0;
-		for (int i = 1; i <= 9; i++) {
-			DP[1][i] = 1;
+
+		for (int lastNumber = 1; lastNumber <= 9; lastNumber++) {
+			DP[1][lastNumber] = 1;
 		}
 
 		for (int i = 2; i <= N; i++) {
 			DP[i][0] = DP[i - 1][1];
-			for (int j = 1; j <= 8; j++) {
-				DP[i][j] = (DP[i - 1][j - 1] + DP[i - 1][j + 1]) % 1_000_000_000;
+			for (int lastNumber = 1; lastNumber <= 8; lastNumber++) {
+				DP[i][lastNumber] = (DP[i - 1][lastNumber - 1] + DP[i - 1][lastNumber + 1]) % 1_000_000_000;
 			}
 			DP[i][9] = DP[i - 1][8];
 		}
 
-		long answer = 0;
-		for (int i = 0; i <= 9; i++) {
-			answer = (answer + DP[N][i]) % 1_000_000_000;
+		int answer = 0;
+		for (int lastNumber = 0; lastNumber <= 9; lastNumber++) {
+			 answer += DP[N][lastNumber] ;
+			 answer %= 1_000_000_000;
 		}
 
 		sb.append(answer);
