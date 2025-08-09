@@ -1,8 +1,6 @@
 import java.io.*;
 import java.util.*;
 
-import javax.print.DocFlavor;
-
 /**
  * BOJ_외판원순회2
  * @author parkrootseok
@@ -26,44 +24,43 @@ public class Main {
 
 		N = Integer.parseInt(br.readLine());
 		W = new int[N + 1][N + 1];
-		for (int r = 1; r <= N; r++) {
+		for (int r = 0; r < N; r++) {
 			st = new StringTokenizer(br.readLine());
-			for (int c = 1; c <= N; c++) {
+			for (int c = 0; c < N; c++) {
 				W[r][c] = Integer.parseInt(st.nextToken());
 			}
 		}
 
 		min = Integer.MAX_VALUE;
 		isVisited = new boolean[N + 1];
-        isVisited[1] = true;
-		bruteforce(0, 1, 1, 0);
-	
+		bruteforce(0, 0, 0);
+
 		sb.append(min);
 		bw.write(sb.toString());
 		bw.close();
 	}
 
-	static void bruteforce(int depth, int start, int cCity, int sum) {
+	static void bruteforce(int depth, int to, int sum) {
 
 		if (depth == N - 1) {
-			if (0 < W[cCity][start]) {
-				min = Math.min(min, sum + W[cCity][start]);
+			if (0 < W[to][0]) {
+				min = Math.min(min, sum + W[to][0]);
 			}
 			return;
 		}
 
-		if (min < sum) {
+		if (isVisited[to] || min < sum) {
 			return;
 		}
 
-		for (int nCity = 1; nCity <= N; nCity++) {
-			if (!isVisited[nCity] && 0 < W[cCity][nCity]) {
-				isVisited[nCity] = true;
-				bruteforce(depth + 1, start, nCity, sum + W[cCity][nCity]);
-				isVisited[nCity] = false;
+		isVisited[to] = true;
+		for (int from = 1; from <= N; from++) {
+			if (!isVisited[from] && W[to][from] != 0) {
+				bruteforce(depth + 1, from, sum + W[to][from]);
 			}
 		}
-		
+		isVisited[to] = false;
+
 	}
 
 }
